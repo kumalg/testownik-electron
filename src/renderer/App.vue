@@ -11,5 +11,10 @@
 </script>
 
 <style>
+.titlebar {
+  position: fixed;
+  width: 100%;
+  z-index: 9999;
+}
   /* CSS */
 </style>

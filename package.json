@@ -49,6 +49,7 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
+      "target": "portable",
       "icon": "build/icons/icon.ico"
     },
     "linux": {
@@ -57,6 +58,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "electron-titlebar-windows": "^3.0.0",
     "node-sass": "^4.8.3",
     "sass-loader": "^7.0.1",
     "vue": "^2.3.3",

@@ -297,3 +297,18 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+
+
+.DS_Store
+dist/electron/*
+dist/web/*
+build/*
+!build/icons
+{{#if unit}}
+coverage
+{{/if}}
+node_modules/
+npm-debug.log
+npm-debug.log.*
+thumbs.db
+!.gitkeep
