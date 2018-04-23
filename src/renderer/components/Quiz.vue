@@ -119,7 +119,7 @@ body {
         > li {
           $checked-color: rgba(255,255,255,.15);
           label {
-            background: mix(#1c1d1f, #222327);
+            background: #1c1d1f;// mix(#1c1d1f, #222327);
             color: rgba(255,255,255,.75);
             box-shadow: none;
           }
@@ -218,7 +218,6 @@ body {
           width: calc(50% - 16px);
           margin: 8px;
           font-size: 0.875em;
-          // height: 64px;
           box-sizing: border-box;
           transition: background .2s ease;
 
@@ -275,14 +274,6 @@ body {
                 width: 0 2px 2px 0;
               }
             }
-            
-            &:hover {
-              transform: scale(0.98);
-            }
-
-            &:active {
-              transform: scale(0.96);
-            }
           }
 
           > input[type=checkbox] {
@@ -296,6 +287,15 @@ body {
               }
               &::after {
                 border-color: #fff;
+              }
+            }
+
+            &:not(:disabled) ~ label {
+              &:hover {
+                transform: scale(0.98);
+              }
+              &:active {
+                transform: scale(0.96);
               }
             }
           }
@@ -364,8 +364,8 @@ body {
       &.accept::after {
         content: '';
         position: absolute;
-        width: 12px;
-        height: 24px;
+        width: 8px;
+        height: 16px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -65%) rotate(45deg);
@@ -379,8 +379,8 @@ body {
       &.next::after {
         content: '';
         position: absolute;
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
         top: 50%;
         left: 50%;
         transform: translate(-70%, -50%) rotate(-45deg);
