@@ -1,7 +1,7 @@
 <template>
   <div id="wrapper">
     <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
-    <router-link to="/quiz">
+    <router-link :to="{ name: 'quiz', params: { quizObject: quiz }}">
       Rozpocznij quiz
     </router-link>
   </div>
@@ -13,6 +13,37 @@
   export default {
     name: 'landing-page',
     components: { SystemInformation },
+    data () {
+      return {
+        quiz: {
+          numberOfQuestions: 5,
+          time: 0,
+          questions: [{
+            tag: '001.txt',
+            contentType: 'text',
+            content: 'Czy pytania będa łatwe?',
+            type: 'single',
+            answers: [{
+              type: 'text',
+              content: 'Tak',
+              isCorrect: true
+            }, {
+              type: 'text',
+              content: 'Nie',
+              isCorrect: false
+            }, {
+              type: 'text',
+              content: 'Nie wiem, choć się domyślam',
+              isCorrect: true
+            }, {
+              type: 'text',
+              content: 'Wiem, ale nie powiem',
+              isCorrect: false
+            }]
+          }]
+        }
+      }
+    },
     methods: {
       open (link) {
         this.$electron.shell.openExternal(link)

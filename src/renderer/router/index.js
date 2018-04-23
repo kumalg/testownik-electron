@@ -13,6 +13,7 @@ export default new Router({
     {
       path: '/quiz',
       name: 'quiz',
+      props: true,
       component: require('@/components/Quiz').default
     },
     {

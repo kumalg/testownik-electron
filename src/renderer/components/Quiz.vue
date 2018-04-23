@@ -3,70 +3,99 @@
     <div class="question-wrapper">
       <div class="question-content-wrapper">
         <div class="question-content">
-         Czy pytania będą łatwe?
+         <template v-if="quiz && currentQuestion">
+           <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
+         </template>
         </div>
       </div>
       <div :class="['answer-wrapper', {'show-answers': !acceptVisible}]">
-        <ul class="single-question">
-          <li class="correct-answer">
-            <input type="checkbox" id="answer_1" :disabled="!acceptVisible">
-            <label for="answer_1">
-              <span>Tak [poprawna]</span>
-            </label>     
-          </li>
-          <li>
-            <input type="checkbox" id="answer_2" :disabled="!acceptVisible">
-            <label for="answer_2">
-              <span>Nie</span>
-            </label>
-          </li>
-          <li class="correct-answer">
-            <input type="checkbox" id="answer_3" :disabled="!acceptVisible">
-            <label for="answer_3">
-              <span>Nie wiem, choć się domyślam [poprawna]</span>
-            </label>     
-          </li>
-          <li>
-            <input type="checkbox" id="answer_4" :disabled="!acceptVisible">
-            <label for="answer_4">
-              <span>Wiem, ale nie powiem</span>
-            </label>
-          </li>
-        </ul>
+        <template v-if="quiz && currentQuestion">
+          <template v-if="currentQuestion.type == 'single'">
+            <ul class="single-question">
+              <li v-for="(answer, index) in currentQuestion.answers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
+                <input type="checkbox" :id="'answer_' + index" :disabled="!acceptVisible">
+                <label :for="'answer_' + index">
+                  <span v-if="answer.type == 'text'">{{ answer.content }}</span>
+                  <span v-else>[Image]</span>
+                </label>
+              </li>
+            </ul>
+          </template>
+          <template v-else>
+          </template>
+        </template>
       </div>
     </div>
     <div class="quiz-info-wrapper">
-      <div class="stat-item-container submitted-answers-container">
-        <h3>Udzielone odpowiedzi</h3>
-      </div>
-      <div class="stat-item-container learned-questions-container">
-        <h3>Opanowane pytania</h3>
-      </div>
-      <div class="stat-item-container questions-number-container">
-        <h3>Liczba pytań</h3>
-      </div>
-      <div class="stat-item-container learning-time-container">
-        <h3>Czas nauki</h3>
-      </div>
+      <template v-if="quiz && currentQuestion">
+        <div class="stat-item-container submitted-answers-container">
+          <h3>Udzielone odpowiedzi</h3>
+          <div>ProgressBar</div>
+        </div>
+        <div class="stat-item-container learned-questions-container">
+          <h3>Opanowane pytania</h3>
+          <div>ProgressBar</div>
+        </div>
+        <div class="stat-item-container questions-number-container">
+          <h3>Liczba pytań</h3>
+          <span>{{ quiz.numberOfQuestions }}</span>
+        </div>
+        <div class="stat-item-container learning-time-container">
+          <h3>Czas nauki</h3>
+          <span>{{ quiz.time | moment }}</span>
+        </div>
+      </template>
       <input type="radio" @click="theme = 'dark'" name="theme">
       <input type="radio" @click="theme = 'light'" name="theme">
-      <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="acceptVisible = !acceptVisible"/>
+      <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
+  props: {
+    quizObject: {
+      type: Object
+    }
+  },
   data () {
     return {
       acceptVisible: true,
-      theme: 'dark'
+      theme: 'dark',
+      currentQuestionIndex: 0,
+      quiz: this.quizObject
     }
+  },
+  methods: {
+    actionButtonClick () {
+      // if (acceptVisible) {} else {}
+      this.acceptVisible = !this.acceptVisible
+    }
+  },
+  computed: {
+    currentQuestion () {
+      return this.quiz.questions ? this.quiz.questions[this.currentQuestionIndex] : null
+    }
+  },
+  filters: {
+    moment: function (date) {
+      const duration = moment.duration(date, 'ms')
+      return duration.hours().toFixed().padStart(2, '0') + ':' + duration.minutes().toFixed().padStart(2, '0') + ':' + duration.seconds().toFixed().padStart(2, '0')
+    }
+  },
+  mounted () {
+    setInterval(function () {
+      this.quiz.time += 1000
+    }.bind(this), 1000)
   }
 }
 </script>
 
 <style lang="scss" scoped>
+@import '../style/_colors.scss';
 
 * {
   box-sizing: border-box;
@@ -86,21 +115,9 @@ body {
     .answer-wrapper {
       background: #222327;
       box-shadow: none;
-      //  &.show-answers {
-      //   > ul.single-question {
-      //     > li.correct-answer {
-      //       $good-unselected-answer: rgb(255, 219, 58);
-      //       > input[type=checkbox]:not(:checked) ~ label {
-      //         &::after {
-      //           border-color: #000;
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
       > ul.single-question {
         > li {
-          $checked-color: rgba(255,255,255,.1);
+          $checked-color: rgba(255,255,255,.15);
           label {
             background: mix(#1c1d1f, #222327);
             color: rgba(255,255,255,.75);
@@ -112,7 +129,7 @@ body {
               border-color: $checked-color $checked-color transparent transparent;
             }
             &::after {
-              border-color: #000;
+              border-color: #1c1d1f;
             }
           }
         }
@@ -170,24 +187,21 @@ body {
       &.show-answers {
         > ul.single-question {
           > li.correct-answer {
-            $good-selected-answer: rgb(104, 226, 100);
             > input[type=checkbox]:checked ~ label {
-              border-color: $good-selected-answer;
+              border-color: $green-color;
               &::before {
-                border-color: $good-selected-answer $good-selected-answer transparent transparent;
+                border-color: $green-color $green-color transparent transparent;
               }
             }
-            $good-unselected-answer: rgb(255, 219, 58);
             > input[type=checkbox]:not(:checked) ~ label {
-              border-color: $good-unselected-answer;
+              border-color: $yellow-color;
             }
           }
           > li:not(.correct-answer) {
-            $bad-selected-answer: rgb(241, 81, 81);
             > input[type=checkbox]:checked ~ label {
-              border-color: $bad-selected-answer;
+              border-color: $red-color;
               &::before {
-                border-color: $bad-selected-answer $bad-selected-answer transparent transparent;
+                border-color: $red-color $red-color transparent transparent;
               }
             }
           }
@@ -204,7 +218,7 @@ body {
           width: calc(50% - 16px);
           margin: 8px;
           font-size: 0.875em;
-          height: 64px;
+          // height: 64px;
           box-sizing: border-box;
           transition: background .2s ease;
 
@@ -212,7 +226,7 @@ body {
             width: 100%;
           }
 
-          $checked-color: #bbb;
+          $checked-color: rgba(0,0,0,.25);
           label {
             position: relative;
             width: 100%;
@@ -310,11 +324,16 @@ body {
         font-size: 0.8125em;
         font-weight: 600;
       }
+
+      span {
+        font-size: 1.75em;
+        color: $primary-color;
+      }
     }
 
     .action-button {
       position: absolute;
-      background: rgb(70, 185, 70);
+      background: $primary-color;
       color: #fff;
       width: 64px;
       height: 64px;
@@ -330,12 +349,12 @@ body {
 
       &:hover {
         transform: scale(0.95);
-        background: lighten(rgb(70, 185, 70), 2);
+        background: $primary-color-lighter;//lighten(rgb(70, 185, 70), 2);
       }
 
       &:active {
         transform: scale(0.9);
-        background: lighten(rgb(70, 185, 70), 5);
+        background: $primary-color-lightest;//lighten(rgb(70, 185, 70), 5);
       }
 
       &::after {

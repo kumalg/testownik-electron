@@ -1,0 +1,7 @@
+$primary-color: #39b54a;
+$primary-color-lighter: lighten($primary-color, 2);//#4dc65d;
+$primary-color-lightest: lighten($primary-color, 5);//#69e07a;
+
+$green-color: $primary-color;
+$yellow-color: rgb(255, 219, 58);
+$red-color: rgb(241, 81, 81);
