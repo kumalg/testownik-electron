@@ -30,11 +30,17 @@
       <template v-if="quiz && currentQuestion">
         <div class="stat-item-container submitted-answers-container">
           <h3>Udzielone odpowiedzi</h3>
-          <div>ProgressBar</div>
+          <ProgressBar
+            :progress="correctAnswersRatio"
+            :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+          />
         </div>
         <div class="stat-item-container learned-questions-container">
           <h3>Opanowane pytania</h3>
-          <div>ProgressBar</div>
+          <ProgressBar
+            :progress="learnedQuestionsRatio"
+            :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+          />
         </div>
         <div class="stat-item-container questions-number-container">
           <h3>Liczba pytań</h3>
@@ -54,6 +60,7 @@
 
 <script>
 import moment from 'moment'
+import ProgressBar from './ProgressBar'
 
 export default {
   props: {
@@ -61,11 +68,13 @@ export default {
       type: Object
     }
   },
+  components: {
+    ProgressBar
+  },
   data () {
     return {
       acceptVisible: true,
       theme: 'dark',
-      // currentQuestionIndex: 0,
       currentQuestionTag: null,
       quiz: this.quizObject
     }
@@ -84,8 +93,9 @@ export default {
     },
     checkUserAnswer () {
       if (this.currentQuestionTag) {
-        var quizReoccurrences = this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag)
-        quizReoccurrences.value--
+        this.quiz.numberOfBadAnswers++
+        var questionReoccurrences = this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag)
+        questionReoccurrences.value--
       }
     },
     randomQuestion () {
@@ -108,6 +118,12 @@ export default {
         return this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
       }
       return null
+    },
+    correctAnswersRatio () {
+      return this.quiz.numberOfCorrectAnswers / (this.quiz.numberOfCorrectAnswers + this.quiz.numberOfBadAnswers)
+    },
+    learnedQuestionsRatio () {
+      return this.quiz.numberOfLearnedQuestions / this.quiz.numberOfQuestions
     }
   },
   filters: {

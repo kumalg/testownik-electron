@@ -17,6 +17,9 @@
       return {
         quiz: {
           numberOfQuestions: 3,
+          numberOfLearnedQuestions: 1,
+          numberOfCorrectAnswers: 4,
+          numberOfBadAnswers: 3,
           time: 0,
           reoccurrences: [
             { tag: '001.txt', value: 2 },
