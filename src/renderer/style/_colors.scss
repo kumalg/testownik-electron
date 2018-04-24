@@ -5,3 +5,10 @@ $primary-color-lightest: lighten($primary-color, 5);//#69e07a;
 $green-color: $primary-color;
 $yellow-color: rgb(255, 219, 58);
 $red-color: rgb(241, 81, 81);
+
+$background-dark: #222327;
+$background-darker: darken($background-dark, 2);
+$background-darkest: darken($background-dark, 3);
+
+$primary-text-ondark: rgba(255,255,255,.75);
+$secondary-text-ondark: rgba(255,255,255,.4);

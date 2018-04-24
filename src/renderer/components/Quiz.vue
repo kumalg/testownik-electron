@@ -65,19 +65,49 @@ export default {
     return {
       acceptVisible: true,
       theme: 'dark',
-      currentQuestionIndex: 0,
+      // currentQuestionIndex: 0,
+      currentQuestionTag: null,
       quiz: this.quizObject
     }
   },
   methods: {
     actionButtonClick () {
-      // if (acceptVisible) {} else {}
+      if (this.acceptVisible) {
+        this.checkUserAnswer()
+      } else {
+        this.randomQuestion()
+      }
       this.acceptVisible = !this.acceptVisible
+    },
+    randomItem (array) {
+      return array[Math.floor(Math.random() * array.length)]
+    },
+    checkUserAnswer () {
+      if (this.currentQuestionTag) {
+        var quizReoccurrences = this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag)
+        quizReoccurrences.value--
+      }
+    },
+    randomQuestion () {
+      const remainingQuestionsReoccurrences = this.quiz.reoccurrences.filter(r => r.value > 0)
+      console.log(remainingQuestionsReoccurrences)
+      if (remainingQuestionsReoccurrences.length) {
+        const questionTag = this.randomItem(remainingQuestionsReoccurrences).tag
+        if (questionTag) {
+          this.currentQuestionTag = questionTag
+        }
+      } else {
+        alert('Koniec!')
+        this.$router.push('/')
+      }
     }
   },
   computed: {
     currentQuestion () {
-      return this.quiz.questions ? this.quiz.questions[this.currentQuestionIndex] : null
+      if (this.quiz.questions && this.currentQuestionTag) {
+        return this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
+      }
+      return null
     }
   },
   filters: {
@@ -87,6 +117,7 @@ export default {
     }
   },
   mounted () {
+    this.randomQuestion()
     setInterval(function () {
       this.quiz.time += 1000
     }.bind(this), 1000)
@@ -109,18 +140,18 @@ body {
 }
 
 .quiz-wrapper[theme=dark] {
-  color: rgba(255,255,255,.75);
+  color: $primary-text-ondark;
   .question-wrapper {
-    background: mix(#1c1d1f, #222327);
+    background: $background-darker;
     .answer-wrapper {
-      background: #222327;
+      background: $background-dark;
       box-shadow: none;
       > ul.single-question {
         > li {
           $checked-color: rgba(255,255,255,.15);
           label {
-            background: #1c1d1f;// mix(#1c1d1f, #222327);
-            color: rgba(255,255,255,.75);
+            background: $background-darker;
+            color: $primary-text-ondark;
             box-shadow: none;
           }
           > input[type=checkbox]:checked ~ label {
@@ -129,7 +160,7 @@ body {
               border-color: $checked-color $checked-color transparent transparent;
             }
             &::after {
-              border-color: #1c1d1f;
+              border-color: $background-darker;
             }
           }
         }
@@ -137,7 +168,7 @@ body {
     }
   }
   .quiz-info-wrapper {
-    background: #1c1d1f;
+    background: $background-darkest;
     .action-button {
       box-shadow: none;
     }
