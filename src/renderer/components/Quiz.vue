@@ -1,5 +1,6 @@
 <template>
   <div class="quiz-wrapper" :theme="theme">
+    <FinishQuizModal v-if="showFinishModal" @close="quitQuiz" />
     <div class="question-wrapper">
       <div class="question-content-wrapper">
         <div class="question-content">
@@ -39,6 +40,10 @@
             :progress="correctAnswersRatio"
             :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
           />
+          <div class="progress-values">
+            <span>{{ quiz.numberOfCorrectAnswers }}</span>
+            <span class="pull-right">{{ quiz.numberOfBadAnswers }}</span>
+          </div>
         </div>
         <div class="stat-item-container learned-questions-container">
           <h3>Opanowane pytania</h3>
@@ -46,18 +51,23 @@
             :progress="learnedQuestionsRatio"
             :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
           />
+          <div class="progress-values">
+            <span>{{ quiz.numberOfLearnedQuestions }}</span>
+            <span class="pull-right">{{ quiz.numberOfQuestions - quiz.numberOfLearnedQuestions }}</span>
+          </div>
         </div>
         <div class="stat-item-container questions-number-container">
           <h3>Liczba pytań</h3>
-          <span>{{ quiz.numberOfQuestions }}</span>
+          <h4>{{ quiz.numberOfQuestions }}</h4>
         </div>
         <div class="stat-item-container learning-time-container">
           <h3>Czas nauki</h3>
-          <span>{{ quiz.time | moment }}</span>
+          <h4>{{ quiz.time | moment }}</h4>
         </div>
       </template>
       <input type="radio" @click="theme = 'dark'" name="theme">
       <input type="radio" @click="theme = 'light'" name="theme">
+      <button class="back-button" @click="quitQuiz"/>
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
     </div>
   </div>
@@ -66,6 +76,7 @@
 <script>
 import moment from 'moment'
 import ProgressBar from './ProgressBar'
+import FinishQuizModal from './FinishQuizModal'
 
 export default {
   props: {
@@ -74,17 +85,22 @@ export default {
     }
   },
   components: {
-    ProgressBar
+    ProgressBar,
+    FinishQuizModal
   },
   data () {
     return {
       acceptVisible: true,
       theme: 'light',
       currentQuestionTag: null,
-      quiz: this.quizObject
+      quiz: this.quizObject,
+      showFinishModal: false
     }
   },
   methods: {
+    quitQuiz () {
+      this.$router.push('/')
+    },
     actionButtonClick () {
       if (this.acceptVisible) {
         this.checkUserAnswer()
@@ -112,8 +128,9 @@ export default {
           this.currentQuestionTag = questionTag
         }
       } else {
-        alert('Koniec!')
-        this.$router.push('/')
+        this.showFinishModal = true
+        // alert('Koniec!')
+        // this.$router.push('/')
       }
     }
   },
@@ -226,6 +243,7 @@ body {
   }
 }
 
+$quiz-info-wrapper-width: 300px;
 .quiz-wrapper {
   height: 100vh;
   display: flex;
@@ -239,6 +257,7 @@ body {
     flex-direction: column;
     background: #fafafa;
     transition: background .2s ease;
+    max-width: calc(100% - #{$quiz-info-wrapper-width});
 
     .question-content-wrapper {
       min-height: 128px;
@@ -250,6 +269,7 @@ body {
 
       .question-content {
         padding: 16px 32px;
+        overflow: auto;
       }
     }
 
@@ -261,7 +281,7 @@ body {
       padding: 32px;
       margin-left: -$offset-width;
       z-index: 1;
-      overflow-y: auto;
+      overflow: auto;
       background: #fafafa;
       box-shadow: 0 0 64px rgba(0,0,0,.15);
       transition: background .2s ease, box-shadow .2s ease;
@@ -330,6 +350,11 @@ body {
               width: 2px;
             }
 
+            img {
+              background: #fff;
+              max-width: 100%;
+            }
+
             &:before {
               content: "";
               position: absolute;
@@ -392,7 +417,7 @@ body {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    width: 300px;
+    width: $quiz-info-wrapper-width;
     margin-left: auto;
     background: #eee;
     position: relative;
@@ -407,9 +432,60 @@ body {
         font-weight: 600;
       }
 
-      span {
+      h4 {
+        font-weight: 400;
         font-size: 1.75em;
         color: $primary-color;
+      }
+
+      .progress-values {
+        display: flex;
+        font-size: 0.75em;
+        .pull-right {
+          margin-left: auto;
+        }
+      }
+    }
+
+    .back-button {
+      position: absolute;
+      background: $primary-color;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      bottom: 128px;
+      left: 0;
+      z-index: 2;
+      box-shadow: 0 4px 32px rgba(0,0,0,.15);
+      outline: none;
+      cursor: pointer;
+      transition: transform .2s ease, background .2s ease;
+
+      &:hover {
+        transform: scale(0.95);
+        background: $primary-color-lighter;//lighten(rgb(70, 185, 70), 2);
+      }
+
+      &:active {
+        transform: scale(0.9);
+        background: $primary-color-lightest;//lighten(rgb(70, 185, 70), 5);
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-30%, -50%) rotate(-45deg);
+        border: {
+          style: solid;
+          color: #fff;
+          width: 2px 0 0 2px;
+        }
       }
     }
 
