@@ -2591,7 +2591,7 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('activate', function () {
     createWindow();
   }
 });
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src\\main"))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src/main"))
 
 /***/ }),
 /* 16 */
@@ -7211,13 +7211,13 @@ function map_obj(obj, fn){
   }, {})
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, "node_modules\\7zip"))
+/* WEBPACK VAR INJECTION */}.call(exports, "node_modules/7zip"))
 
 /***/ }),
 /* 46 */
 /***/ (function(module, exports) {
 
-module.exports = {"_args":[["7zip@0.0.6","C:\\Users\\kumal\\Desktop\\Programowanie\\testownik-electron\\testownik-electron"]],"_development":true,"_from":"7zip@0.0.6","_id":"7zip@0.0.6","_inBundle":false,"_integrity":"sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=","_location":"/7zip","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"7zip@0.0.6","name":"7zip","escapedName":"7zip","rawSpec":"0.0.6","saveSpec":null,"fetchSpec":"0.0.6"},"_requiredBy":["/electron-devtools-installer"],"_resolved":"https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz","_spec":"0.0.6","_where":"C:\\Users\\kumal\\Desktop\\Programowanie\\testownik-electron\\testownik-electron","bin":{"7z":"7zip-lite/7z.exe"},"bugs":{"url":"https://github.com/fritx/win-7zip/issues"},"description":"7zip Windows Package via Node.js","homepage":"https://github.com/fritx/win-7zip#readme","keywords":["7z","7zip","7-zip","windows","install"],"license":"GNU LGPL","main":"index.js","name":"7zip","repository":{"type":"git","url":"git+ssh://git@github.com/fritx/win-7zip.git"},"scripts":{"test":"mocha"},"version":"0.0.6"}
+module.exports = {"_args":[["7zip@0.0.6","/Users/kubukoz/IdeaProjects/testownik-electron"]],"_development":true,"_from":"7zip@0.0.6","_id":"7zip@0.0.6","_inBundle":false,"_integrity":"sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=","_location":"/7zip","_phantomChildren":{},"_requested":{"type":"version","registry":true,"raw":"7zip@0.0.6","name":"7zip","escapedName":"7zip","rawSpec":"0.0.6","saveSpec":null,"fetchSpec":"0.0.6"},"_requiredBy":["/electron-devtools-installer"],"_resolved":"https://registry.npmjs.org/7zip/-/7zip-0.0.6.tgz","_spec":"0.0.6","_where":"/Users/kubukoz/IdeaProjects/testownik-electron","bin":{"7z":"7zip-lite/7z.exe"},"bugs":{"url":"https://github.com/fritx/win-7zip/issues"},"description":"7zip Windows Package via Node.js","homepage":"https://github.com/fritx/win-7zip#readme","keywords":["7z","7zip","7-zip","windows","install"],"license":"GNU LGPL","main":"index.js","name":"7zip","repository":{"type":"git","url":"git+ssh://git@github.com/fritx/win-7zip.git"},"scripts":{"test":"mocha"},"version":"0.0.6"}
 
 /***/ }),
 /* 47 */

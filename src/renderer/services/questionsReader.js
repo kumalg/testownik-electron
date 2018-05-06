@@ -1,31 +1,29 @@
 import fs from 'fs'
+import { promisify } from 'util'
+const readFileAsync = promisify(fs.readFile)
 // import windows1250 from 'windows-1250'
 
 export default {
-  readFilesFromFolder (quizPath, files) {
-    var questions = []
-    for (let file of files) {
-      if (file.endsWith('.txt')) {
-        // fs.readFileSync(quizPath + '\\' + file, 'utf-8', (err, data) => {
-        //   if (err) {
-        //     throw new Error(err)
-        //   }
-        //   const lines = data.split('\n')
-        //   if (lines[0].startsWith('X')) {
-        //     const question = readXQuestion(file, lines)
-        //     questions.push(question)
-        //   }
-        // })
-        const text = fs.readFileSync(quizPath + '\\' + file, 'utf-8')
-        const lines = text.split('\n')
-        if (lines[0].startsWith('X')) {
-          const question = readXQuestion(quizPath, file, lines)
-          questions.push(question)
-        }
-      }
+  async readFilesFromFolder (quizPath, files) {
+    const getQuestionFromFile = async filename => {
+      const text = await readFileAsync(quizPath + '/' + filename, 'utf-8')
+      return getQuestionFromText(text, quizPath, filename)
     }
-    return questions
+
+    const questionPromises =
+      files
+        .filter(filename => filename.endsWith('.txt'))
+        .map(getQuestionFromFile)
+
+    return Promise.all(questionPromises).then(qs => qs.filter(q => q !== null))
   }
+}
+
+function getQuestionFromText (text, quizPath, filename) {
+  const lines = text.split('\n')
+  if (lines[0].startsWith('X')) {
+    return readXQuestion(quizPath, filename, lines)
+  } else return null
 }
 
 function readXQuestion (quizPath, filename, lines) {

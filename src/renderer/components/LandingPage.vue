@@ -31,11 +31,11 @@
             throw new Error('Błąd przy wyborze folderu')
           }
           const quizPath = path[0]
-          fs.readdir(quizPath, (err, files) => {
+          fs.readdir(quizPath, async (err, files) => {
             if (err) {
               throw new Error(err)
             }
-            const questions = questionsReader.readFilesFromFolder(quizPath, files)
+            const questions = await questionsReader.readFilesFromFolder(quizPath, files)
             const quiz = quizMaker.prepareQuizObject(questions)
             this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
           })
@@ -54,7 +54,8 @@
     padding: 0;
   }
 
-  body { font-family: 'Open Sans', sans-serif; 
+  body {
+    font-family: 'Open Sans', sans-serif;
     overflow-y: hidden;
   }
 
