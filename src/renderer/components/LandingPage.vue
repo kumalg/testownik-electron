@@ -2,9 +2,9 @@
   <div id="wrapper">
     <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
     <button @click="selectFolder">Wybierz folder</button>
-    <router-link :to="{ name: 'quiz', params: { quizObject: quiz }}">
+    <!-- <router-link :to="{ name: 'quiz', params: { quizObject: quiz }}">
       Rozpocznij quiz
-    </router-link>
+    </router-link> -->
   </div>
 </template>
 
@@ -19,9 +19,7 @@
     name: 'landing-page',
     components: { SystemInformation },
     data () {
-      return {
-        quiz: Object
-      }
+      return {}
     },
     methods: {
       open (link) {
@@ -38,7 +36,8 @@
               throw new Error(err)
             }
             const questions = questionsReader.readFilesFromFolder(quizPath, files)
-            this.quiz = quizMaker.prepareQuizObject(questions)
+            const quiz = quizMaker.prepareQuizObject(questions)
+            this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
           })
         })
       }

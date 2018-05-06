@@ -6,6 +6,7 @@
           <transition name="question-content-fade" mode="out-in">
             <div v-if="quiz && currentQuestion" :key="currentQuestion.tag">
               <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
+              <img v-else :src="'file:///' + currentQuestion.content">
             </div>
           </transition>
         </div>
@@ -19,7 +20,7 @@
                   <input type="checkbox" :id="'answer_' + index" :disabled="!acceptVisible">
                   <label :for="'answer_' + index">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
-                    <span v-else>[Image]</span>
+                    <img v-else :src="'file:///' + answer.content">
                   </label>
                 </li>
               </ul>

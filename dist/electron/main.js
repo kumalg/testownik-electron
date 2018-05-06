@@ -2565,7 +2565,10 @@ function createWindow() {
     height: 563,
 
     width: 1000,
-    frame: false
+    frame: false,
+    webPreferences: {
+      webSecurity: false
+    }
   });
 
   mainWindow.loadURL(winURL);
