@@ -18,7 +18,7 @@
             <template v-if="currentQuestion.type == 'single'">
               <ul class="single-question">
                 <li v-for="(answer, index) in currentQuestion.answers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
-                  <input type="checkbox" :id="'answer_' + index" :disabled="!acceptVisible">
+                  <input type="checkbox" v-model="answers" :value="index" :id="'answer_' + index" :disabled="!acceptVisible">
                   <label :for="'answer_' + index">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
                     <img v-else :src="'file:///' + answer.content">
@@ -94,7 +94,8 @@ export default {
       theme: 'light',
       currentQuestionTag: null,
       quiz: this.quizObject,
-      showFinishModal: false
+      showFinishModal: false,
+      answers: []
     }
   },
   methods: {
@@ -105,6 +106,7 @@ export default {
       if (this.acceptVisible) {
         this.checkUserAnswer()
       } else {
+        this.answers = []
         this.randomQuestion()
       }
       this.acceptVisible = !this.acceptVisible
@@ -114,14 +116,30 @@ export default {
     },
     checkUserAnswer () {
       if (this.currentQuestionTag) {
-        this.quiz.numberOfBadAnswers++
         var questionReoccurrences = this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag)
-        questionReoccurrences.value--
+        const correctAnswers = this.currentQuestion.answers
+          .map((a, i) => { return {a: a.isCorrect, i: i} })
+          .filter(a => a.a)
+          .map(a => a.i)
+        if (correctAnswers.sort().join(',') === this.answers.sort().join(',')) {
+          this.quiz.numberOfCorrectAnswers++
+          questionReoccurrences.value--
+          if (questionReoccurrences.value === 0) {
+            this.quiz.numberOfLearnedQuestions++
+          }
+        } else {
+          this.quiz.numberOfBadAnswers++
+          questionReoccurrences.value++
+        }
+      }
+
+      const remainingQuestionsReoccurrences = this.quiz.reoccurrences.filter(r => r.value > 0)
+      if (!remainingQuestionsReoccurrences.length) {
+        this.showFinishModal = true
       }
     },
     randomQuestion () {
       const remainingQuestionsReoccurrences = this.quiz.reoccurrences.filter(r => r.value > 0)
-      console.log(remainingQuestionsReoccurrences)
       if (remainingQuestionsReoccurrences.length) {
         const questionTag = this.randomItem(remainingQuestionsReoccurrences).tag
         if (questionTag) {
@@ -129,8 +147,6 @@ export default {
         }
       } else {
         this.showFinishModal = true
-        // alert('Koniec!')
-        // this.$router.push('/')
       }
     }
   },

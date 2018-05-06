@@ -14,7 +14,6 @@ export default {
       }),
       questions: questions
     }
-    console.log(questions)
     return quiz
   }
 }
