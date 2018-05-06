@@ -3,27 +3,31 @@
     <div class="question-wrapper">
       <div class="question-content-wrapper">
         <div class="question-content">
-         <template v-if="quiz && currentQuestion">
-           <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
-         </template>
+          <transition name="question-content-fade" mode="out-in">
+            <div v-if="quiz && currentQuestion" :key="currentQuestion.tag">
+              <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
+            </div>
+          </transition>
         </div>
       </div>
       <div :class="['answer-wrapper', {'show-answers': !acceptVisible}]">
-        <template v-if="quiz && currentQuestion">
-          <template v-if="currentQuestion.type == 'single'">
-            <ul class="single-question">
-              <li v-for="(answer, index) in currentQuestion.answers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
-                <input type="checkbox" :id="'answer_' + index" :disabled="!acceptVisible">
-                <label :for="'answer_' + index">
-                  <span v-if="answer.type == 'text'">{{ answer.content }}</span>
-                  <span v-else>[Image]</span>
-                </label>
-              </li>
-            </ul>
-          </template>
-          <template v-else>
-          </template>
-        </template>
+        <transition name="answers-container-fade" mode="out-in">
+          <div v-if="quiz && currentQuestion" :key="currentQuestion.tag">
+            <template v-if="currentQuestion.type == 'single'">
+              <ul class="single-question">
+                <li v-for="(answer, index) in currentQuestion.answers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
+                  <input type="checkbox" :id="'answer_' + index" :disabled="!acceptVisible">
+                  <label :for="'answer_' + index">
+                    <span v-if="answer.type == 'text'">{{ answer.content }}</span>
+                    <span v-else>[Image]</span>
+                  </label>
+                </li>
+              </ul>
+            </template>
+            <template v-else>
+            </template>
+          </div>
+        </transition>
       </div>
     </div>
     <div class="quiz-info-wrapper">
@@ -74,7 +78,7 @@ export default {
   data () {
     return {
       acceptVisible: true,
-      theme: 'dark',
+      theme: 'light',
       currentQuestionTag: null,
       quiz: this.quizObject
     }
@@ -144,6 +148,36 @@ export default {
 <style lang="scss" scoped>
 @import '../style/_colors.scss';
 
+.question-content,
+.answers-container {
+  &-fade-enter-active,
+  &-fade-leave-active {
+    transition: all 0.2s ease;
+  }
+  &-fade-enter,
+  &-fade-leave-to {
+    opacity: 0;
+  }
+}
+
+.question-content {
+  &-fade-enter {
+    transform: translateX(8px);
+  }
+  &-fade-leave-to {
+    transform: translateX(-8px);
+  }
+}
+
+.answers-container {
+  &-fade-enter {
+    transform: translateX(16px);
+  }
+  &-fade-leave-to {
+    transform: translateX(-16px);
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -162,7 +196,7 @@ body {
     .answer-wrapper {
       background: $background-dark;
       box-shadow: none;
-      > ul.single-question {
+      ul.single-question {
         > li {
           $checked-color: rgba(255,255,255,.15);
           label {
@@ -232,7 +266,7 @@ body {
       transition: background .2s ease, box-shadow .2s ease;
 
       &.show-answers {
-        > ul.single-question {
+        ul.single-question {
           > li.correct-answer {
             > input[type=checkbox]:checked ~ label {
               border-color: $green-color;
@@ -255,7 +289,7 @@ body {
         }
       }
 
-      > ul.single-question {
+      ul.single-question {
         list-style: none;
         display: flex;
         flex-wrap: wrap;

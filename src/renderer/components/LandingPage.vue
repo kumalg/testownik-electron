@@ -1,6 +1,7 @@
 <template>
   <div id="wrapper">
     <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
+    <button @click="selectFolder">Wybierz folder</button>
     <router-link :to="{ name: 'quiz', params: { quizObject: quiz }}">
       Rozpocznij quiz
     </router-link>
@@ -9,84 +10,37 @@
 
 <script>
   import SystemInformation from './LandingPage/SystemInformation'
+  import questionsReader from '@/services/questionsReader'
+  import quizMaker from '@/services/quizMaker'
+  const fs = require('fs')
+  const { dialog } = require('electron').remote
 
   export default {
     name: 'landing-page',
     components: { SystemInformation },
     data () {
       return {
-        quiz: {
-          numberOfQuestions: 3,
-          numberOfLearnedQuestions: 1,
-          numberOfCorrectAnswers: 4,
-          numberOfBadAnswers: 3,
-          time: 0,
-          reoccurrences: [
-            { tag: '001.txt', value: 2 },
-            { tag: '002.txt', value: 2 },
-            { tag: '003.txt', value: 2 }
-          ],
-          questions: [{
-            tag: '001.txt',
-            contentType: 'text',
-            content: 'Czy pytania będa łatwe?',
-            type: 'single',
-            answers: [{
-              type: 'text',
-              content: 'Tak',
-              isCorrect: true
-            }, {
-              type: 'text',
-              content: 'No tak średnio bym powiedział',
-              isCorrect: false
-            }, {
-              type: 'text',
-              content: 'Nie wiem, choć się domyślam',
-              isCorrect: true
-            }, {
-              type: 'text',
-              content: 'Wiem, ale nie powiem',
-              isCorrect: false
-            }]
-          }, {
-            tag: '002.txt',
-            contentType: 'text',
-            content: 'Więcej niż jedno zwierze to:',
-            type: 'single',
-            answers: [{
-              type: 'text',
-              content: 'Owca',
-              isCorrect: false
-            }, {
-              type: 'text',
-              content: 'Stado',
-              isCorrect: true
-            }, {
-              type: 'text',
-              content: 'Lama',
-              isCorrect: false
-            }]
-          }, {
-            tag: '003.txt',
-            contentType: 'text',
-            content: 'Czy vue.js to cudowny framework?',
-            type: 'single',
-            answers: [{
-              type: 'text',
-              content: 'Tak',
-              isCorrect: true
-            }, {
-              type: 'text',
-              content: 'Nie',
-              isCorrect: false
-            }]
-          }]
-        }
+        quiz: Object
       }
     },
     methods: {
       open (link) {
         this.$electron.shell.openExternal(link)
+      },
+      selectFolder () {
+        dialog.showOpenDialog({properties: ['openDirectory']}, (path) => {
+          if (path == null || path.length === 0 || path[0] == null) {
+            throw new Error('Błąd przy wyborze folderu')
+          }
+          const quizPath = path[0]
+          fs.readdir(quizPath, (err, files) => {
+            if (err) {
+              throw new Error(err)
+            }
+            const questions = questionsReader.readFilesFromFolder(quizPath, files)
+            this.quiz = quizMaker.prepareQuizObject(questions)
+          })
+        })
       }
     }
   }
