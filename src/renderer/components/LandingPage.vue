@@ -12,8 +12,10 @@
   import SystemInformation from './LandingPage/SystemInformation'
   import questionsReader from '@/services/questionsReader'
   import quizMaker from '@/services/quizMaker'
-  const fs = require('fs')
+  import fs from 'fs'
+  import { promisify } from 'util'
   const { dialog } = require('electron').remote
+  let readdirAsync = promisify(fs.readdir)
 
   export default {
     name: 'landing-page',
@@ -26,19 +28,15 @@
         this.$electron.shell.openExternal(link)
       },
       selectFolder () {
-        dialog.showOpenDialog({properties: ['openDirectory']}, (path) => {
+        dialog.showOpenDialog({properties: ['openDirectory']}, async path => {
           if (path == null || path.length === 0 || path[0] == null) {
             throw new Error('Błąd przy wyborze folderu')
           }
           const quizPath = path[0]
-          fs.readdir(quizPath, async (err, files) => {
-            if (err) {
-              throw new Error(err)
-            }
-            const questions = await questionsReader.readFilesFromFolder(quizPath, files)
-            const quiz = quizMaker.prepareQuizObject(questions)
-            this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
-          })
+          const filenames = await readdirAsync(quizPath)
+          const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
+          const quiz = quizMaker.prepareQuizObject(questions)
+          this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
         })
       }
     }
