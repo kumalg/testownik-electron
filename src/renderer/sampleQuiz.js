@@ -15,20 +15,24 @@ export const sampleQuiz = {
     content: 'Czy pytania będa łatwe?',
     type: 'single',
     answers: [{
+      id: 1,
       type: 'text',
-      content: 'Tak (T)',
+      content: '1 Tak (T)',
       isCorrect: true
     }, {
+      id: 2,
       type: 'text',
-      content: 'No tak średnio bym powiedział',
+      content: '2 No tak średnio bym powiedział',
       isCorrect: false
     }, {
+      id: 3,
       type: 'text',
-      content: 'Nie wiem, choć się domyślam (T)',
+      content: '3. Nie wiem, choć się domyślam (T)',
       isCorrect: true
     }, {
+      id: 4,
       type: 'text',
-      content: 'Wiem, ale nie powiem',
+      content: '4. Wiem, ale nie powiem',
       isCorrect: false
     }]
   }, {
@@ -37,16 +41,19 @@ export const sampleQuiz = {
     content: 'Więcej niż jedno zwierze to:',
     type: 'single',
     answers: [{
+      id: 1,
       type: 'text',
-      content: 'Owca',
+      content: '1. Owca',
       isCorrect: false
     }, {
+      id: 2,
       type: 'text',
-      content: 'Stado (T)',
+      content: '2. Stado (T)',
       isCorrect: true
     }, {
+      id: 3,
       type: 'text',
-      content: 'Lama',
+      content: '3. Lama',
       isCorrect: false
     }]
   }, {
@@ -55,12 +62,14 @@ export const sampleQuiz = {
     content: 'Czy vue.js to cudowny framework?',
     type: 'single',
     answers: [{
+      id: 1,
       type: 'text',
-      content: 'Tak (T)',
+      content: '1. Tak (T)',
       isCorrect: true
     }, {
+      id: 2,
       type: 'text',
-      content: 'Nie',
+      content: '2. Nie',
       isCorrect: false
     }]
   }]

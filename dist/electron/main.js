@@ -2547,6 +2547,9 @@ var changePermissions = exports.changePermissions = function changePermissions(d
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_electron__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_electron___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_electron__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_settings__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_electron_settings__);
+
 
 
 
@@ -2578,7 +2581,12 @@ function createWindow() {
   });
 }
 
-__WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', createWindow);
+__WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
+  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('theme')) {
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('theme', 'light');
+  }
+  createWindow();
+});
 
 __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
@@ -7224,6 +7232,12 @@ module.exports = {"_args":[["7zip@0.0.6","C:\\Users\\kumal\\Desktop\\Programowan
 /***/ (function(module, exports) {
 
 module.exports = require("https");
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports) {
+
+module.exports = require("electron-settings");
 
 /***/ })
 /******/ ]);

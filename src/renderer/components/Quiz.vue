@@ -1,11 +1,12 @@
 <template>
   <div class="quiz-wrapper" :theme="theme">
     <FinishQuizModal v-if="showFinishModal" @close="quitQuiz" />
+    <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/>
     <div class="question-wrapper">
       <div class="question-content-wrapper">
         <div class="question-content">
           <transition name="question-content-fade" mode="out-in">
-            <div v-if="quiz && currentQuestion" :key="currentQuestion.tag">
+            <div v-if="quiz && currentQuestion" :key="questionNum">
               <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
               <img v-else :src="'file:///' + currentQuestion.content">
             </div>
@@ -14,12 +15,12 @@
       </div>
       <div :class="['answer-wrapper', {'show-answers': !acceptVisible}]">
         <transition name="answers-container-fade" mode="out-in">
-          <div v-if="quiz && currentQuestion" :key="currentQuestion.tag">
+          <div v-if="quiz && currentQuestion" :key="questionNum">
             <template v-if="currentQuestion.type == 'single'">
               <ul class="single-question">
-                <li v-for="(answer, index) in currentQuestion.answers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
-                  <input type="checkbox" v-model="answers" :value="index" :id="'answer_' + index" :disabled="!acceptVisible">
-                  <label :for="'answer_' + index">
+                <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
+                  <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
+                  <label :for="'answer_' + answer.id">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
                     <img v-else :src="'file:///' + answer.content">
                   </label>
@@ -38,7 +39,7 @@
           <h3>Udzielone odpowiedzi</h3>
           <ProgressBar
             :progress="correctAnswersRatio"
-            :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+            :backgroundColor="theme == 'dark' ? 'rgb(123, 30, 30)' : 'rgb(241, 81, 81)'"
           />
           <div class="progress-values">
             <span>{{ quiz.numberOfCorrectAnswers }}</span>
@@ -65,8 +66,7 @@
           <h4>{{ quiz.time | moment }}</h4>
         </div>
       </template>
-      <input type="radio" @click="theme = 'dark'" name="theme">
-      <input type="radio" @click="theme = 'light'" name="theme">
+      <button @click="showSettingsModal = true">Ustawienia</button>
       <button class="back-button" @click="quitQuiz"/>
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
     </div>
@@ -74,9 +74,12 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import moment from 'moment'
+import settings from 'electron-settings'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
+import SettingsModal from './SettingsModal'
 
 export default {
   props: {
@@ -86,17 +89,27 @@ export default {
   },
   components: {
     ProgressBar,
-    FinishQuizModal
+    FinishQuizModal,
+    SettingsModal
   },
   data () {
     return {
+      theme: settings.get('theme'),
+      questionNum: 0,
       acceptVisible: true,
-      theme: 'light',
       currentQuestionTag: null,
+      currentQuestion: null,
+      unsortedAnswers: null,
       quiz: this.quizObject,
       showFinishModal: false,
+      showSettingsModal: false,
       answers: []
     }
+  },
+  created () {
+    settings.watch('theme', (newValue, oldValue) => {
+      this.theme = newValue
+    })
   },
   methods: {
     quitQuiz () {
@@ -106,6 +119,7 @@ export default {
       if (this.acceptVisible) {
         this.checkUserAnswer()
       } else {
+        this.questionNum++
         this.answers = []
         this.randomQuestion()
       }
@@ -118,9 +132,8 @@ export default {
       if (this.currentQuestionTag) {
         var questionReoccurrences = this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag)
         const correctAnswers = this.currentQuestion.answers
-          .map((a, i) => { return {a: a.isCorrect, i: i} })
-          .filter(a => a.a)
-          .map(a => a.i)
+          .filter(a => a.isCorrect)
+          .map(a => a.id)
         if (correctAnswers.sort().join(',') === this.answers.sort().join(',')) {
           this.quiz.numberOfCorrectAnswers++
           questionReoccurrences.value--
@@ -144,6 +157,8 @@ export default {
         const questionTag = this.randomItem(remainingQuestionsReoccurrences).tag
         if (questionTag) {
           this.currentQuestionTag = questionTag
+          this.currentQuestion = this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
+          this.unsortedAnswers = _.shuffle(this.currentQuestion.answers)
         }
       } else {
         this.showFinishModal = true
@@ -151,18 +166,24 @@ export default {
     }
   },
   computed: {
-    currentQuestion () {
-      if (this.quiz.questions && this.currentQuestionTag) {
-        return this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
-      }
-      return null
-    },
+    // currentQuestion () {
+    //   if (this.quiz.questions && this.currentQuestionTag) {
+    //     return this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
+    //   }
+    //   return null
+    // },
     correctAnswersRatio () {
       return this.quiz.numberOfCorrectAnswers / (this.quiz.numberOfCorrectAnswers + this.quiz.numberOfBadAnswers)
     },
     learnedQuestionsRatio () {
       return this.quiz.numberOfLearnedQuestions / this.quiz.numberOfQuestions
     }
+    // unsortedAnswers () {
+    //   if (this.currentQuestion == null) {
+    //     return null
+    //   }
+    //   return _.shuffle(this.currentQuestion.answers)
+    // }
   },
   filters: {
     moment: function (date) {

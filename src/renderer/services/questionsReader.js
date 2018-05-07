@@ -34,6 +34,7 @@ function readXQuestion (quizPath, filename, lines) {
   const questionContent = questionType === 'image' ? quizPath.replace('\\', '/') + '/' + lines[1].replace('[img]', '').replace('[/img]', '') : lines[1]
   const answers = lines.slice(2).filter(l => l.replace(/^\s*/, '').replace(/\s*$/, '').length !== 0).map((line, index) => {
     return {
+      id: index,
       type: line.startsWith('[img]') ? 'image' : 'text',
       content: line.startsWith('[img]') ? quizPath.replace('\\', '/') + '/' + line.replace('[img]', '').replace('[/img]', '') : line,
       isCorrect: correctAnswers.findIndex(i => i === index) !== -1

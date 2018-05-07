@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import settings from 'electron-settings'
 import SystemInformation from './LandingPage/SystemInformation'
 import questionsReader from '@/services/questionsReader'
 import quizMaker from '@/services/quizMaker'
@@ -21,7 +22,14 @@ export default {
   name: 'landing-page',
   components: { SystemInformation },
   data () {
-    return { }
+    return {
+      theme: settings.get('theme')
+    }
+  },
+  created () {
+    settings.watch('theme', (newValue, oldValue) => {
+      this.theme = newValue
+    })
   },
   methods: {
     open (link) {

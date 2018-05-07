@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <transition name="page-component-fade" mode="out-in">
-      <router-view></router-view>
+      <router-view/>
     </transition>
   </div>
 </template>
@@ -19,20 +19,20 @@
   z-index: 9999;
 }
 
-.page-component {
-  &-fade-enter-active,
-  &-fade-leave-active {
-    transition: all 0.2s ease;
-  }
-  &-fade-enter,
-  &-fade-leave-to {
-    opacity: 0;
-  }
-  &-fade-enter {
-    transform: translateX(8px);
-  }
-  &-fade-leave-to {
-    transform: translateX(-8px);
-  }
+.page-component-fade-enter-active {
+  transition: all 0.2s ease-out;
+}
+.page-component-fade-leave-active {
+  transition: all 0.2s ease-in;
+}
+.page-component-fade-enter,
+.page-component-fade-leave-to {
+  opacity: 0;
+}
+.page-component-fade-enter {
+  transform: translateX(32px);
+}
+.page-component-fade-leave-to {
+  transform: translateX(-32px);
 }
 </style>
