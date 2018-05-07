@@ -1,4 +1,4 @@
-import Vuex from 'vuex'
+import store from '../store'
 
 export default {
   prepareQuizObject (questions) {
@@ -11,7 +11,7 @@ export default {
       reoccurrences: questions.map(q => {
         return {
           tag: q.tag,
-          value: Vuex.state.reoccurrencesOnStart
+          value: store.state.reoccurrencesOnStart
         }
       }),
       questions: questions

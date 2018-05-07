@@ -29,6 +29,8 @@
             </template>
             <template v-else>
             </template>
+            <div>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</div>
+            <div>{{ currentQuestion.tag }}</div>
           </div>
         </transition>
       </div>
@@ -79,7 +81,6 @@ import _ from 'lodash'
 import moment from 'moment'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
-// import SettingsModal from './SettingsModal'
 
 export default {
   props: {
@@ -90,7 +91,6 @@ export default {
   components: {
     ProgressBar,
     FinishQuizModal
-    // SettingsModal
   },
   data () {
     return {
@@ -101,7 +101,6 @@ export default {
       unsortedAnswers: null,
       quiz: this.quizObject,
       showFinishModal: false,
-      // showSettingsModal: false,
       answers: []
     }
   },
@@ -136,7 +135,10 @@ export default {
           }
         } else {
           this.quiz.numberOfBadAnswers++
-          questionReoccurrences.value++
+          questionReoccurrences.value += this.reoccurrencesIfBad
+          if (questionReoccurrences.value > this.maxReoccurrences) {
+            questionReoccurrences.value = this.maxReoccurrences
+          }
         }
       }
 
@@ -159,31 +161,28 @@ export default {
       }
     }
   },
-  created () {
-    console.log(this.$store.state.theme)
-  },
   computed: {
-    // currentQuestion () {
-    //   if (this.quiz.questions && this.currentQuestionTag) {
-    //     return this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
-    //   }
-    //   return null
-    // },
     correctAnswersRatio () {
       return this.quiz.numberOfCorrectAnswers / (this.quiz.numberOfCorrectAnswers + this.quiz.numberOfBadAnswers)
     },
     learnedQuestionsRatio () {
       return this.quiz.numberOfLearnedQuestions / this.quiz.numberOfQuestions
     },
+    currentQuestionReoccurrences () {
+      if (!this.currentQuestionTag) {
+        return null
+      }
+      return this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag).value
+    },
     theme () {
       return this.$store.state.theme
+    },
+    reoccurrencesIfBad () {
+      return this.$store.state.reoccurrencesIfBad
+    },
+    maxReoccurrences () {
+      return this.$store.state.maxReoccurrences
     }
-    // unsortedAnswers () {
-    //   if (this.currentQuestion == null) {
-    //     return null
-    //   }
-    //   return _.shuffle(this.currentQuestion.answers)
-    // }
   },
   filters: {
     moment: function (date) {

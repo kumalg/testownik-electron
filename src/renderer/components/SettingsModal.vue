@@ -23,15 +23,15 @@
       </div>
       <div class="section-option">
         <label for="reoccurrences-if-bad-input">Liczba dodatkowych powtórzeń przy błędnej odpowiedzi</label>
-        <input id="reoccurrences-if-bad-input" type="number" min="0" max="10" v-model="reoccurrencesIfBad">
+        <input id="reoccurrences-if-bad-input" type="number" min="0" max="10" v-model.number="reoccurrencesIfBad">
       </div>
       <div class="section-option">
         <label for="reoccurrences-on-start-input">Wstępna liczba powtórzeń</label>
-        <input id="reoccurrences-on-start-input" type="number" min="0" max="10" v-model="reoccurrencesOnStart">
+        <input id="reoccurrences-on-start-input" type="number" min="0" max="10" v-model.number="reoccurrencesOnStart">
       </div>
       <div class="section-option">
         <label for="max-reoccurrences-input">Maksymalna liczba powtórzeń</label>
-        <input id="max-reoccurrences-input" type="number" min="0" max="10" v-model="maxReoccurrences">
+        <input id="max-reoccurrences-input" type="number" min="0" max="10" v-model.number="maxReoccurrences">
       </div>
     </div>
   </div>
