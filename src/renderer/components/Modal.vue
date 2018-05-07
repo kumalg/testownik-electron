@@ -28,18 +28,11 @@
 </template>
 
 <script>
-import settings from 'electron-settings'
-
 export default {
-  data () {
-    return {
-      theme: settings.get('theme')
+  computed: {
+    theme () {
+      return this.$store.state.theme
     }
-  },
-  created () {
-    settings.watch('theme', (newValue, oldValue) => {
-      this.theme = newValue
-    })
   }
 }
 </script>

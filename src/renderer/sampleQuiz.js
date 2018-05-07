@@ -1,3 +1,5 @@
+import store from './store'
+
 export const sampleQuiz = {
   numberOfQuestions: 3,
   numberOfLearnedQuestions: 0,
@@ -5,9 +7,9 @@ export const sampleQuiz = {
   numberOfBadAnswers: 0,
   time: 0,
   reoccurrences: [
-    { tag: '001.txt', value: 2 },
-    { tag: '002.txt', value: 2 },
-    { tag: '003.txt', value: 2 }
+    { tag: '001.txt', value: store.state.reoccurrencesOnStart },
+    { tag: '002.txt', value: store.state.reoccurrencesOnStart },
+    { tag: '003.txt', value: store.state.reoccurrencesOnStart }
   ],
   questions: [{
     tag: '001.txt',

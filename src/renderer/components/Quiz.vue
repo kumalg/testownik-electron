@@ -76,7 +76,6 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import settings from 'electron-settings'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
 import SettingsModal from './SettingsModal'
@@ -94,7 +93,6 @@ export default {
   },
   data () {
     return {
-      theme: settings.get('theme'),
       questionNum: 0,
       acceptVisible: true,
       currentQuestionTag: null,
@@ -105,11 +103,6 @@ export default {
       showSettingsModal: false,
       answers: []
     }
-  },
-  created () {
-    settings.watch('theme', (newValue, oldValue) => {
-      this.theme = newValue
-    })
   },
   methods: {
     quitQuiz () {
@@ -165,6 +158,9 @@ export default {
       }
     }
   },
+  created () {
+    console.log(this.$store.state.theme)
+  },
   computed: {
     // currentQuestion () {
     //   if (this.quiz.questions && this.currentQuestionTag) {
@@ -177,6 +173,9 @@ export default {
     },
     learnedQuestionsRatio () {
       return this.quiz.numberOfLearnedQuestions / this.quiz.numberOfQuestions
+    },
+    theme () {
+      return this.$store.state.theme
     }
     // unsortedAnswers () {
     //   if (this.currentQuestion == null) {

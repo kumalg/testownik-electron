@@ -4,23 +4,66 @@
     Ustawienia
   </div>
   <div slot="body">
-    Wygląd
-    <input type="radio" @click="setTheme('dark')" name="theme">
-    <input type="radio" @click="setTheme('light')" name="theme">
+    <div class="section">
+      <div class="section-title">
+        Motyw
+      </div>
+      <div class="section-option">
+        <input id="dark-theme-radio" type="radio" v-model="theme" value="dark">
+        <label for="dark-theme-radio">Ciemny</label>
+      </div>
+      <div class="section-option">
+        <input id="light-theme-radio" type="radio" v-model="theme" value="light">
+        <label for="light-theme-radio">Jasny</label>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">
+        Quiz
+      </div>
+      <div class="section-option">
+        <label for="reoccurrences-if-bad-input">Liczba dodatkowych powtórzeń przy błędnej odpowiedzi</label>
+        <input id="reoccurrences-if-bad-input" type="number" min="0" max="10" v-model="reoccurrencesIfBad">
+      </div>
+      <div class="section-option">
+        <label for="reoccurrences-on-start-input">Wstępna liczba powtórzeń</label>
+        <input id="reoccurrences-on-start-input" type="number" min="0" max="10" v-model="reoccurrencesOnStart">
+      </div>
+      <div class="section-option">
+        <label for="max-reoccurrences-input">Maksymalna liczba powtórzeń</label>
+        <input id="max-reoccurrences-input" type="number" min="0" max="10" v-model="maxReoccurrences">
+      </div>
+    </div>
   </div>
 </Modal>
 </template>
 
 <script>
-import settings from 'electron-settings'
 import Modal from '@/components/Modal'
 export default {
   components: {
     Modal
   },
-  methods: {
-    setTheme (theme) {
-      settings.set('theme', theme)
+  data () {
+    return {
+      theme: this.$store.state.theme,
+      reoccurrencesIfBad: this.$store.state.reoccurrencesIfBad,
+      reoccurrencesOnStart: this.$store.state.reoccurrencesOnStart,
+      maxReoccurrences: this.$store.state.maxReoccurrences
+    }
+  },
+  watch: {
+    theme (value) {
+      this.$store.dispatch('setTheme', value)
+    },
+    reoccurrencesIfBad (value) {
+      this.$store.dispatch('setReoccurrencesIfBad', value)
+    },
+    reoccurrencesOnStart (value) {
+      this.$store.dispatch('setReoccurrencesOnStart', value)
+    },
+    maxReoccurrences (value) {
+      this.$store.dispatch('setMaxReoccurrences', value)
     }
   }
 }

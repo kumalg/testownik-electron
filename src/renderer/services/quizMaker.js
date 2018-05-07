@@ -1,3 +1,5 @@
+import Vuex from 'vuex'
+
 export default {
   prepareQuizObject (questions) {
     const quiz = {
@@ -9,7 +11,7 @@ export default {
       reoccurrences: questions.map(q => {
         return {
           tag: q.tag,
-          value: 2
+          value: Vuex.state.reoccurrencesOnStart
         }
       }),
       questions: questions

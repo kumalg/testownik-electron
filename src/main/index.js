@@ -43,6 +43,15 @@ app.on('ready', () => {
   if (!settings.has('theme')) {
     settings.set('theme', 'light')
   }
+  if (!settings.has('reoccurrencesIfBad')) {
+    settings.set('reoccurrencesIfBad', 1)
+  }
+  if (!settings.has('reoccurrencesOnStart')) {
+    settings.set('reoccurrencesOnStart', 2)
+  }
+  if (!settings.has('setMaxReoccurrences')) {
+    settings.set('setMaxReoccurrences', 10)
+  }
   createWindow()
 })
 

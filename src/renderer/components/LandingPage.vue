@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import settings from 'electron-settings'
 import SystemInformation from './LandingPage/SystemInformation'
 import questionsReader from '@/services/questionsReader'
 import quizMaker from '@/services/quizMaker'
@@ -21,16 +20,6 @@ const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(
 export default {
   name: 'landing-page',
   components: { SystemInformation },
-  data () {
-    return {
-      theme: settings.get('theme')
-    }
-  },
-  created () {
-    settings.watch('theme', (newValue, oldValue) => {
-      this.theme = newValue
-    })
-  },
   methods: {
     open (link) {
       this.$electron.shell.openExternal(link)
