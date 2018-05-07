@@ -1,7 +1,7 @@
 <template>
   <div class="quiz-wrapper" :theme="theme">
     <FinishQuizModal v-if="showFinishModal" @close="quitQuiz" />
-    <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/>
+    <!-- <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/> -->
     <div class="question-wrapper">
       <div class="question-content-wrapper">
         <div class="question-content">
@@ -66,7 +66,8 @@
           <h4>{{ quiz.time | moment }}</h4>
         </div>
       </template>
-      <button @click="showSettingsModal = true">Ustawienia</button>
+      <button @click="$emit('showSettings')">Ustawienia</button>
+      <button @click="$emit('showInfo')">Informacje</button>
       <button class="back-button" @click="quitQuiz"/>
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
     </div>
@@ -78,7 +79,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
-import SettingsModal from './SettingsModal'
+// import SettingsModal from './SettingsModal'
 
 export default {
   props: {
@@ -88,8 +89,8 @@ export default {
   },
   components: {
     ProgressBar,
-    FinishQuizModal,
-    SettingsModal
+    FinishQuizModal
+    // SettingsModal
   },
   data () {
     return {
@@ -100,7 +101,7 @@ export default {
       unsortedAnswers: null,
       quiz: this.quizObject,
       showFinishModal: false,
-      showSettingsModal: false,
+      // showSettingsModal: false,
       answers: []
     }
   },

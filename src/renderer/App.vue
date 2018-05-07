@@ -1,15 +1,33 @@
 <template>
   <div id="app">
+    <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/>
+    <InfoModal v-if="showInfoModal" @close="showInfoModal = false"/>
     <transition name="page-component-fade" mode="out-in">
-      <router-view/>
+      <router-view 
+        @showSettings="showSettingsModal = true"
+        @showInfo="showInfoModal = true"
+      />
     </transition>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'testownik-electron'
+import SettingsModal from '@/components/SettingsModal'
+import InfoModal from '@/components/InfoModal'
+
+export default {
+  name: 'testownik-electron',
+  components: {
+    SettingsModal,
+    InfoModal
+  },
+  data () {
+    return {
+      showSettingsModal: false,
+      showInfoModal: false
+    }
   }
+}
 </script>
 
 <style lang="scss">

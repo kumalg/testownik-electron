@@ -3,6 +3,9 @@
   <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
   <button @click="selectFolder">Wybierz folder</button>
   <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
+
+  <button @click="$emit('showSettings')">Ustawienia</button>
+  <button @click="$emit('showInfo')">Informacje</button>
 </div>
 </template>
 
