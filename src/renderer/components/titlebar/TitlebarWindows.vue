@@ -1,5 +1,9 @@
 <template>
 <div :class="['titlebar draggable', {'fullscreen': isMaximized}, {'titlebar-light': $store.state.theme === 'dark'}]">
+  <div class="titlebar-backbutton">
+  </div><div class="titlebar-app-title">
+    <span>Testownik</span>
+  </div>
   <div class="titlebar-controls">
     <div class="titlebar-minimize" @click="minimize">
       <svg x="0px" y="0px" viewBox="0 0 10 1">
@@ -60,6 +64,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$color: rgba(0,0,0,.75);
+$color-light: rgba(255,255,255,.5);
+.titlebar-backbutton {
+  display: none;
+  height: 100%;
+  width: 48px;
+}
+
+.titlebar-app-title {
+  display: inline-block;
+  vertical-align: top;
+  span {
+    color: $color;
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1em;
+    margin: 10px 14px;
+    transition: color .2s ease;
+  }
+}
+
+.titlebar-light .titlebar-app-title span {
+  color: $color-light;
+}
+
 .titlebar {
   display: block;
   position: fixed;
@@ -148,14 +177,14 @@ export default {
 .titlebar svg polygon,
 .titlebar svg rect,
 .titlebar svg > path {
-  fill: rgba(0, 0, 0, .5);
+  fill: $color;
   transition: fill .2s;
 }
 
 .titlebar-light svg polygon,
 .titlebar-light svg rect,
 .titlebar-light svg > path {
-  fill: rgba(255, 255, 255, .5);
+  fill: $color-light;
 }
 
 .titlebar-light .titlebar-close:hover {
