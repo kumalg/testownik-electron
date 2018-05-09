@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <TitlebarWindows/>
     <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/>
     <InfoModal v-if="showInfoModal" @close="showInfoModal = false"/>
     <transition name="page-component-fade" mode="out-in">
@@ -12,12 +13,14 @@
 </template>
 
 <script>
+import TitlebarWindows from '@/components/titlebar/TitlebarWindows'
 import SettingsModal from '@/components/SettingsModal'
 import InfoModal from '@/components/InfoModal'
 
 export default {
   name: 'testownik-electron',
   components: {
+    TitlebarWindows,
     SettingsModal,
     InfoModal
   },
@@ -31,12 +34,6 @@ export default {
 </script>
 
 <style lang="scss">
-.titlebar {
-  position: fixed;
-  width: 100%;
-  z-index: 9999;
-}
-
 .page-component-fade-enter-active {
   transition: all 0.2s ease-out;
 }
