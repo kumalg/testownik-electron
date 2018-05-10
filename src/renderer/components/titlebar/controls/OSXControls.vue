@@ -37,6 +37,7 @@ export default {
   width: 12px;
   height: 12px;
   background: red;
+  cursor: pointer;
   border-radius: 6px;
   border: {
     style: solid;

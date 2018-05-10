@@ -62,42 +62,51 @@ $color-dark: rgba(255,255,255,.5);
   shape-rendering: crispEdges;
 }
 
-.titlebar-minimize:hover,
-.titlebar-resize:hover,
-.titlebar-fullscreen:hover {
-  background-color: rgba(0, 0, 0, .05);
+.titlebar-minimize,
+.titlebar-resize,
+.titlebar-fullscreen {
+  &:hover {
+    background-color: rgba(0, 0, 0, .05);
+  }
 }
 
-.titlebar-controls-dark .titlebar-backbutton:hover,
-.titlebar-controls-dark .titlebar-minimize:hover,
-.titlebar-controls-dark .titlebar-resize:hover,
-.titlebar-controls-dark.titlebar-fullscreen:hover {
-  background-color: rgba(255, 255, 255, .05);
+.titlebar-controls-dark {
+  .titlebar-backbutton,
+  .titlebar-minimize,
+  .titlebar-resize,
+  .titlebar-fullscreen {
+    &:hover {
+      background-color: rgba(255, 255, 255, .05);
+    }
+  }
 }
 
 .titlebar-close:hover {
   background-color: rgba(232, 17, 35, 0.9);
-}
-
-.titlebar-close:hover svg polygon {
-  fill: rgba(255, 255, 255, 1);
+  svg polygon {
+    fill: rgba(255, 255, 255, 1);
+  }
 }
 
 .titlebar-controls-dark .titlebar-close:hover {
   fill: rgba(0, 0, 0, 1);
 }
 
-.titlebar svg polygon,
-.titlebar svg rect,
-.titlebar svg > path {
-  fill: $color;
-  transition: fill .2s;
+.titlebar {
+  svg polygon,
+  svg rect,
+  svg > path {
+    fill: $color;
+    transition: fill .2s;
+  }
 }
 
-.titlebar-controls-dark svg polygon,
-.titlebar-controls-dark svg rect,
-.titlebar-controls-dark svg > path {
-  fill: $color-dark;
+.titlebar-controls-dark {
+  svg polygon,
+  svg rect,
+  svg > path {
+    fill: $color-dark;
+  }
 }
 
 .titlebar-controls-dark .titlebar-close:hover {

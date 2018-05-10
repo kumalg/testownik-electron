@@ -1,5 +1,5 @@
 <template>
-<div id="wrapper">
+<div id="wrapper" :theme="$store.state.theme">
   <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
   <button @click="selectFolder">Wybierz folder</button>
   <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
@@ -45,7 +45,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import '../style/_colors.scss';
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
 
 * {
@@ -59,17 +60,27 @@ body {
   overflow-y: hidden;
 }
 
+#wrapper[theme=dark] {
+  background:
+    radial-gradient(
+      ellipse at top left,
+      $background-dark 40%,
+      $background-darkest 100%
+    );
+}
+
 #wrapper {
   background:
     radial-gradient(
       ellipse at top left,
-      rgba(255, 255, 255, 1) 40%,
-      rgba(229, 229, 229, .9) 100%
+      rgba(255, 255, 255, .8) 40%,
+      rgba(255, 255, 255, .9) 100%
     );
   height: 100vh;
   padding: 60px 80px;
   width: 100vw;
   overflow-y: auto;
+  transition: background .2s ease;
 }
 
 #logo {
