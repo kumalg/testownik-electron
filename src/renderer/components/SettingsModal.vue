@@ -106,6 +106,13 @@ export default {
   .section-option {
     margin: 4px 0;
     font-size: .875em;
+
+    select,
+    input[type=text],
+    input[type=number] {
+      display: block;
+      width: 100%;
+    }
   }
 }
 </style>
