@@ -39,6 +39,16 @@ export default {
 
 <style lang="scss">
 @import "../style/_colors.scss";
+.modal-mask[theme=dark] {
+  background-color: rgba($background-dark, .5);
+  > .modal-wrapper {
+    > .modal-container {
+      color: $primary-text-ondark;
+      background-color: $background-darkest;
+    }
+  }
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9999;
@@ -46,7 +56,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba($background-dark, .5);
+  background-color: rgba($background-light, .5);
   display: table;
   transition: opacity .3s ease;
 }
@@ -58,19 +68,20 @@ export default {
 .modal-container {
   position: relative;
   width: 100%;
-  max-width: 640px;
+  max-width: 480px;
   margin: 0px auto;
   padding: 24px 32px;
-  background-color: #fff;
+  background-color: $background-lighter;
   border-radius: 4px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, .15);
   transition: all .3s ease;
-  // font-family: Helvetica, Arial, sans-serif;
 }
 .modal-header h3 {
   margin-top: 0;
-  font-size: 1.75em;
+  font-size: 1.5em;
+  font-weight: 400;
   color: $primary-color;
+  text-align: center;
 }
 .modal-body {
   margin: 16px 0;

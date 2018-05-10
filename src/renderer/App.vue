@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :theme="$store.state.theme">
     <Titlebar
       :theme="$store.state.theme"
       :controlsTheme="$store.state.controlsTheme"
@@ -38,6 +38,28 @@ export default {
 </script>
 
 <style lang="scss">
+@import "style/_colors.scss";
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  overflow-y: hidden;
+}
+
+#app {
+  background: $background-lighter;
+  overflow-y: hidden;
+  &[theme=dark] {
+    background: $background-darker;
+  }
+}
+
 .page-component-fade-enter-active {
   transition: all 0.2s ease-out;
 }

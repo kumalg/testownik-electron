@@ -1,11 +1,13 @@
 <template>
-<div id="wrapper" :theme="$store.state.theme">
-  <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
-  <button @click="selectFolder">Wybierz folder</button>
-  <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
+<div>
+  <div id="wrapper" :theme="$store.state.theme">
+    <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
+    <button @click="selectFolder">Wybierz folder</button>
+    <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
 
-  <button @click="$emit('showSettings')">Ustawienia</button>
-  <button @click="$emit('showInfo')">Informacje</button>
+    <button @click="$emit('showSettings')">Ustawienia</button>
+    <button @click="$emit('showInfo')">Informacje</button>
+  </div>
 </div>
 </template>
 
@@ -45,20 +47,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import '../style/_colors.scss';
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Open Sans', sans-serif;
-  overflow-y: hidden;
-}
 
 #wrapper[theme=dark] {
   background:

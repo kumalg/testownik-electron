@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="quiz-wrapper" :theme="theme">
     <FinishQuizModal v-if="showFinishModal" @close="quitQuiz" />
     <!-- <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/> -->
@@ -74,6 +75,7 @@
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
     </div>
   </div>
+</div>
 </template>
 
 <script>

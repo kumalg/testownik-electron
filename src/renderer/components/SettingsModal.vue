@@ -1,12 +1,12 @@
 <template>
 <Modal @close="$emit('close')">
   <div slot="header">
-    Ustawienia
+    <h3>Ustawienia</h3>
   </div>
   <div slot="body">
     <div class="section">
       <div class="section-title">
-        Motyw
+        <span>Motyw</span>
       </div>
       <div class="section-option">
         <input id="dark-theme-radio" type="radio" v-model="theme" value="dark">
@@ -19,7 +19,7 @@
     </div>
     <div class="section">
       <div class="section-title">
-        Pasek tytułu
+        <span>Pasek tytułu</span>
       </div>
       <div class="section-option">
         <label>Styl przycisków</label>
@@ -35,7 +35,7 @@
     </div>
     <div class="section">
       <div class="section-title">
-        Quiz
+        <span>Quiz</span>
       </div>
       <div class="section-option">
         <label for="reoccurrences-if-bad-input">Liczba dodatkowych powtórzeń przy błędnej odpowiedzi</label>
@@ -95,4 +95,17 @@ export default {
 
 <style lang="scss">
 @import "../style/_colors.scss";
+
+.section {
+  margin: 16px 0;
+  .section-title {
+    margin-bottom: 8px;
+    font-size: 1.1em;
+    font-weight: 400;
+  }
+  .section-option {
+    margin: 4px 0;
+    font-size: .875em;
+  }
+}
 </style>
