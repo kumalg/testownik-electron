@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <TitlebarWindows/>
+    <Titlebar
+      :theme="$store.state.theme"
+      :controlsTheme="$store.state.controlsTheme"
+      :reverseControlsLocation="$store.state.reverseControlsLocation"
+    />
     <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/>
     <InfoModal v-if="showInfoModal" @close="showInfoModal = false"/>
     <transition name="page-component-fade" mode="out-in">
@@ -13,14 +17,14 @@
 </template>
 
 <script>
-import TitlebarWindows from '@/components/titlebar/TitlebarWindows'
+import Titlebar from '@/components/titlebar/Titlebar'
 import SettingsModal from '@/components/SettingsModal'
 import InfoModal from '@/components/InfoModal'
 
 export default {
   name: 'testownik-electron',
   components: {
-    TitlebarWindows,
+    Titlebar,
     SettingsModal,
     InfoModal
   },

@@ -43,6 +43,13 @@ app.on('ready', () => {
   if (!settings.has('theme')) {
     settings.set('theme', 'light')
   }
+  if (!settings.has('controlsTheme')) {
+    settings.set('controlsTheme', 'win')
+  }
+  if (!settings.has('reverseControlsLocation')) {
+    settings.set('reverseControlsLocation', false)
+  }
+
   if (!settings.has('reoccurrencesIfBad')) {
     settings.set('reoccurrencesIfBad', 1)
   }

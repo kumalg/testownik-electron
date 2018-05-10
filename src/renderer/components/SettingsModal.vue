@@ -19,6 +19,22 @@
     </div>
     <div class="section">
       <div class="section-title">
+        Pasek tytułu
+      </div>
+      <div class="section-option">
+        <label>Styl przycisków</label>
+        <select v-model="controlsTheme">
+          <option value="win">Windows 10</option>
+          <option value="osx">Yosemite</option>
+        </select>
+      </div>
+      <div class="section-option">
+        <input id="reverse-controls-checkbox" type="checkbox" v-model="reverseControlsLocation">
+        <label for="reverse-controls-checkbox">Przyciski po lewej stronie</label>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-title">
         Quiz
       </div>
       <div class="section-option">
@@ -47,6 +63,8 @@ export default {
   data () {
     return {
       theme: this.$store.state.theme,
+      controlsTheme: this.$store.state.controlsTheme,
+      reverseControlsLocation: this.$store.state.reverseControlsLocation,
       reoccurrencesIfBad: this.$store.state.reoccurrencesIfBad,
       reoccurrencesOnStart: this.$store.state.reoccurrencesOnStart,
       maxReoccurrences: this.$store.state.maxReoccurrences
@@ -55,6 +73,12 @@ export default {
   watch: {
     theme (value) {
       this.$store.dispatch('setTheme', value)
+    },
+    controlsTheme (value) {
+      this.$store.dispatch('setControlsTheme', value)
+    },
+    reverseControlsLocation (value) {
+      this.$store.dispatch('setReverseControlsLocation', value)
     },
     reoccurrencesIfBad (value) {
       this.$store.dispatch('setReoccurrencesIfBad', value)

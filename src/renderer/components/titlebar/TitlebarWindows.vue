@@ -1,6 +1,7 @@
 <template>
 <div :class="['titlebar draggable', {'fullscreen': isMaximized}, {'titlebar-light': $store.state.theme === 'dark'}]">
   <div class="titlebar-backbutton">
+    <span><</span>
   </div><div class="titlebar-app-title">
     <span>Testownik</span>
   </div>
@@ -67,9 +68,12 @@ export default {
 $color: rgba(0,0,0,.75);
 $color-light: rgba(255,255,255,.5);
 .titlebar-backbutton {
-  display: none;
+  display: inline-block;
   height: 100%;
   width: 48px;
+  color: #fff;
+  transition: background .2s ease;
+  cursor: pointer;
 }
 
 .titlebar-app-title {
@@ -127,6 +131,7 @@ $color-light: rgba(255,255,255,.5);
   transition: background-color 0.2s;
 }
 
+.titlebar.draggable .titlebar-backbutton,
 .titlebar.draggable .titlebar-minimize,
 .titlebar.draggable .titlebar-resize,
 .titlebar.draggable .titlebar-close {
@@ -150,12 +155,14 @@ $color-light: rgba(255,255,255,.5);
   display: none;
 }
 
+.titlebar-backbutton:hover,
 .titlebar-minimize:hover,
 .titlebar-resize:hover,
 .titlebar-fullscreen:hover {
   background-color: rgba(0, 0, 0, .05);
 }
 
+.titlebar-light .titlebar-backbutton:hover,
 .titlebar-light .titlebar-minimize:hover,
 .titlebar-light .titlebar-resize:hover,
 .titlebar-light .titlebar-fullscreen:hover {
