@@ -1,12 +1,21 @@
 <template>
 <div>
   <div id="wrapper" :theme="$store.state.theme">
-    <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
-    <button @click="selectFolder">Wybierz folder</button>
-    <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
+    <div class="last-locations">
 
-    <button @click="$emit('showSettings')">Ustawienia</button>
-    <button @click="$emit('showInfo')">Informacje</button>
+    </div>
+    <div class="right-column">
+      <div class="right-column-content">
+        <h1>Testownik</h1>
+        <div class="buttons">
+          <button @click="selectFolder">Wybierz folder</button>
+          <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
+
+          <button @click="$emit('showSettings')">Ustawienia</button>
+          <button @click="$emit('showInfo')">Informacje</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 </template>
@@ -50,27 +59,77 @@ export default {
 <style lang="scss" scoped>
 @import '../style/_colors.scss';
 
+h1 {
+  font-size: 3em;
+  font-weight: 200;
+}
+
 #wrapper[theme=dark] {
-  background:
-    radial-gradient(
-      ellipse at top left,
-      $background-dark 40%,
-      $background-darkest 100%
-    );
+  background: $background-dark;
+  color: $primary-text-ondark;
+  .last-locations {
+    background: $background-darkest;
+  }
+  .right-column {
+    .right-column-content {
+      .buttons > button {
+        &:not(:hover) {
+          color: $secondary-text-ondark;
+        }
+        &:hover {
+          color: $primary-text-ondark;
+          background: $background-darkest;
+        }
+      }
+    }
+  }
 }
 
 #wrapper {
-  background:
-    radial-gradient(
-      ellipse at top left,
-      rgba(255, 255, 255, .8) 40%,
-      rgba(255, 255, 255, .9) 100%
-    );
+  display: flex;
+  background: $background-lighter;
   height: 100vh;
-  padding: 60px 80px;
   width: 100vw;
-  overflow-y: auto;
   transition: background .2s ease;
+  text-align: center;
+
+  .last-locations {
+    width: 300px;
+    background: $background-light;
+    transition: background .2s ease;
+  }
+
+  .right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 0 64px rgba(0,0,0,.05);
+
+    .right-column-content {
+      margin-top: 32px;
+      overflow-y: auto;
+      .buttons {
+        margin-top: 32px;
+        > button {
+          margin: 8px auto;
+          display: block;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 48px;
+          cursor: pointer;
+          background: none;
+          transition: all .2s ease;
+          &:not(:hover) {
+            color: rgba(0,0,0,.75);
+          }
+          &:hover {
+            background: $background-light;
+          }
+        }
+      }
+    }
+  }
 }
 
 #logo {

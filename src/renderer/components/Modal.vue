@@ -45,6 +45,7 @@ export default {
     > .modal-container {
       color: $primary-text-ondark;
       background-color: $background-darkest;
+      box-shadow: none;
     }
   }
 }
@@ -63,7 +64,11 @@ export default {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
-  padding: 24px;
+  // display: flex;
+  // align-items: center;
+  padding: 32px;
+  // height: 100%;
+  // overflow: auto;
 }
 .modal-container {
   position: relative;

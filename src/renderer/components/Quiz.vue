@@ -30,49 +30,59 @@
             </template>
             <template v-else>
             </template>
-            <div>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</div>
-            <div>{{ currentQuestion.tag }}</div>
+            <div class="question-info">
+              <div>
+                <span>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</span>
+              </div>
+              <div>
+                <span>{{ currentQuestion.tag }}</span>
+              </div>
+            </div>
           </div>
         </transition>
       </div>
     </div>
     <div class="quiz-info-wrapper">
-      <template v-if="quiz && currentQuestion">
-        <div class="stat-item-container submitted-answers-container">
-          <h3>Udzielone odpowiedzi</h3>
-          <ProgressBar
-            :progress="correctAnswersRatio"
-            :backgroundColor="theme == 'dark' ? 'rgb(123, 30, 30)' : 'rgb(241, 81, 81)'"
-          />
-          <div class="progress-values">
-            <span>{{ quiz.numberOfCorrectAnswers }}</span>
-            <span class="pull-right">{{ quiz.numberOfBadAnswers }}</span>
-          </div>
-        </div>
-        <div class="stat-item-container learned-questions-container">
-          <h3>Opanowane pytania</h3>
-          <ProgressBar
-            :progress="learnedQuestionsRatio"
-            :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
-          />
-          <div class="progress-values">
-            <span>{{ quiz.numberOfLearnedQuestions }}</span>
-            <span class="pull-right">{{ quiz.numberOfQuestions - quiz.numberOfLearnedQuestions }}</span>
-          </div>
-        </div>
-        <div class="stat-item-container questions-number-container">
-          <h3>Liczba pytań</h3>
-          <h4>{{ quiz.numberOfQuestions }}</h4>
-        </div>
-        <div class="stat-item-container learning-time-container">
-          <h3>Czas nauki</h3>
-          <h4>{{ quiz.time | moment }}</h4>
-        </div>
-      </template>
-      <button @click="$emit('showSettings')">Ustawienia</button>
-      <button @click="$emit('showInfo')">Informacje</button>
-      <button class="back-button" @click="quitQuiz"/>
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
+      <div class="quiz-info-wrapper-content">
+        <div class="stats" v-if="quiz && currentQuestion">
+          <div class="stat-item-container submitted-answers-container">
+            <h3>Udzielone odpowiedzi</h3>
+            <ProgressBar
+              :progress="correctAnswersRatio"
+              :backgroundColor="theme == 'dark' ? 'rgb(123, 30, 30)' : 'rgb(241, 81, 81)'"
+            />
+            <div class="progress-values">
+              <span>{{ quiz.numberOfCorrectAnswers }}</span>
+              <span class="pull-right">{{ quiz.numberOfBadAnswers }}</span>
+            </div>
+          </div>
+          <div class="stat-item-container learned-questions-container">
+            <h3>Opanowane pytania</h3>
+            <ProgressBar
+              :progress="learnedQuestionsRatio"
+              :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+            />
+            <div class="progress-values">
+              <span>{{ quiz.numberOfLearnedQuestions }}</span>
+              <span class="pull-right">{{ quiz.numberOfQuestions - quiz.numberOfLearnedQuestions }}</span>
+            </div>
+          </div>
+          <div class="stat-item-container questions-number-container">
+            <h3>Liczba pytań</h3>
+            <h4>{{ quiz.numberOfQuestions }}</h4>
+          </div>
+          <div class="stat-item-container learning-time-container">
+            <h3>Czas nauki</h3>
+            <h4>{{ quiz.time | moment }}</h4>
+          </div>
+        </div>
+        <div class="buttons">
+          <button @click="quitQuiz"><</button>
+          <button @click="$emit('showSettings')">O</button>
+          <button @click="$emit('showInfo')">i</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -248,9 +258,9 @@ body {
 .quiz-wrapper[theme=dark] {
   color: $primary-text-ondark;
   .question-wrapper {
-    background: $background-darker;
+    background: $background-dark;
     .answer-wrapper {
-      background: $background-dark;
+      // background: $background-dark;
       box-shadow: none;
       ul.single-question {
         > li {
@@ -268,6 +278,14 @@ body {
             &::after {
               border-color: $background-darker;
             }
+          }
+        }
+      }
+      .question-info {
+        > * {
+          > span {
+            background: $background-darker;
+            box-shadow: none;
           }
         }
       }
@@ -294,11 +312,14 @@ $quiz-info-wrapper-width: 300px;
     display: flex;
     flex-direction: column;
     background: #fafafa;
+    z-index: 1;
+    box-shadow: 0 0 64px rgba(0,0,0,.05);
     transition: background .2s ease;
     max-width: calc(100% - #{$quiz-info-wrapper-width});
 
     .question-content-wrapper {
-      min-height: 128px;
+      margin-top: 40px;
+      min-height: 64px;
       text-align: center;
       font-size: 0.875em;
       display: flex;
@@ -311,37 +332,65 @@ $quiz-info-wrapper-width: 300px;
       }
     }
 
-    $offset-width: 17px;
+    // $offset-width: 17px;
     .answer-wrapper {
       flex: 1;
-      transform: translateX($offset-width);
+      // transform: translateX($offset-width);
       text-align: center;
       padding: 32px;
-      margin-left: -$offset-width;
-      z-index: 1;
+      padding-top: 8px;
+      // margin-left: -$offset-width;
+      // z-index: 1;
       overflow: auto;
-      background: #fafafa;
-      box-shadow: 0 0 64px rgba(0,0,0,.15);
+      // background: #fafafa;
+      // box-shadow: 0 0 64px rgba(0,0,0,.15);
       transition: background .2s ease, box-shadow .2s ease;
+
+      > div {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .question-info {
+          z-index: 1;
+          bottom: 16px;
+          > * {
+            > span {
+              display: inline-block;
+              background: #fff;
+              padding: 8px 16px;
+              font-size: 0.8125em;
+              border-radius: 32px;
+              margin: 4px;
+              box-shadow: 0 4px 32px rgba(0,0,0,.1);
+            }
+          }
+        }
+      }
 
       &.show-answers {
         ul.single-question {
-          > li.correct-answer {
-            > input[type=checkbox]:checked ~ label {
-              border-color: $green-color;
-              &::before {
-                border-color: $green-color $green-color transparent transparent;
+          > li {
+            label {
+              cursor: initial;
+            }
+            &.correct-answer {
+              > input[type=checkbox]:checked ~ label {
+                border-color: $green-color;
+                &::before {
+                  border-color: $green-color $green-color transparent transparent;
+                }
+              }
+              > input[type=checkbox]:not(:checked) ~ label {
+                border-color: $yellow-color;
               }
             }
-            > input[type=checkbox]:not(:checked) ~ label {
-              border-color: $yellow-color;
-            }
-          }
-          > li:not(.correct-answer) {
-            > input[type=checkbox]:checked ~ label {
-              border-color: $red-color;
-              &::before {
-                border-color: $red-color $red-color transparent transparent;
+            &:not(.correct-answer) {
+              > input[type=checkbox]:checked ~ label {
+                border-color: $red-color;
+                &::before {
+                  border-color: $red-color $red-color transparent transparent;
+                }
               }
             }
           }
@@ -377,7 +426,7 @@ $quiz-info-wrapper-width: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 32px rgba(0,0,0,.15);
+            box-shadow: 0 4px 32px rgba(0,0,0,.1);
             box-sizing: border-box;
             transition: all .2s ease;
             cursor: pointer;
@@ -450,17 +499,25 @@ $quiz-info-wrapper-width: 300px;
   }
 
   .quiz-info-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
     width: $quiz-info-wrapper-width;
     margin-left: auto;
     background: #eee;
     position: relative;
     text-align: center;
     transition: background .2s ease;
+
+    .quiz-info-wrapper-content {
+      margin-top: 32px;
+      overflow-y: auto;
+      width: 100%;
+      height: calc(100% - 32px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stats {
+      margin: auto 0 0 0;
+    }
 
     .stat-item-container {
       margin: 16px 0;
@@ -477,11 +534,26 @@ $quiz-info-wrapper-width: 300px;
       }
 
       .progress-values {
+        margin: auto;
+        width: 150px;
         display: flex;
         font-size: 0.75em;
         .pull-right {
           margin-left: auto;
         }
+      }
+    }
+
+    .buttons {
+      margin-top: auto;
+      margin-bottom: 64px;
+
+      button {
+        height: 32px;
+        width: 32px;
+        border-radius: 16px;
+        border: none;
+        cursor: pointer;
       }
     }
 
@@ -494,7 +566,7 @@ $quiz-info-wrapper-width: 300px;
       border-radius: 50%;
       border: none;
       bottom: 128px;
-      left: 0;
+      left: -16px;
       z-index: 2;
       box-shadow: 0 4px 32px rgba(0,0,0,.15);
       outline: none;
@@ -536,7 +608,7 @@ $quiz-info-wrapper-width: 300px;
       border-radius: 50%;
       border: none;
       bottom: 48px;
-      left: -16px;
+      left: -32px;
       z-index: 2;
       box-shadow: 0 4px 32px rgba(0,0,0,.15);
       outline: none;
