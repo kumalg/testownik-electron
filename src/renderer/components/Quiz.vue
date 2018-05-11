@@ -78,9 +78,9 @@
           </div>
         </div>
         <div class="buttons">
-          <button @click="quitQuiz"><</button>
-          <button @click="$emit('showSettings')">O</button>
-          <button @click="$emit('showInfo')">i</button>
+          <button @click="quitQuiz"><FontAwesomeIcon :icon="faSignOutAlt"/>
+          </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
+          </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
         </div>
       </div>
     </div>
@@ -93,6 +93,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 
 export default {
   props: {
@@ -102,10 +104,14 @@ export default {
   },
   components: {
     ProgressBar,
-    FinishQuizModal
+    FinishQuizModal,
+    FontAwesomeIcon
   },
   data () {
     return {
+      faSignOutAlt,
+      faCog,
+      faInfo,
       questionNum: 0,
       acceptVisible: true,
       currentQuestionTag: null,
@@ -259,9 +265,8 @@ body {
   color: $primary-text-ondark;
   .question-wrapper {
     background: $background-dark;
+    box-shadow: none;
     .answer-wrapper {
-      // background: $background-dark;
-      box-shadow: none;
       ul.single-question {
         > li {
           $checked-color: rgba(255,255,255,.15);
@@ -293,6 +298,14 @@ body {
   }
   .quiz-info-wrapper {
     background: $background-darkest;
+    .buttons {
+      button {
+        color: $secondary-text-ondark;
+        &:hover {
+          background: $background-dark;
+        }
+      }
+    }
     .action-button {
       box-shadow: none;
     }
@@ -546,14 +559,22 @@ $quiz-info-wrapper-width: 300px;
 
     .buttons {
       margin-top: auto;
-      margin-bottom: 64px;
+      margin-bottom: 60px;
 
       button {
+        margin: 4px;
         height: 32px;
         width: 32px;
         border-radius: 16px;
         border: none;
         cursor: pointer;
+        background: transparent;
+        color: rgba(0,0,0,.5);
+        transition: all .2s ease;
+        &:hover {
+          color: $primary-color;
+          background: $background-lighter;
+        }
       }
     }
 

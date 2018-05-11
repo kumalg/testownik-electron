@@ -47,7 +47,7 @@ $color-dark: rgba(255,255,255,.5);
   float: left;
   width: 45px;
   height: 31px;
-  margin: 1px 1px 0 0;
+  margin: 0;
   text-align: center;
   line-height: 29px;
   transition: background-color 0.2s;

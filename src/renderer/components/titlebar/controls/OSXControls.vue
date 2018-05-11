@@ -55,7 +55,6 @@ export default {
   margin: 10px 4px;
   width: 12px;
   height: 12px;
-  cursor: pointer;
   border-radius: 6px;
   border: {
     style: solid;
