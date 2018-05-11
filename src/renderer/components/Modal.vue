@@ -64,18 +64,18 @@ export default {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
-  // display: flex;
-  // align-items: center;
+  align-items: center;
   padding: 32px;
-  // height: 100%;
-  // overflow: auto;
 }
 .modal-container {
   position: relative;
+  overflow: auto;
   width: 100%;
+  max-height: 100%;
   max-width: 480px;
   margin: 0px auto;
   padding: 24px 32px;
+  box-sizing: border-box;
   background-color: $background-lighter;
   border-radius: 4px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, .15);

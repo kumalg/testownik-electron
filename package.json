@@ -1,6 +1,6 @@
 {
   "name": "testownik-electron",
-  "version": "0.0.0",
+  "version": "0.10.0",
   "author": "Kamil Golec <kumalgfilms@gmail.com>",
   "description": "An electron-vue project",
   "license": null,

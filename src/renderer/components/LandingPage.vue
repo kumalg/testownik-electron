@@ -1,11 +1,8 @@
 <template>
 <div>
   <div id="wrapper" :theme="$store.state.theme">
-    <div class="last-locations">
-
-    </div>
-    <div class="right-column">
-      <div class="right-column-content">
+    <div class="left-column">
+      <div class="left-column-content">
         <h1>Testownik</h1>
         <div class="buttons">
           <button @click="selectFolder">Wybierz folder</button>
@@ -15,6 +12,9 @@
           <button @click="$emit('showInfo')">Informacje</button>
         </div>
       </div>
+    </div>
+    <div class="last-locations">
+
     </div>
   </div>
 </div>
@@ -70,8 +70,8 @@ h1 {
   .last-locations {
     background: $background-darkest;
   }
-  .right-column {
-    .right-column-content {
+  .left-column {
+    .left-column-content {
       .buttons > button {
         &:not(:hover) {
           color: $secondary-text-ondark;
@@ -99,14 +99,14 @@ h1 {
     transition: background .2s ease;
   }
 
-  .right-column {
+  .left-column {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 0 64px rgba(0,0,0,.05);
 
-    .right-column-content {
+    .left-column-content {
       margin-top: 32px;
       overflow-y: auto;
       .buttons {
