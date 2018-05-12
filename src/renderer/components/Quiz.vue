@@ -19,7 +19,7 @@
           <div v-if="quiz && currentQuestion" :key="questionNum">
             <template v-if="currentQuestion.type == 'single'">
               <ul class="single-question">
-                <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
+                <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
@@ -268,12 +268,14 @@ body {
     box-shadow: none;
     .answer-wrapper {
       ul.single-question {
-        > li {
+        > li label {
+          box-shadow: none;
+        }
+        > li:not(.white-background) {
           $checked-color: rgba(255,255,255,.15);
           label {
             background: $background-darker;
             color: $primary-text-ondark;
-            box-shadow: none;
           }
           > input[type=checkbox]:checked ~ label {
             border-color: $checked-color;
