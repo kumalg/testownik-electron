@@ -1,7 +1,8 @@
 <template>
 <Modal @close="$emit('close')">
   <div slot="body">
-    Autor: Kamil Golec
+    <h2>Testownik</h2>
+    <p>Autor: Kamil Golec</p>
     <p>Wersja: {{ appVersion }}</p>
   </div>
 </Modal>

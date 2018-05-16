@@ -37,7 +37,7 @@ export default {
 
 <style lang="scss" scoped>
 .titlebar-osx-controls {
-  margin: 0 6px;
+  margin: 0 12px;
   path {
     opacity: 0;
     transition: all .2s ease;

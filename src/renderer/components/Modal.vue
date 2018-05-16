@@ -40,12 +40,20 @@ export default {
 <style lang="scss">
 @import "../style/_colors.scss";
 .modal-mask[theme=dark] {
-  background-color: rgba($background-dark, .5);
+  background-color: rgba($background-darkest, .5);
   > .modal-wrapper {
     > .modal-container {
       color: $primary-text-ondark;
-      background-color: $background-darkest;
+      background-color: $background-dark;
       box-shadow: none;
+
+      .modal-default-button {
+        background: rgba(255,255,255,.03);
+        color: rgba(255,255,255,.75);
+        &:hover {
+        background: rgba(255,255,255,.06);
+        }
+      }
     }
   }
 }
