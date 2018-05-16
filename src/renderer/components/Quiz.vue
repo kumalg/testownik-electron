@@ -30,14 +30,6 @@
             </template>
             <template v-else>
             </template>
-            <!-- <div class="question-info">
-              <div>
-                <span>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</span>
-              </div>
-              <div>
-                <span>{{ currentQuestion.tag }}</span>
-              </div>
-            </div> -->
           </div>
         </transition>
         <transition name="answers-container-fade" mode="out-in">
@@ -380,10 +372,10 @@ $quiz-info-wrapper-width: 300px;
       }
 
       .question-info {
-        position: absolute;
+        position: fixed;
         z-index: 1;
         bottom: 16px;
-        left: 50%;
+        left: calc(50% - #{$quiz-info-wrapper-width * 0.5});
         > * {
           transform: translateX(-50%);
           > span {
@@ -394,6 +386,7 @@ $quiz-info-wrapper-width: 300px;
             border-radius: 32px;
             margin: 4px;
             box-shadow: 0 4px 32px rgba(0,0,0,.1);
+            transition: all .2s ease;
           }
         }
       }
