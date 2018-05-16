@@ -30,13 +30,23 @@
             </template>
             <template v-else>
             </template>
-            <div class="question-info">
+            <!-- <div class="question-info">
               <div>
                 <span>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</span>
               </div>
               <div>
                 <span>{{ currentQuestion.tag }}</span>
               </div>
+            </div> -->
+          </div>
+        </transition>
+        <transition name="answers-container-fade" mode="out-in">
+          <div class="question-info" :key="questionNum">
+            <div>
+              <span>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</span>
+            </div>
+            <div>
+              <span>{{ currentQuestion.tag }}</span>
             </div>
           </div>
         </transition>
@@ -350,6 +360,7 @@ $quiz-info-wrapper-width: 300px;
     // $offset-width: 17px;
     .answer-wrapper {
       flex: 1;
+      position: relative;
       // transform: translateX($offset-width);
       text-align: center;
       padding: 32px;
@@ -361,24 +372,28 @@ $quiz-info-wrapper-width: 300px;
       // box-shadow: 0 0 64px rgba(0,0,0,.15);
       transition: background .2s ease, box-shadow .2s ease;
 
-      > div {
+      > div:not(.question-info) {
         height: 100%;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        .question-info {
-          z-index: 1;
-          bottom: 16px;
-          > * {
-            > span {
-              display: inline-block;
-              background: #fff;
-              padding: 8px 16px;
-              font-size: 0.8125em;
-              border-radius: 32px;
-              margin: 4px;
-              box-shadow: 0 4px 32px rgba(0,0,0,.1);
-            }
+      }
+
+      .question-info {
+        position: absolute;
+        z-index: 1;
+        bottom: 16px;
+        left: 50%;
+        > * {
+          transform: translateX(-50%);
+          > span {
+            display: inline-block;
+            background: #fff;
+            padding: 8px 16px;
+            font-size: 0.8125em;
+            border-radius: 32px;
+            margin: 4px;
+            box-shadow: 0 4px 32px rgba(0,0,0,.1);
           }
         }
       }
