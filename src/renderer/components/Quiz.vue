@@ -32,13 +32,14 @@
             </template>
           </div>
         </transition>
-        <transition name="answers-container-fade" mode="out-in">
+        <transition name="question-info-fade" mode="out-in">
           <div class="question-info" :key="questionNum">
-            <div>
-              <span>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</span>
-            </div>
-            <div>
-              <span>{{ currentQuestion.tag }}</span>
+            <div class="question-info-wrapper">
+              <div>
+                <span>{{ currentQuestion.tag }}</span>
+              </div><div>
+                <span>Ponowne wystąpienia: <b>{{ currentQuestionReoccurrences }}</b></span>
+              </div>
             </div>
           </div>
         </transition>
@@ -223,6 +224,7 @@ export default {
 @import '../style/_colors.scss';
 
 .question-content,
+.question-info,
 .answers-container {
   &-fade-enter-active,
   &-fade-leave-active {
@@ -252,6 +254,15 @@ export default {
   }
 }
 
+.question-info {
+  &-fade-enter {
+    transform: translateX(32px);
+  }
+  &-fade-leave-to {
+    transform: translateX(-32px);
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -271,7 +282,7 @@ body {
     .answer-wrapper {
       ul.single-question {
         > li label {
-          box-shadow: none;
+          box-shadow: none !important;
         }
         > li:not(.white-background) {
           $checked-color: rgba(255,255,255,.15);
@@ -291,10 +302,12 @@ body {
         }
       }
       .question-info {
-        > * {
-          > span {
-            background: $background-darker;
-            box-shadow: none;
+        > .question-info-wrapper {
+          > div {
+            > span {
+              background: $background-darker;
+              box-shadow: none;
+            }
           }
         }
       }
@@ -349,44 +362,39 @@ $quiz-info-wrapper-width: 300px;
       }
     }
 
-    // $offset-width: 17px;
     .answer-wrapper {
       flex: 1;
       position: relative;
-      // transform: translateX($offset-width);
       text-align: center;
       padding: 32px;
       padding-top: 8px;
-      // margin-left: -$offset-width;
-      // z-index: 1;
+      padding-bottom: 64px;
       overflow: auto;
-      // background: #fafafa;
-      // box-shadow: 0 0 64px rgba(0,0,0,.15);
       transition: background .2s ease, box-shadow .2s ease;
-
-      > div:not(.question-info) {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-      }
 
       .question-info {
         position: fixed;
         z-index: 1;
         bottom: 16px;
         left: calc(50% - #{$quiz-info-wrapper-width * 0.5});
-        > * {
+        .question-info-wrapper {
           transform: translateX(-50%);
-          > span {
+          * {
             display: inline-block;
-            background: #fff;
-            padding: 8px 16px;
-            font-size: 0.8125em;
-            border-radius: 32px;
-            margin: 4px;
-            box-shadow: 0 4px 32px rgba(0,0,0,.1);
-            transition: all .2s ease;
+            span {
+              display: inline-block;
+              background: #fff;
+              padding: 8px 16px;
+              font-size: 0.8125em;
+              border-radius: 32px;
+              margin: 4px;
+              box-shadow: 0 4px 32px rgba(0,0,0,.1);
+              transition: all .2s ease;
+
+              b {
+                color: $primary-color;
+              }
+            }
           }
         }
       }
@@ -400,17 +408,20 @@ $quiz-info-wrapper-width: 300px;
             &.correct-answer {
               > input[type=checkbox]:checked ~ label {
                 border-color: $green-color;
+                box-shadow: 0 4px 32px rgba($green-color, 0.25);
                 &::before {
                   border-color: $green-color $green-color transparent transparent;
                 }
               }
               > input[type=checkbox]:not(:checked) ~ label {
                 border-color: $yellow-color;
+                box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
               }
             }
             &:not(.correct-answer) {
               > input[type=checkbox]:checked ~ label {
                 border-color: $red-color;
+                box-shadow: 0 4px 32px rgba($red-color, 0.25);
                 &::before {
                   border-color: $red-color $red-color transparent transparent;
                 }
@@ -641,7 +652,7 @@ $quiz-info-wrapper-width: 300px;
       bottom: 48px;
       left: -32px;
       z-index: 2;
-      box-shadow: 0 4px 32px rgba(0,0,0,.15);
+      box-shadow: 0 4px 32px rgba($primary-color, .5);
       outline: none;
       cursor: pointer;
       transition: transform .2s ease, background .2s ease;

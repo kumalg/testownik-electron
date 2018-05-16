@@ -8,14 +8,16 @@
       <div class="section-title">
         <span>Motyw</span>
       </div>
-      <div class="section-option">
-        <input id="dark-theme-radio" type="radio" v-model="theme" value="dark">
-        <label for="dark-theme-radio">Ciemny</label>
-      </div>
-      <div class="section-option">
-        <input id="light-theme-radio" type="radio" v-model="theme" value="light">
-        <label for="light-theme-radio">Jasny</label>
-      </div>
+      <label class="custom-radio-button section-option" :theme="theme">
+        <input class="custom-radio-button" type="radio" v-model="theme" value="dark">
+        <span class="helping-el"></span>
+        <span class="label-text">Ciemny</span>
+      </label>
+      <label class="custom-radio-button section-option" :theme="theme">
+        <input class="custom-radio-button" type="radio" v-model="theme" value="light">
+        <span class="helping-el"></span>
+        <span class="label-text">Jasny</span>
+      </label>
     </div>
     <div class="section">
       <div class="section-title">
@@ -104,6 +106,7 @@ export default {
     font-weight: 400;
   }
   .section-option {
+    display: block;
     margin: 4px 0;
     font-size: .875em;
 

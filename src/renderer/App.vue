@@ -39,7 +39,8 @@ export default {
 
 <style lang="scss">
 @import "style/_colors.scss";
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+@import "style/ui_elements.scss";
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 * {
   box-sizing: border-box;

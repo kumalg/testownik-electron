@@ -1,0 +1,43 @@
+// @import 'variable';
+// @import 'common';
+// @import 'radio';
+@import '_colors';
+
+label.custom-radio-button input[type="radio"] {
+  display: none;
+}
+
+label.custom-radio-button input[type="radio"] ~ .helping-el {
+	// background-color: rgba(255,255,255, .1);
+  border-radius: 50%;
+  border: {
+    style: solid;
+    width: 3px;
+    color: rgba(0,0,0, .1);
+  }
+  display: inline-block;
+  margin-right: 7px;
+  padding: 8px;
+  position: relative;
+  top: 3px;
+}
+
+label.custom-radio-button[theme=dark] input[type="radio"] ~ .helping-el {
+  border: {
+    style: solid;
+    width: 3px;
+    color: rgba(255,255,255, .1);
+  }
+}
+
+label.custom-radio-button input[type="radio"]:checked ~ .helping-el:after {
+	background-color: $primary-color;
+  border-radius: 50%;
+  content: " ";
+  font-size: 33px;
+  height: 10px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  width: 10px;
+}

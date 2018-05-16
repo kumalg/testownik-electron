@@ -18,7 +18,7 @@
 
           <div class="modal-footer">
             <button class="modal-default-button" @click="$emit('close')">
-              OK
+              Wyjdź
             </button>
           </div>
         </div>
@@ -125,8 +125,26 @@ export default {
     transform: rotate(-45deg);
   }
 }
+.modal-footer {
+}
 .modal-default-button {
-  // float: right;
+  padding: 12px 24px;
+  line-height: 1em;
+  background: $background-light;
+  // text-transform: uppercase;
+  font-size: .75em;
+  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  color: rgba(0,0,0,.75);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  transition: background .2s ease;
+
+  &:hover {
+    background: $background-lighter;
+  }
 }
 /*
  * The following styles are auto-applied to elements with
