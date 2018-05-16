@@ -12,6 +12,14 @@
       @resize="resize"
       @close="close"
     />
+    <ArchControls
+      v-else-if="controlsTheme === 'linux'"
+      :theme="theme"
+      :isMaximized="isMaximized"
+      @minimize="minimize"
+      @resize="resize"
+      @close="close"
+    />
     <WindowsControls
       v-else
       :theme="theme"
@@ -27,6 +35,7 @@
 <script>
 import { remote } from 'electron'
 import WindowsControls from './controls/WindowsControls'
+import ArchControls from './controls/ArchControls'
 import OSXControls from './controls/OSXControls'
 const browserWindow = remote.getCurrentWindow()
 
@@ -47,6 +56,7 @@ export default {
   },
   components: {
     WindowsControls,
+    ArchControls,
     OSXControls
   },
   data () {

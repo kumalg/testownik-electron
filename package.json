@@ -1,5 +1,6 @@
 {
   "name": "testownik-electron",
+  "productName": "Testownik",
   "version": "0.10.0",
   "author": "Kamil Golec <kumalgfilms@gmail.com>",
   "description": "An electron-vue project",
@@ -50,7 +51,7 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "target": "portable",
+      "target": "nsis",
       "icon": "build/icons/icon.ico"
     },
     "linux": {

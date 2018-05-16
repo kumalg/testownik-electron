@@ -6,5 +6,9 @@ export const controlThemes = [
   {
     label: 'Yosemite',
     value: 'osx'
+  },
+  {
+    label: 'Arch Linux',
+    value: 'linux'
   }
 ]

@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" @mousedown.stop="$emit('close')" @touchstart.stop="$emit('close')" :theme="theme">
+    <div class="modal-mask" @mousedown.stop="close" @touchstart.stop="close" :theme="theme">
       <div class="modal-wrapper">
         <div class="modal-container" @mousedown.stop @touchstart.stop>
           
@@ -29,10 +29,22 @@
 
 <script>
 export default {
+  methods: {
+    close () {
+      this.$emit('close')
+    }
+  },
   computed: {
     theme () {
       return this.$store.state.theme
     }
+  },
+  mounted () {
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 27) {
+        this.close()
+      }
+    })
   }
 }
 </script>

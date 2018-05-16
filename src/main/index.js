@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow } from 'electron'
 import settings from 'electron-settings'
+import os from 'os'
 
 /**
  * Set `__static` path to static files in production
@@ -41,10 +42,22 @@ function createWindow () {
 
 app.on('ready', () => {
   if (!settings.has('theme')) {
-    settings.set('theme', 'light')
+    settings.set('theme', 'dark')
   }
   if (!settings.has('controlsTheme')) {
-    settings.set('controlsTheme', 'win')
+    let platform
+    switch (os.platform()) {
+      case 'darwin':
+        platform = 'osx'
+        break
+      case 'linux':
+        platform = 'linux'
+        break
+      default:
+        platform = 'win'
+        break
+    }
+    settings.set('controlsTheme', platform)
   }
   if (!settings.has('reverseControlsLocation')) {
     settings.set('reverseControlsLocation', false)

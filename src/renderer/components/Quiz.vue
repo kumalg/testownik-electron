@@ -212,6 +212,24 @@ export default {
     }
   },
   mounted () {
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 32 && !this.showFinishModal) {
+        this.actionButtonClick()
+      }
+      if (this.acceptVisible && !this.showFinishModal && e.keyCode >= 49 && e.keyCode <= 57) {
+        const index = e.keyCode - 49
+        if (index >= 0 && index < this.unsortedAnswers.length) {
+          const id = this.unsortedAnswers[index].id
+          const answerIndex = this.answers.indexOf(id)
+
+          if (answerIndex === -1) {
+            this.answers.push(id)
+          } else {
+            this.answers.splice(answerIndex, 1)
+          }
+        }
+      }
+    })
     this.randomQuestion()
     setInterval(function () {
       this.quiz.time += 1000
