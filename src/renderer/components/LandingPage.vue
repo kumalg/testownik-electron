@@ -4,33 +4,47 @@
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
-        <div class="buttons">
-          <!-- <div id="drag" :class="{'drag-over': isDragOver}">
-            <p><b>Upuść tutaj folder</b></p>
-            <p>bądź</p>
-            <button @click="selectFolder">Wybierz folder</button>
-          </div> -->
-          <div id="drag" :class="{'drag-over': isDragOver}">
+        <div id="drag" :class="{'drag-over': isDragOver}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
-			<path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
-				c-13.2,0-24-10.8-24-24V180c0-13.2,10.8-24,24-24h72c4.4,0,8-3.6,8-8c0-4.4-3.6-8-8-8H78c-22,0-40,18-40,40v192c0,22,18,40,40,40
-				h256c22,0,40-18,40-40V180C374,158,356,140,334,140z"/>
-			<path d="M206,28c4.4,0,8-3.6,8-8V8c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v12C198,24.4,201.6,28,206,28z"/>
-			<path d="M129.6,211.6c-3.2,3.2-3.2,8,0,11.2l70.8,70.8c1.6,1.6,3.6,2.4,5.6,2.4s4-0.8,5.6-2.4l70.8-70.8c3.2-3.2,3.2-8,0-11.2
-				s-8-3.2-11.2,0L214,268.8V56c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v212.8l-57.2-57.2C137.6,208.4,132.8,208.4,129.6,211.6z"/>
-		</svg>
+          viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
+              <path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
+                c-13.2,0-24-10.8-24-24V180c0-13.2,10.8-24,24-24h72c4.4,0,8-3.6,8-8c0-4.4-3.6-8-8-8H78c-22,0-40,18-40,40v192c0,22,18,40,40,40
+                h256c22,0,40-18,40-40V180C374,158,356,140,334,140z"/>
+              <path d="M206,28c4.4,0,8-3.6,8-8V8c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v12C198,24.4,201.6,28,206,28z"/>
+              <path d="M129.6,211.6c-3.2,3.2-3.2,8,0,11.2l70.8,70.8c1.6,1.6,3.6,2.4,5.6,2.4s4-0.8,5.6-2.4l70.8-70.8c3.2-3.2,3.2-8,0-11.2
+                s-8-3.2-11.2,0L214,268.8V56c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v212.8l-57.2-57.2C137.6,208.4,132.8,208.4,129.6,211.6z"/>
+            </svg>
             <a @click="selectFolder"><b>Wybierz folder</b> lub upuść go tutaj</a>
           </div>
-          <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
+        <div class="buttons">
+          <!-- <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button> -->
 
-          <button @click="$emit('showSettings')">Ustawienia</button>
-          <button @click="$emit('showInfo')">Informacje</button>
+          <button @click="$emit('showInfo')">
+            <i>
+              <FontAwesomeIcon :icon="faInfo"/>
+            </i>
+            Informacje
+          </button><button @click="$emit('showSettings')">
+            <i>
+              <FontAwesomeIcon :icon="faCog"/>
+            </i>
+            Ustawienia
+          </button>
         </div>
       </div>
     </div>
     <div class="last-locations">
-
+      <div class="last-locations-container">
+        <h3>Ostatnio używane</h3>
+        <ul>
+          <li v-for="folder in lastFolders" :key="folder">
+            <i @click="$store.dispatch('deleteLastFolder', folder)">
+              <FontAwesomeIcon :icon="faTrashAlt"/>
+            </i>
+            <p @click="openQuiz(folder)">{{ folder }}</p>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -43,15 +57,24 @@ import quizMaker from '@/services/quizMaker'
 import { sampleQuiz } from '@/sampleQuiz'
 import fs from 'fs'
 import { promisify } from 'util'
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
+import { faTrashAlt } from '@fortawesome/fontawesome-free-regular'
 const readdirAsync = promisify(fs.readdir)
-const { dialog } = require('electron').remote
+const { dialog, app } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
 
 export default {
   name: 'landing-page',
-  components: { SystemInformation },
+  components: {
+    SystemInformation,
+    FontAwesomeIcon
+  },
   data () {
     return {
+      faCog,
+      faInfo,
+      faTrashAlt,
       isDragOver: false
     }
   },
@@ -68,16 +91,28 @@ export default {
       await this.openQuiz(quizPath)
     },
     async openQuiz (quizPath) {
+      console.log(app)
       const filenames = await readdirAsync(quizPath)
       const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
       const quiz = quizMaker.prepareQuizObject(questions)
       this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
+      this.$store.dispatch('addNewLastFolder', quizPath)
     },
     sampleQuiz () {
       this.$router.push({ name: 'quiz', params: { quizObject: JSON.parse(JSON.stringify(sampleQuiz)) } })
     }
   },
+  computed: {
+    lastFolders () {
+      return this.$store.state.lastFolders
+    }
+  },
   mounted () {
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 84 && !this.showFinishModal) {
+        this.sampleQuiz()
+      }
+    })
     var holder = document.getElementById('drag')
     holder.ondragover = (e) => {
       e.preventDefault()
@@ -101,9 +136,6 @@ export default {
     }
     holder.ondrop = (e) => {
       e.preventDefault()
-      // for (let f of e.dataTransfer.files) {
-      //   console.log('File(s) you dragged here: ', f.path)
-      // }
       if (e.dataTransfer.files.length > 0) {
         this.openQuiz(e.dataTransfer.files[0].path)
       }
@@ -141,6 +173,21 @@ h1 {
   }
   .last-locations {
     background: $background-darkest;
+    .last-locations-container {
+      h3 {
+        color: $secondary-text-ondark;
+      }
+      ul {
+        li {
+          p {
+            color: $primary-text-ondark;
+          }
+          i {
+            color: $secondary-text-ondark;
+          }
+        }
+      }
+    }
   }
   .left-column {
     .left-column-content {
@@ -164,7 +211,6 @@ h1 {
   width: 100vw;
   transition: background .2s ease;
   text-align: center;
-
   #drag {
     padding: 32px;
     display: flex;
@@ -177,11 +223,17 @@ h1 {
     color:rgba(0,0,0,.5);
     text-align: center;
     max-width: 512px;
-    min-height: 128px;
-    margin: auto;
+    height: 196px;
+    margin: 32px auto;
     transition: background .2s ease;
     &.drag-over {
       background: rgba(0, 0, 0, 0.05);
+      a {
+        height: 0;
+      }
+      svg {
+        height: 96px;
+      }
     }
 
     p {
@@ -198,10 +250,14 @@ h1 {
       height: 64px;
       margin-bottom: 16px;
       fill: rgba(0,0,0,.2);
+      transition: all .2s ease;
     }
 
     a {
+      height: 2em;
+      overflow: hidden;
       cursor: pointer;
+      transition: all .2s ease;
       &:hover {
         b {
           color: $primary-color;
@@ -235,6 +291,60 @@ h1 {
     width: 300px;
     background: $background-light;
     transition: background .2s ease;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    .last-locations-container {
+      margin-top: 48px;
+      h3 {
+        text-align: right;
+        margin-bottom: 24px;
+        margin-right: 24px;
+        color: $secondary-text;
+        font-weight: 400;
+      }
+
+      ul {
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        li {
+          padding: 16px 24px;
+          display: flex;
+          flex-wrap: nowrap;
+          cursor: pointer;
+          transition: background .2s ease;
+          font-size: 0.875em;
+          &:hover {
+            background: rgba(255,255,255,.25);
+            i {
+              opacity: 1;
+            }
+          }
+          p {
+            flex: 1;
+            text-align: right;
+            overflow: hidden;
+            direction: rtl;
+            text-overflow: ellipsis;
+            color: $primary-text;
+          }
+          i {
+            padding: 8px;
+            margin: -8px;
+            margin-right: 0;
+            transition: color .2s ease, opacity .2s ease;
+            color: $secondary-text;
+            opacity: 0;
+            &:hover {
+              color: $red-color;
+            }
+          }
+        }
+      }
+    }
   }
 
   .left-column {
@@ -246,18 +356,23 @@ h1 {
 
     .left-column-content {
       margin-top: 32px;
+      padding: 32px;
       overflow-y: auto;
       .buttons {
-        margin: 32px;
+        // margin: 32px;
         > button {
-          margin: 8px auto;
-          display: block;
+          margin: 8px;
+          // display: block;
           padding: 12px 24px;
           border: none;
           border-radius: 48px;
           cursor: pointer;
           background: none;
           transition: all .2s ease;
+          i {
+            opacity: .4;
+            margin-right: 16px;
+          }
           &:not(:hover) {
             color: rgba(0,0,0,.75);
           }
