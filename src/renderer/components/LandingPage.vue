@@ -5,7 +5,23 @@
       <div class="left-column-content">
         <h1>Testownik</h1>
         <div class="buttons">
-          <button @click="selectFolder">Wybierz folder</button>
+          <!-- <div id="drag" :class="{'drag-over': isDragOver}">
+            <p><b>Upuść tutaj folder</b></p>
+            <p>bądź</p>
+            <button @click="selectFolder">Wybierz folder</button>
+          </div> -->
+          <div id="drag" :class="{'drag-over': isDragOver}">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
+			<path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
+				c-13.2,0-24-10.8-24-24V180c0-13.2,10.8-24,24-24h72c4.4,0,8-3.6,8-8c0-4.4-3.6-8-8-8H78c-22,0-40,18-40,40v192c0,22,18,40,40,40
+				h256c22,0,40-18,40-40V180C374,158,356,140,334,140z"/>
+			<path d="M206,28c4.4,0,8-3.6,8-8V8c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v12C198,24.4,201.6,28,206,28z"/>
+			<path d="M129.6,211.6c-3.2,3.2-3.2,8,0,11.2l70.8,70.8c1.6,1.6,3.6,2.4,5.6,2.4s4-0.8,5.6-2.4l70.8-70.8c3.2-3.2,3.2-8,0-11.2
+				s-8-3.2-11.2,0L214,268.8V56c0-4.4-3.6-8-8-8c-4.4,0-8,3.6-8,8v212.8l-57.2-57.2C137.6,208.4,132.8,208.4,129.6,211.6z"/>
+		</svg>
+            <a @click="selectFolder"><b>Wybierz folder</b> lub upuść go tutaj</a>
+          </div>
           <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
 
           <button @click="$emit('showSettings')">Ustawienia</button>
@@ -34,6 +50,11 @@ const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(
 export default {
   name: 'landing-page',
   components: { SystemInformation },
+  data () {
+    return {
+      isDragOver: false
+    }
+  },
   methods: {
     open (link) {
       this.$electron.shell.openExternal(link)
@@ -44,6 +65,9 @@ export default {
         throw new Error('Błąd przy wyborze folderu')
       }
       const quizPath = path[0]
+      await this.openQuiz(quizPath)
+    },
+    async openQuiz (quizPath) {
       const filenames = await readdirAsync(quizPath)
       const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
       const quiz = quizMaker.prepareQuizObject(questions)
@@ -51,6 +75,40 @@ export default {
     },
     sampleQuiz () {
       this.$router.push({ name: 'quiz', params: { quizObject: JSON.parse(JSON.stringify(sampleQuiz)) } })
+    }
+  },
+  mounted () {
+    var holder = document.getElementById('drag')
+    holder.ondragover = (e) => {
+      e.preventDefault()
+      this.isDragOver = true
+      return false
+    }
+    holder.ondragenter = (e) => {
+      e.preventDefault()
+      this.isDragOver = true
+      return false
+    }
+    holder.ondragleave = (e) => {
+      e.preventDefault()
+      this.isDragOver = false
+      return false
+    }
+    holder.ondragend = (e) => {
+      e.preventDefault()
+      this.isDragOver = false
+      return false
+    }
+    holder.ondrop = (e) => {
+      e.preventDefault()
+      // for (let f of e.dataTransfer.files) {
+      //   console.log('File(s) you dragged here: ', f.path)
+      // }
+      if (e.dataTransfer.files.length > 0) {
+        this.openQuiz(e.dataTransfer.files[0].path)
+      }
+      this.isDragOver = false
+      return false
     }
   }
 }
@@ -67,6 +125,20 @@ h1 {
 #wrapper[theme=dark] {
   background: $background-dark;
   color: $primary-text-ondark;
+  
+  #drag {
+    border: 2px dashed rgba(255,255,255,.1);
+    background: rgba(255,255,255,.02);
+    color: rgba(255,255,255,.4);
+    svg {
+      height: 64px;
+      margin-bottom: 16px;
+      fill: rgba(255,255,255,.2);
+    }
+    &.drag-over {
+      background: rgba(255,255,255,.04);
+    }
+  }
   .last-locations {
     background: $background-darkest;
   }
@@ -93,6 +165,72 @@ h1 {
   transition: background .2s ease;
   text-align: center;
 
+  #drag {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 2px dashed rgba(0,0,0,.1);
+    background: rgba(0, 0, 0, 0.02);
+    color:rgba(0,0,0,.5);
+    text-align: center;
+    max-width: 512px;
+    min-height: 128px;
+    margin: auto;
+    transition: background .2s ease;
+    &.drag-over {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    p {
+      font-size: .875em;
+      margin: 8px;
+    }
+
+    b {
+      font-weight: 600;
+      transition: color .2s ease;
+    }
+
+    svg {
+      height: 64px;
+      margin-bottom: 16px;
+      fill: rgba(0,0,0,.2);
+    }
+
+    a {
+      cursor: pointer;
+      &:hover {
+        b {
+          color: $primary-color;
+        }
+      }
+    }
+
+    button {
+      margin: 8px;
+      padding: 16px 32px;
+      line-height: 1em;
+      border-radius: 4px;
+      background: $primary-color;
+      color: #fff;
+      font-family: 'Open Sans';
+      font-weight: 600;
+      font-size: 0.75em;
+      border: none;
+      cursor: pointer;
+      transition: background .2s ease;
+      &:hover {
+        background: $primary-color-lighter;
+      }
+      &:active {
+        background: $primary-color-lightest;
+      }
+    }
+  }
+
   .last-locations {
     width: 300px;
     background: $background-light;
@@ -110,7 +248,7 @@ h1 {
       margin-top: 32px;
       overflow-y: auto;
       .buttons {
-        margin-top: 32px;
+        margin: 32px;
         > button {
           margin: 8px auto;
           display: block;
