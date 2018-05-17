@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="quiz-wrapper" :theme="theme">
-    <FinishQuizModal v-if="showFinishModal" @close="quitQuiz" />
+    <FinishQuizModal v-if="showFinishModal" :time="quiz.time" @close="quitQuiz" />
     <!-- <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/> -->
     <div class="question-wrapper">
       <div class="question-content-wrapper">
@@ -99,6 +99,8 @@ import FinishQuizModal from './FinishQuizModal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 
+var timer
+
 export default {
   props: {
     quizObject: {
@@ -165,7 +167,7 @@ export default {
 
       const remainingQuestionsReoccurrences = this.quiz.reoccurrences.filter(r => r.value > 0)
       if (!remainingQuestionsReoccurrences.length) {
-        this.showFinishModal = true
+        this.finishQuiz()
       }
     },
     randomQuestion () {
@@ -178,8 +180,21 @@ export default {
           this.unsortedAnswers = _.shuffle(this.currentQuestion.answers)
         }
       } else {
-        this.showFinishModal = true
+        this.finishQuiz()
       }
+    },
+    finishQuiz () {
+      this.stopTimer()
+      this.showFinishModal = true
+    },
+    startTimer () {
+      timer = window.setInterval(() => {
+        this.quiz.time += 1000
+      }, 1000)
+    },
+    stopTimer () {
+      window.clearInterval(timer)
+      timer = null
     }
   },
   computed: {
@@ -231,9 +246,7 @@ export default {
       }
     })
     this.randomQuestion()
-    setInterval(function () {
-      this.quiz.time += 1000
-    }.bind(this), 1000)
+    this.startTimer()
   }
 }
 </script>
