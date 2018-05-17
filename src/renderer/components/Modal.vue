@@ -1,6 +1,6 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" @mousedown.stop="$emit('close')" @touchstart.stop="$emit('close')" :theme="theme">
+    <div class="modal-mask" @mousedown.stop="close" @touchstart.stop="close" :theme="theme">
       <div class="modal-wrapper">
         <div class="modal-container" @mousedown.stop @touchstart.stop>
           
@@ -18,7 +18,7 @@
 
           <div class="modal-footer">
             <button class="modal-default-button" @click="$emit('close')">
-              OK
+              Wyjdź
             </button>
           </div>
         </div>
@@ -29,16 +29,47 @@
 
 <script>
 export default {
+  methods: {
+    close () {
+      this.$emit('close')
+    }
+  },
   computed: {
     theme () {
       return this.$store.state.theme
     }
+  },
+  mounted () {
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 27) {
+        this.close()
+      }
+    })
   }
 }
 </script>
 
 <style lang="scss">
 @import "../style/_colors.scss";
+.modal-mask[theme=dark] {
+  background-color: rgba($background-darkest, .5);
+  > .modal-wrapper {
+    > .modal-container {
+      color: $primary-text-ondark;
+      background-color: $background-dark;
+      box-shadow: none;
+
+      .modal-default-button {
+        background: rgba(255,255,255,.03);
+        color: rgba(255,255,255,.75);
+        &:hover {
+        background: rgba(255,255,255,.06);
+        }
+      }
+    }
+  }
+}
+
 .modal-mask {
   position: fixed;
   z-index: 9999;
@@ -46,31 +77,36 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba($background-dark, .5);
+  background-color: rgba($background-light, .5);
   display: table;
   transition: opacity .3s ease;
 }
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
-  padding: 24px;
+  align-items: center;
+  padding: 32px;
 }
 .modal-container {
   position: relative;
+  overflow: auto;
   width: 100%;
-  max-width: 640px;
+  max-height: 100%;
+  max-width: 480px;
   margin: 0px auto;
   padding: 24px 32px;
-  background-color: #fff;
+  box-sizing: border-box;
+  background-color: $background-lighter;
   border-radius: 4px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, .15);
   transition: all .3s ease;
-  // font-family: Helvetica, Arial, sans-serif;
 }
 .modal-header h3 {
   margin-top: 0;
-  font-size: 1.75em;
+  font-size: 1.5em;
+  font-weight: 400;
   color: $primary-color;
+  text-align: center;
 }
 .modal-body {
   margin: 16px 0;
@@ -109,8 +145,26 @@ export default {
     transform: rotate(-45deg);
   }
 }
+.modal-footer {
+}
 .modal-default-button {
-  // float: right;
+  padding: 12px 24px;
+  line-height: 1em;
+  background: $background-light;
+  // text-transform: uppercase;
+  font-size: .75em;
+  font-weight: 600;
+  font-family: 'Open Sans', sans-serif;
+  color: rgba(0,0,0,.75);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  float: right;
+  transition: background .2s ease;
+
+  &:hover {
+    background: $background-lighter;
+  }
 }
 /*
  * The following styles are auto-applied to elements with

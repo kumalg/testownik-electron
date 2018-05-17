@@ -1,11 +1,22 @@
 <template>
-<div id="wrapper">
-  <img id="logo" src="~@/assets/logo.png" alt="electron-vue">
-  <button @click="selectFolder">Wybierz folder</button>
-  <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
+<div>
+  <div id="wrapper" :theme="$store.state.theme">
+    <div class="left-column">
+      <div class="left-column-content">
+        <h1>Testownik</h1>
+        <div class="buttons">
+          <button @click="selectFolder">Wybierz folder</button>
+          <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button>
 
-  <button @click="$emit('showSettings')">Ustawienia</button>
-  <button @click="$emit('showInfo')">Informacje</button>
+          <button @click="$emit('showSettings')">Ustawienia</button>
+          <button @click="$emit('showInfo')">Informacje</button>
+        </div>
+      </div>
+    </div>
+    <div class="last-locations">
+
+    </div>
+  </div>
 </div>
 </template>
 
@@ -45,31 +56,80 @@ export default {
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+<style lang="scss" scoped>
+@import '../style/_colors.scss';
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+h1 {
+  font-size: 3em;
+  font-weight: 200;
 }
 
-body {
-  font-family: 'Open Sans', sans-serif;
-  overflow-y: hidden;
+#wrapper[theme=dark] {
+  background: $background-dark;
+  color: $primary-text-ondark;
+  .last-locations {
+    background: $background-darkest;
+  }
+  .left-column {
+    .left-column-content {
+      .buttons > button {
+        &:not(:hover) {
+          color: $secondary-text-ondark;
+        }
+        &:hover {
+          color: $primary-text-ondark;
+          background: $background-darkest;
+        }
+      }
+    }
+  }
 }
 
 #wrapper {
-  background:
-    radial-gradient(
-      ellipse at top left,
-      rgba(255, 255, 255, 1) 40%,
-      rgba(229, 229, 229, .9) 100%
-    );
+  display: flex;
+  background: $background-lighter;
   height: 100vh;
-  padding: 60px 80px;
   width: 100vw;
-  overflow-y: auto;
+  transition: background .2s ease;
+  text-align: center;
+
+  .last-locations {
+    width: 300px;
+    background: $background-light;
+    transition: background .2s ease;
+  }
+
+  .left-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 0 64px rgba(0,0,0,.05);
+
+    .left-column-content {
+      margin-top: 32px;
+      overflow-y: auto;
+      .buttons {
+        margin-top: 32px;
+        > button {
+          margin: 8px auto;
+          display: block;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 48px;
+          cursor: pointer;
+          background: none;
+          transition: all .2s ease;
+          &:not(:hover) {
+            color: rgba(0,0,0,.75);
+          }
+          &:hover {
+            background: $background-light;
+          }
+        }
+      }
+    }
+  }
 }
 
 #logo {

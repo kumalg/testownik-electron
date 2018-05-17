@@ -1,6 +1,7 @@
 {
   "name": "testownik-electron",
-  "version": "0.0.0",
+  "productName": "Testownik",
+  "version": "0.10.0",
   "author": "Kamil Golec <kumalgfilms@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
@@ -50,7 +51,7 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "target": "portable",
+      "target": "nsis",
       "icon": "build/icons/icon.ico"
     },
     "linux": {
@@ -58,6 +59,10 @@
     }
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free-regular": "^5.0.13",
+    "@fortawesome/fontawesome-free-solid": "^5.0.13",
+    "@fortawesome/vue-fontawesome": "0.0.22",
     "axios": "^0.16.1",
     "electron-settings": "^3.1.4",
     "electron-titlebar-windows": "^3.0.0",

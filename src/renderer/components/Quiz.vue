@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="quiz-wrapper" :theme="theme">
     <FinishQuizModal v-if="showFinishModal" @close="quitQuiz" />
     <!-- <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/> -->
@@ -18,7 +19,7 @@
           <div v-if="quiz && currentQuestion" :key="questionNum">
             <template v-if="currentQuestion.type == 'single'">
               <ul class="single-question">
-                <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="{'correct-answer': answer.isCorrect}">
+                <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
@@ -29,51 +30,65 @@
             </template>
             <template v-else>
             </template>
-            <div>Liczba powtórzeń: {{ currentQuestionReoccurrences }}</div>
-            <div>{{ currentQuestion.tag }}</div>
+          </div>
+        </transition>
+        <transition name="question-info-fade" mode="out-in">
+          <div class="question-info" :key="questionNum">
+            <div class="question-info-wrapper">
+              <div>
+                <span>{{ currentQuestion.tag }}</span>
+              </div><div>
+                <span>Ponowne wystąpienia: <b>{{ currentQuestionReoccurrences }}</b></span>
+              </div>
+            </div>
           </div>
         </transition>
       </div>
     </div>
     <div class="quiz-info-wrapper">
-      <template v-if="quiz && currentQuestion">
-        <div class="stat-item-container submitted-answers-container">
-          <h3>Udzielone odpowiedzi</h3>
-          <ProgressBar
-            :progress="correctAnswersRatio"
-            :backgroundColor="theme == 'dark' ? 'rgb(123, 30, 30)' : 'rgb(241, 81, 81)'"
-          />
-          <div class="progress-values">
-            <span>{{ quiz.numberOfCorrectAnswers }}</span>
-            <span class="pull-right">{{ quiz.numberOfBadAnswers }}</span>
-          </div>
-        </div>
-        <div class="stat-item-container learned-questions-container">
-          <h3>Opanowane pytania</h3>
-          <ProgressBar
-            :progress="learnedQuestionsRatio"
-            :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
-          />
-          <div class="progress-values">
-            <span>{{ quiz.numberOfLearnedQuestions }}</span>
-            <span class="pull-right">{{ quiz.numberOfQuestions - quiz.numberOfLearnedQuestions }}</span>
-          </div>
-        </div>
-        <div class="stat-item-container questions-number-container">
-          <h3>Liczba pytań</h3>
-          <h4>{{ quiz.numberOfQuestions }}</h4>
-        </div>
-        <div class="stat-item-container learning-time-container">
-          <h3>Czas nauki</h3>
-          <h4>{{ quiz.time | moment }}</h4>
-        </div>
-      </template>
-      <button @click="$emit('showSettings')">Ustawienia</button>
-      <button @click="$emit('showInfo')">Informacje</button>
-      <button class="back-button" @click="quitQuiz"/>
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
+      <div class="quiz-info-wrapper-content">
+        <div class="stats" v-if="quiz && currentQuestion">
+          <div class="stat-item-container submitted-answers-container">
+            <h3>Udzielone odpowiedzi</h3>
+            <ProgressBar
+              :progress="correctAnswersRatio"
+              :backgroundColor="theme == 'dark' ? 'rgb(123, 30, 30)' : 'rgb(241, 81, 81)'"
+            />
+            <div class="progress-values">
+              <span>{{ quiz.numberOfCorrectAnswers }}</span>
+              <span class="pull-right">{{ quiz.numberOfBadAnswers }}</span>
+            </div>
+          </div>
+          <div class="stat-item-container learned-questions-container">
+            <h3>Opanowane pytania</h3>
+            <ProgressBar
+              :progress="learnedQuestionsRatio"
+              :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+            />
+            <div class="progress-values">
+              <span>{{ quiz.numberOfLearnedQuestions }}</span>
+              <span class="pull-right">{{ quiz.numberOfQuestions - quiz.numberOfLearnedQuestions }}</span>
+            </div>
+          </div>
+          <div class="stat-item-container questions-number-container">
+            <h3>Liczba pytań</h3>
+            <h4>{{ quiz.numberOfQuestions }}</h4>
+          </div>
+          <div class="stat-item-container learning-time-container">
+            <h3>Czas nauki</h3>
+            <h4>{{ quiz.time | moment }}</h4>
+          </div>
+        </div>
+        <div class="buttons">
+          <button @click="quitQuiz"><FontAwesomeIcon :icon="faSignOutAlt"/>
+          </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
+          </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -81,6 +96,8 @@ import _ from 'lodash'
 import moment from 'moment'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 
 export default {
   props: {
@@ -90,10 +107,14 @@ export default {
   },
   components: {
     ProgressBar,
-    FinishQuizModal
+    FinishQuizModal,
+    FontAwesomeIcon
   },
   data () {
     return {
+      faSignOutAlt,
+      faCog,
+      faInfo,
       questionNum: 0,
       acceptVisible: true,
       currentQuestionTag: null,
@@ -191,6 +212,24 @@ export default {
     }
   },
   mounted () {
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 32 && !this.showFinishModal) {
+        this.actionButtonClick()
+      }
+      if (this.acceptVisible && !this.showFinishModal && e.keyCode >= 49 && e.keyCode <= 57) {
+        const index = e.keyCode - 49
+        if (index >= 0 && index < this.unsortedAnswers.length) {
+          const id = this.unsortedAnswers[index].id
+          const answerIndex = this.answers.indexOf(id)
+
+          if (answerIndex === -1) {
+            this.answers.push(id)
+          } else {
+            this.answers.splice(answerIndex, 1)
+          }
+        }
+      }
+    })
     this.randomQuestion()
     setInterval(function () {
       this.quiz.time += 1000
@@ -203,6 +242,7 @@ export default {
 @import '../style/_colors.scss';
 
 .question-content,
+.question-info,
 .answers-container {
   &-fade-enter-active,
   &-fade-leave-active {
@@ -232,6 +272,15 @@ export default {
   }
 }
 
+.question-info {
+  &-fade-enter {
+    transform: translateX(32px);
+  }
+  &-fade-leave-to {
+    transform: translateX(-32px);
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -246,17 +295,18 @@ body {
 .quiz-wrapper[theme=dark] {
   color: $primary-text-ondark;
   .question-wrapper {
-    background: $background-darker;
+    background: $background-dark;
+    box-shadow: none;
     .answer-wrapper {
-      background: $background-dark;
-      box-shadow: none;
       ul.single-question {
-        > li {
+        > li label {
+          box-shadow: none !important;
+        }
+        > li:not(.white-background) {
           $checked-color: rgba(255,255,255,.15);
           label {
             background: $background-darker;
             color: $primary-text-ondark;
-            box-shadow: none;
           }
           > input[type=checkbox]:checked ~ label {
             border-color: $checked-color;
@@ -269,10 +319,28 @@ body {
           }
         }
       }
+      .question-info {
+        > .question-info-wrapper {
+          > div {
+            > span {
+              background: $background-darker;
+              box-shadow: none;
+            }
+          }
+        }
+      }
     }
   }
   .quiz-info-wrapper {
     background: $background-darkest;
+    .buttons {
+      button {
+        color: $secondary-text-ondark;
+        &:hover {
+          background: $background-dark;
+        }
+      }
+    }
     .action-button {
       box-shadow: none;
     }
@@ -292,11 +360,14 @@ $quiz-info-wrapper-width: 300px;
     display: flex;
     flex-direction: column;
     background: #fafafa;
+    z-index: 1;
+    box-shadow: 0 0 64px rgba(0,0,0,.05);
     transition: background .2s ease;
     max-width: calc(100% - #{$quiz-info-wrapper-width});
 
     .question-content-wrapper {
-      min-height: 128px;
+      margin-top: 40px;
+      min-height: 64px;
       text-align: center;
       font-size: 0.875em;
       display: flex;
@@ -309,37 +380,69 @@ $quiz-info-wrapper-width: 300px;
       }
     }
 
-    $offset-width: 17px;
     .answer-wrapper {
       flex: 1;
-      transform: translateX($offset-width);
+      position: relative;
       text-align: center;
       padding: 32px;
-      margin-left: -$offset-width;
-      z-index: 1;
+      padding-top: 8px;
+      padding-bottom: 64px;
       overflow: auto;
-      background: #fafafa;
-      box-shadow: 0 0 64px rgba(0,0,0,.15);
       transition: background .2s ease, box-shadow .2s ease;
+
+      .question-info {
+        position: fixed;
+        z-index: 1;
+        bottom: 16px;
+        left: calc(50% - #{$quiz-info-wrapper-width * 0.5});
+        .question-info-wrapper {
+          transform: translateX(-50%);
+          * {
+            display: inline-block;
+            span {
+              display: inline-block;
+              background: #fff;
+              padding: 8px 16px;
+              font-size: 0.8125em;
+              border-radius: 32px;
+              margin: 4px;
+              box-shadow: 0 4px 32px rgba(0,0,0,.1);
+              transition: all .2s ease;
+
+              b {
+                color: $primary-color;
+              }
+            }
+          }
+        }
+      }
 
       &.show-answers {
         ul.single-question {
-          > li.correct-answer {
-            > input[type=checkbox]:checked ~ label {
-              border-color: $green-color;
-              &::before {
-                border-color: $green-color $green-color transparent transparent;
+          > li {
+            label {
+              cursor: initial;
+            }
+            &.correct-answer {
+              > input[type=checkbox]:checked ~ label {
+                border-color: $green-color;
+                box-shadow: 0 4px 32px rgba($green-color, 0.25);
+                &::before {
+                  border-color: $green-color $green-color transparent transparent;
+                }
+              }
+              > input[type=checkbox]:not(:checked) ~ label {
+                border-color: $yellow-color;
+                box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
               }
             }
-            > input[type=checkbox]:not(:checked) ~ label {
-              border-color: $yellow-color;
-            }
-          }
-          > li:not(.correct-answer) {
-            > input[type=checkbox]:checked ~ label {
-              border-color: $red-color;
-              &::before {
-                border-color: $red-color $red-color transparent transparent;
+            &:not(.correct-answer) {
+              > input[type=checkbox]:checked ~ label {
+                border-color: $red-color;
+                box-shadow: 0 4px 32px rgba($red-color, 0.25);
+                &::before {
+                  border-color: $red-color $red-color transparent transparent;
+                }
               }
             }
           }
@@ -375,7 +478,7 @@ $quiz-info-wrapper-width: 300px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 32px rgba(0,0,0,.15);
+            box-shadow: 0 4px 32px rgba(0,0,0,.1);
             box-sizing: border-box;
             transition: all .2s ease;
             cursor: pointer;
@@ -448,17 +551,25 @@ $quiz-info-wrapper-width: 300px;
   }
 
   .quiz-info-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
     width: $quiz-info-wrapper-width;
     margin-left: auto;
     background: #eee;
     position: relative;
     text-align: center;
     transition: background .2s ease;
+
+    .quiz-info-wrapper-content {
+      margin-top: 32px;
+      overflow-y: auto;
+      width: 100%;
+      height: calc(100% - 32px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stats {
+      margin: auto 0 0 0;
+    }
 
     .stat-item-container {
       margin: 16px 0;
@@ -475,10 +586,33 @@ $quiz-info-wrapper-width: 300px;
       }
 
       .progress-values {
+        margin: auto;
+        width: 150px;
         display: flex;
         font-size: 0.75em;
         .pull-right {
           margin-left: auto;
+        }
+      }
+    }
+
+    .buttons {
+      margin-top: auto;
+      margin-bottom: 60px;
+
+      button {
+        margin: 4px;
+        height: 32px;
+        width: 32px;
+        border-radius: 16px;
+        border: none;
+        cursor: pointer;
+        background: transparent;
+        color: rgba(0,0,0,.5);
+        transition: all .2s ease;
+        &:hover {
+          color: $primary-color;
+          background: $background-lighter;
         }
       }
     }
@@ -492,7 +626,7 @@ $quiz-info-wrapper-width: 300px;
       border-radius: 50%;
       border: none;
       bottom: 128px;
-      left: 0;
+      left: -16px;
       z-index: 2;
       box-shadow: 0 4px 32px rgba(0,0,0,.15);
       outline: none;
@@ -534,9 +668,9 @@ $quiz-info-wrapper-width: 300px;
       border-radius: 50%;
       border: none;
       bottom: 48px;
-      left: -16px;
+      left: -32px;
       z-index: 2;
-      box-shadow: 0 4px 32px rgba(0,0,0,.15);
+      box-shadow: 0 4px 32px rgba($primary-color, .5);
       outline: none;
       cursor: pointer;
       transition: transform .2s ease, background .2s ease;

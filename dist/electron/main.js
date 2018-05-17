@@ -2563,11 +2563,11 @@ var winURL = process.env.NODE_ENV === 'development' ? 'http://localhost:9080' : 
 
 function createWindow() {
   mainWindow = new __WEBPACK_IMPORTED_MODULE_0_electron__["BrowserWindow"]({
-    minWidth: 540,
-    minHeight: 320,
-    height: 563,
+    minWidth: 720,
+    minHeight: 400,
+    height: 512,
 
-    width: 1000,
+    width: 900,
     frame: false,
     webPreferences: {
       webSecurity: false
@@ -2585,6 +2585,13 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
   if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('theme')) {
     __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('theme', 'light');
   }
+  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('controlsTheme')) {
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('controlsTheme', 'win');
+  }
+  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reverseControlsLocation')) {
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reverseControlsLocation', false);
+  }
+
   if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reoccurrencesIfBad')) {
     __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reoccurrencesIfBad', 1);
   }

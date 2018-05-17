@@ -6,7 +6,11 @@ $green-color: $primary-color;
 $yellow-color: rgb(255, 219, 58);
 $red-color: rgb(241, 81, 81);
 
-$background-dark: #222327;
+$background-light: #eee;
+$background-lighter: #fafafa;
+$background-lightest: #fff;
+
+$background-dark: #21252b;
 $background-darker: darken($background-dark, 2);
 $background-darkest: darken($background-dark, 3);
 

@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow } from 'electron'
 import settings from 'electron-settings'
+import os from 'os'
 
 /**
  * Set `__static` path to static files in production
@@ -21,11 +22,11 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    minWidth: 540,
-    minHeight: 320,
-    height: 563,
+    minWidth: 720,
+    minHeight: 400,
+    height: 512,
     // useContentSize: true,
-    width: 1000,
+    width: 900,
     frame: false,
     webPreferences: {
       webSecurity: false
@@ -41,8 +42,27 @@ function createWindow () {
 
 app.on('ready', () => {
   if (!settings.has('theme')) {
-    settings.set('theme', 'light')
+    settings.set('theme', 'dark')
   }
+  if (!settings.has('controlsTheme')) {
+    let platform
+    switch (os.platform()) {
+      case 'darwin':
+        platform = 'osx'
+        break
+      case 'linux':
+        platform = 'linux'
+        break
+      default:
+        platform = 'win'
+        break
+    }
+    settings.set('controlsTheme', platform)
+  }
+  if (!settings.has('reverseControlsLocation')) {
+    settings.set('reverseControlsLocation', false)
+  }
+
   if (!settings.has('reoccurrencesIfBad')) {
     settings.set('reoccurrencesIfBad', 1)
   }
