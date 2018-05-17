@@ -1,8 +1,8 @@
 <template>
 <div :class="['titlebar draggable', {'fullscreen': isMaximized}, {'titlebar-dark': theme === 'dark'}, {'titlebar-reverse-controls-location': reverseControlsLocation}]">
-  <div class="titlebar-app-title">
+  <!-- <div class="titlebar-app-title">
     <span>Testownik</span>
-  </div>
+  </div> -->
   <div class="titlebar-controls">
     <OSXControls
       v-if="controlsTheme === 'osx'"
