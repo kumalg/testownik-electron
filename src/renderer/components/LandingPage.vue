@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="last-locations">
+    <div class="last-locations" v-if="lastFolders && lastFolders.length > 0">
       <div class="last-locations-container">
         <h3>Ostatnio używane</h3>
         <ul>
@@ -61,7 +61,7 @@ import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faTrashAlt } from '@fortawesome/fontawesome-free-regular'
 const readdirAsync = promisify(fs.readdir)
-const { dialog, app } = require('electron').remote
+const { dialog } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
 
 export default {
@@ -91,7 +91,6 @@ export default {
       await this.openQuiz(quizPath)
     },
     async openQuiz (quizPath) {
-      console.log(app)
       const filenames = await readdirAsync(quizPath)
       const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
       const quiz = quizMaker.prepareQuizObject(questions)
@@ -179,6 +178,9 @@ h1 {
       }
       ul {
         li {
+          &:hover {
+            background: rgba(0,0,0,.25);
+          }
           p {
             color: $primary-text-ondark;
           }
