@@ -5,7 +5,7 @@ import settings from 'electron-settings'
 Vue.use(Vuex)
 
 const state = {
-  lastFolders: settings.get('lastFolders') || [],
+  recentFolders: settings.get('recentFolders') || [],
 
   theme: settings.get('theme') || 'light',
   controlsTheme: settings.get('controlsTheme') || 'win',
@@ -17,13 +17,13 @@ const state = {
 }
 
 const mutations = {
-  addNewLastFolder (state, folderPath) {
-    state.lastFolders.splice(0, 0, folderPath)
+  addNewRecentFolder (state, folderPath) {
+    state.recentFolders.splice(0, 0, folderPath)
   },
-  deleteLastFolder (state, folderPath) {
-    const index = state.lastFolders.indexOf(folderPath)
+  deleteRecentFolder (state, folderPath) {
+    const index = state.recentFolders.indexOf(folderPath)
     if (index !== -1) {
-      state.lastFolders.splice(index, 1)
+      state.recentFolders.splice(index, 1)
     }
   },
   setTheme (state, theme) {
@@ -47,25 +47,25 @@ const mutations = {
 }
 
 const actions = {
-  addNewLastFolder ({ commit }, folderPath) {
-    let folders = settings.get('lastFolders')
+  addNewRecentFolder ({ commit }, folderPath) {
+    let folders = settings.get('recentFolders')
     const index = folders.indexOf(folderPath)
     if (index > -1) {
       return
     }
     folders.splice(0, 0, folderPath)
-    settings.set('lastFolders', folders)
-    commit('addNewLastFolder', folderPath)
+    settings.set('recentFolders', folders)
+    commit('addNewRecentFolder', folderPath)
   },
-  deleteLastFolder ({ commit }, folderPath) {
-    let folders = settings.get('lastFolders')
+  deleteRecentFolder ({ commit }, folderPath) {
+    let folders = settings.get('recentFolders')
     const index = folders.indexOf(folderPath)
     if (index === -1) {
       return
     }
     folders.splice(index, 1)
-    settings.set('lastFolders', folders)
-    commit('deleteLastFolder', folderPath)
+    settings.set('recentFolders', folders)
+    commit('deleteRecentFolder', folderPath)
   },
   setTheme ({ commit }, theme) {
     settings.set('theme', theme)

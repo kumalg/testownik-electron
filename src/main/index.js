@@ -41,8 +41,8 @@ function createWindow () {
 }
 
 app.on('ready', () => {
-  if (!settings.has('lastFolders')) {
-    settings.set('lastFolders', [])
+  if (!settings.has('recentFolders')) {
+    settings.set('recentFolders', [])
   }
   if (!settings.has('theme')) {
     settings.set('theme', 'dark')

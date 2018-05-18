@@ -22,10 +22,8 @@ export default {
 
 function decodeBuffer (textBuffer) {
   if (encodingDetector.isUTF8(textBuffer)) {
-    console.log('is utf-8')
     return textBuffer.toString('utf-8')
   } else {
-    console.log('is ascii')
     const binary = textBuffer.toString('binary')
     return windows1250.decode(binary)
   }

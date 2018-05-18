@@ -33,12 +33,12 @@
         </div>
       </div>
     </div>
-    <div class="last-locations" v-if="lastFolders && lastFolders.length > 0">
-      <div class="last-locations-container">
+    <div class="recent-folders" v-if="recentFolders && recentFolders.length > 0">
+      <div class="recent-folders-container">
         <h3>Ostatnio używane</h3>
         <ul>
-          <li v-for="folder in lastFolders" :key="folder">
-            <i @click="$store.dispatch('deleteLastFolder', folder)">
+          <li v-for="folder in recentFolders" :key="folder">
+            <i @click="$store.dispatch('deleteRecentFolder', folder)">
               <FontAwesomeIcon :icon="faTrashAlt"/>
             </i>
             <p @click="openQuiz(folder)">{{ folder }}</p>
@@ -95,15 +95,16 @@ export default {
       const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
       const quiz = quizMaker.prepareQuizObject(questions)
       this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
-      this.$store.dispatch('addNewLastFolder', quizPath)
+      this.$store.dispatch('deleteRecentFolder', quizPath)
+      this.$store.dispatch('addNewRecentFolder', quizPath)
     },
     sampleQuiz () {
       this.$router.push({ name: 'quiz', params: { quizObject: JSON.parse(JSON.stringify(sampleQuiz)) } })
     }
   },
   computed: {
-    lastFolders () {
-      return this.$store.state.lastFolders
+    recentFolders () {
+      return this.$store.state.recentFolders
     }
   },
   mounted () {
@@ -170,9 +171,9 @@ h1 {
       background: rgba(255,255,255,.04);
     }
   }
-  .last-locations {
+  .recent-folders {
     background: $background-darkest;
-    .last-locations-container {
+    .recent-folders-container {
       h3 {
         color: $secondary-text-ondark;
       }
@@ -289,7 +290,7 @@ h1 {
     }
   }
 
-  .last-locations {
+  .recent-folders {
     width: 300px;
     background: $background-light;
     transition: background .2s ease;
@@ -298,7 +299,7 @@ h1 {
     flex-direction: column;
     justify-content: center;
     
-    .last-locations-container {
+    .recent-folders-container {
       margin-top: 48px;
       h3 {
         text-align: right;
