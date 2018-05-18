@@ -26,7 +26,7 @@ function createWindow () {
     minHeight: 400,
     height: 512,
     // useContentSize: true,
-    width: 900,
+    width: 1080,
     frame: false,
     webPreferences: {
       webSecurity: false
@@ -41,6 +41,9 @@ function createWindow () {
 }
 
 app.on('ready', () => {
+  if (!settings.has('recentFolders')) {
+    settings.set('recentFolders', [])
+  }
   if (!settings.has('theme')) {
     settings.set('theme', 'dark')
   }

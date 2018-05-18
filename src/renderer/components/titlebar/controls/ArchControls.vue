@@ -38,7 +38,7 @@ export default {
 <style lang="scss" scoped>
 @import '../../../style/_colors.scss';
 
-$color: rgba(0,0,0,.75);
+$color: rgba(0,0,0,.5);
 $color-dark: rgba($secondary-text-ondark,0.25);
 
 .titlebar-osx-controls {
@@ -51,6 +51,9 @@ $color-dark: rgba($secondary-text-ondark,0.25);
       fill: $color-dark;
     }
     .titlebar-close {
+      &:not(:hover) {
+        background: $color-dark;
+      }
       path {
         fill: $background-darker;
       }
@@ -74,7 +77,7 @@ $color-dark: rgba($secondary-text-ondark,0.25);
 }
 
 .titlebar-close {
-  background: $color-dark;
+  background: $color;
   &:hover {
     background: #d05c73;
   }
@@ -87,25 +90,13 @@ $color-dark: rgba($secondary-text-ondark,0.25);
 }
 
 .titlebar-minimize {
-  // background: #fdbf41;
-  // border-color: #dea02d;
   &:active {
-    // background: lighten(#fdbf41,10%);
   }
-  // path {
-  //   fill: #975713;
-  // }
 }
 
 .titlebar-resize {
-  // background: #35cb4b;
-  // border-color: #21aa35;
   &:active {
-    // background: lighten(#35cb4b,15%);
   }
-  // path {
-  //   fill: #0a630b;
-  // }
 }
 
 svg {
