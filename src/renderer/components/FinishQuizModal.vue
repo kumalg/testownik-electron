@@ -2,9 +2,10 @@
 <Modal @close="$emit('close')">
   <div slot="body">
     <div class="body-content">
-      <img class="beer-image" src="../assets/beer.png">
+      <img class="beer-image" src="../assets/monster.png">
       <div class="info">
         <h3>Koniec quizu!</h3>
+        <p>Możesz dupnąć sobie Monsterka byku!</p>
         <p>Twój czas: {{ time | moment }}</p>
       </div>
     </div>
@@ -33,7 +34,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../style/_colors.scss";
 
 .body-content {
