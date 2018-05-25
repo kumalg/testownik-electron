@@ -386,6 +386,15 @@ body {
     background: $background-dark;
     box-shadow: none;
     .answer-wrapper {
+      &:not(.show-answers) {
+        .select-question-content {
+          .select-question-content-span {
+            &.select-question-content-option-span {
+              border-bottom-color: $secondary-text-ondark;
+            }
+          }
+        }
+      }
       ul.single-question {
         > li label {
           box-shadow: none !important;
