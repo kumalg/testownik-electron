@@ -35,7 +35,9 @@ function getQuestionFromBuffer (textBuffer, quizPath, filename) {
   const firstLine = lines[0].trim()
   if (firstLine.startsWith('X')) {
     return readXQuestion(quizPath, filename, lines)
-  } else return null
+  } else {
+    return readYQuestion(quizPath, filename, lines)
+  }
 }
 
 function readXQuestion (quizPath, filename, lines) {
@@ -60,5 +62,54 @@ function readXQuestion (quizPath, filename, lines) {
     type: 'single',
     answers: answers
   }
+  return question
+}
+
+function getYQuestionContent (line, numberOfSelects) {
+  const a = line.split(/({wybór [1-9][0-9]*})/)
+  const content = a.map(l => {
+    if (l.match(/{wybór [1-9][0-9]*}/)) {
+      return {
+        selectId: parseInt(l.replace('{wybór ', '').replace('}', '')) - 1,
+        visibleContent: ''
+      }
+    } else {
+      return l
+    }
+  })
+  return content
+}
+
+function readYQuestion (quizPath, filename, lines) {
+  const correctAnswersOfSelects = lines[0].trim().substring(2).split('').map(char => {
+    return parseInt(char) - 1
+  })
+
+  const questionType = lines[1].trim().startsWith('[img]') ? 'image' : 'text'
+  const questionContent = questionType === 'image' ? quizPath.replace('\\', '/') + '/' + lines[1].replace('[img]', '').replace('[/img]', '') : getYQuestionContent(lines[1], lines[0].trim().substring(1, 1))
+  const answers = lines.slice(2).filter(l => l.replace(/^\s*/, '').replace(/\s*$/, '').length !== 0).map((line, selectIndex) => {
+    const options = line.trim().split(';;').filter(x => x)
+    const correctOptionId = correctAnswersOfSelects[selectIndex]
+    return {
+      id: selectIndex,
+      correctOptionId: correctOptionId,
+      options: options.map((o, answerIndex) => {
+        return {
+          id: answerIndex,
+          type: o.startsWith('[img]') ? 'image' : 'text',
+          content: o.startsWith('[img]') ? quizPath.replace('\\', '/') + '/' + o.replace('[img]', '').replace('[/img]', '') : o,
+          isCorrect: correctOptionId === answerIndex
+        }
+      })
+    }
+  })
+  const question = {
+    tag: filename,
+    contentType: questionType,
+    content: questionContent,
+    type: 'select',
+    answers: answers
+  }
+  console.log(question)
   return question
 }

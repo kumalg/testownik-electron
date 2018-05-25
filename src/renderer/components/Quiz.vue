@@ -2,21 +2,22 @@
 <div>
   <div class="quiz-wrapper" :theme="theme">
     <FinishQuizModal v-if="showFinishModal" :time="quiz.time" @close="quitQuiz" />
+    <SelectOptionsModal v-if="isSelectOptionsModalOpened" :select="selectOptionsModalContent" @selectOption="setSelectedOptionId" @close="isSelectOptionsModalOpened = false"/>
     <!-- <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/> -->
     <div class="question-wrapper">
-      <div class="question-content-wrapper">
-        <div class="question-content">
+      <div v-if="quiz && currentQuestion" class="question-content-wrapper">
+        <div class="question-content" v-if="currentQuestion.type === 'single'">
           <transition name="question-content-fade" mode="out-in">
-            <div v-if="quiz && currentQuestion" :key="questionNum">
+            <div :key="questionNum">
               <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
               <img v-else :src="'file:///' + currentQuestion.content">
             </div>
           </transition>
         </div>
       </div>
-      <div :class="['answer-wrapper', {'show-answers': !acceptVisible}]">
+      <div v-if="quiz && currentQuestion" :class="['answer-wrapper', {'show-answers': !acceptVisible}]">
         <transition name="answers-container-fade" mode="out-in">
-          <div v-if="quiz && currentQuestion" :key="questionNum">
+          <div v-if="currentQuestion" :key="questionNum">
             <template v-if="currentQuestion.type == 'single'">
               <ul class="single-question">
                 <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
@@ -28,8 +29,17 @@
                 </li>
               </ul>
             </template>
-            <template v-else>
-            </template>
+            <div v-else-if="currentQuestion.type == 'select'" class="select-question-content">
+              <template v-for="(item, index) in selectQuestionContent">
+                <span v-if="typeof item === 'string'" class="select-question-content-span" :key="index">{{ item }}</span>
+                <span
+                  v-else
+                  :key="index"
+                  :class="['select-question-content-span select-question-content-option-span', {'empty-span': !item.visibleContent}, {'correct-answer': item.isCorrect}]" 
+                  @click="acceptVisible ? showSelectOptionsModal(item.selectId) : null"
+                >{{ item.visibleContent }}</span>
+              </template>
+            </div>
           </div>
         </transition>
         <transition name="question-info-fade" mode="out-in">
@@ -96,6 +106,7 @@ import _ from 'lodash'
 import moment from 'moment'
 import ProgressBar from './ProgressBar'
 import FinishQuizModal from './FinishQuizModal'
+import SelectOptionsModal from '@/components/Quiz/SelectOptionsModal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 
@@ -110,6 +121,7 @@ export default {
   components: {
     ProgressBar,
     FinishQuizModal,
+    SelectOptionsModal,
     FontAwesomeIcon
   },
   data () {
@@ -124,7 +136,11 @@ export default {
       unsortedAnswers: null,
       quiz: this.quizObject,
       showFinishModal: false,
-      answers: []
+      isSelectOptionsModalOpened: false,
+      answers: [],
+      selectAnswers: [],
+      selectObject: Object,
+      selectOptionsModalContent: null
     }
   },
   methods: {
@@ -147,10 +163,19 @@ export default {
     checkUserAnswer () {
       if (this.currentQuestionTag) {
         var questionReoccurrences = this.quiz.reoccurrences.find(r => r.tag === this.currentQuestionTag)
-        const correctAnswers = this.currentQuestion.answers
-          .filter(a => a.isCorrect)
-          .map(a => a.id)
-        if (correctAnswers.sort().join(',') === this.answers.sort().join(',')) {
+
+        var isCorrect
+        if (this.currentQuestion.type === 'single') {
+          const correctAnswers = this.currentQuestion.answers
+            .filter(a => a.isCorrect)
+            .map(a => a.id)
+          isCorrect = correctAnswers.sort().join(',') === this.answers.sort().join(',')
+        } else if (this.currentQuestion.type === 'select') {
+          console.log(this.selectAnswers)
+          isCorrect = !this.selectAnswers.find(c => c.correctOptionId !== c.selectedOptionId)
+        }
+
+        if (isCorrect) {
           this.quiz.numberOfCorrectAnswers++
           questionReoccurrences.value--
           if (questionReoccurrences.value === 0) {
@@ -171,13 +196,28 @@ export default {
       }
     },
     randomQuestion () {
+      this.unsortedAnswers = null
+      this.selectAnswers = null
+      this.currentQuestionTag = null
+      this.currentQuestionTag = null
       const remainingQuestionsReoccurrences = this.quiz.reoccurrences.filter(r => r.value > 0)
       if (remainingQuestionsReoccurrences.length) {
         const questionTag = this.randomItem(remainingQuestionsReoccurrences).tag
         if (questionTag) {
           this.currentQuestionTag = questionTag
           this.currentQuestion = this.quiz.questions.find(q => q.tag === this.currentQuestionTag)
-          this.unsortedAnswers = _.shuffle(this.currentQuestion.answers)
+          if (this.currentQuestion.type === 'single') {
+            this.unsortedAnswers = _.shuffle(this.currentQuestion.answers)
+          } else if (this.currentQuestion.type === 'select') {
+            this.selectAnswers = this.currentQuestion.answers.map(s => {
+              return {
+                selectId: s.id,
+                selectedOptionId: null,
+                correctOptionId: s.correctOptionId
+              }
+            })
+            this.unsortedAnswers = JSON.parse(JSON.stringify(this.currentQuestion.content))
+          }
         }
       } else {
         this.finishQuiz()
@@ -195,6 +235,17 @@ export default {
     stopTimer () {
       window.clearInterval(timer)
       timer = null
+    },
+    setSelectedOptionId (response) {
+      console.log('setSelectedOptionId')
+      const item = this.selectAnswers.find(i => i.selectId === response.selectId)
+      if (item != null) {
+        item.selectedOptionId = response.optionId
+      }
+    },
+    showSelectOptionsModal (selectId) {
+      this.isSelectOptionsModalOpened = true
+      this.selectOptionsModalContent = this.currentQuestion.answers.find(s => s.id === selectId)
     }
   },
   computed: {
@@ -218,6 +269,27 @@ export default {
     },
     maxReoccurrences () {
       return this.$store.state.maxReoccurrences
+    },
+    selectQuestionContent () {
+      if (this.currentQuestion == null || this.currentQuestion.type !== 'select') {
+        return null
+      }
+      const cont = this.unsortedAnswers.map(l => {
+        if (typeof l !== 'string') {
+          const selection = this.selectAnswers.find(i => i.selectId === l.selectId)
+          if (selection.selectedOptionId != null) {
+            const select = this.currentQuestion.answers.find(s => s.id === l.selectId)
+            if (select != null) {
+              const option = select.options.find(o => o.id === selection.selectedOptionId)
+              l.visibleContent = option != null ? option.content : ''
+              l.isCorrect = option.isCorrect
+            }
+          }
+        }
+        return l
+      })
+      console.log(cont)
+      return cont
     }
   },
   filters: {
@@ -227,6 +299,9 @@ export default {
     }
   },
   mounted () {
+    if (!this.quizObject) {
+      this.quitQuiz()
+    }
     document.body.addEventListener('keyup', e => {
       if (e.keyCode === 32 && !this.showFinishModal) {
         this.actionButtonClick()
@@ -403,6 +478,41 @@ $quiz-info-wrapper-width: 300px;
       overflow: auto;
       transition: background .2s ease, box-shadow .2s ease;
 
+      &:not(.show-answers) {        
+        .select-question-content {
+          .select-question-content-span {
+            &.select-question-content-option-span {
+              cursor: pointer;
+              &:hover {
+                background: rgba(0,0,0,.05);
+              }
+            }
+          }
+        }
+      }
+
+      .select-question-content {
+        .select-question-content-span {
+          vertical-align: middle;
+          line-height: 2em;
+          margin: 2px 0;
+
+          &.select-question-content-option-span {
+            display: inline;
+            min-height: 2em;
+            min-width: 128px;
+            padding: 4px 8px;
+            font-weight: 600;
+            border-bottom: 2px solid $secondary-text;
+            transition: all .2s ease;
+
+            &.empty-span {
+              display: inline-block;
+            }
+          }
+        }
+      }
+
       .question-info {
         position: fixed;
         z-index: 1;
@@ -431,6 +541,18 @@ $quiz-info-wrapper-width: 300px;
       }
 
       &.show-answers {
+        .select-question-content-option-span {
+          &.correct-answer {
+            // color: $green-color;
+            background: rgba($green-color,.1);
+            border-bottom-color: $green-color;
+          }
+          &:not(.correct-answer) {
+            // color: $red-color;
+            background: rgba($red-color,.1);
+            border-bottom-color: $red-color;
+          }
+        }
         ul.single-question {
           > li {
             label {
