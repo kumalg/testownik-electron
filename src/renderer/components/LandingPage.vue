@@ -79,7 +79,12 @@ export default {
     async openQuiz (quizPath) {
       const filenames = await readdirAsync(quizPath)
       const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
-      const quiz = quizMaker.prepareQuizObject(questions)
+      let quiz
+      if (filenames.find(f => f === 'save.json')) {
+        quiz = await quizMaker.prepareQuizObjectWithSave(questions, quizPath)
+      } else {
+        quiz = quizMaker.prepareQuizObject(questions, quizPath)
+      }
       this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
       this.$store.dispatch('deleteRecentFolder', quizPath)
       this.$store.dispatch('addNewRecentFolder', quizPath)

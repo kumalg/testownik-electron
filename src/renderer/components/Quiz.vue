@@ -10,7 +10,7 @@
             <div class="single-question-content">
               <div class="question-content">
                 <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
-                <img v-else :src="'file:///' + currentQuestion.content">
+                <img v-else :src="'file:///' + quiz.location + '/' + currentQuestion.content">
               </div>
             </div>
             <div class="single-question-answers">
@@ -19,7 +19,7 @@
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
-                    <img v-else :src="'file:///' + answer.content">
+                    <img v-else :src="'file:///' + quiz.location + '/' + answer.content">
                   </label>
                 </li>
               </ul>
@@ -89,6 +89,7 @@
         </div>
         <div class="buttons">
           <button @click="quitQuiz"><FontAwesomeIcon :icon="faSignOutAlt"/>
+          </button><button v-if="quiz.location" @click="saveQuiz"><FontAwesomeIcon :icon="faSave"/>
           </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
           </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
         </div>
@@ -99,6 +100,7 @@
 </template>
 
 <script>
+import fs from 'fs'
 import _ from 'lodash'
 import moment from 'moment'
 import ProgressBar from '@/components/Quiz/ProgressBar'
@@ -106,6 +108,7 @@ import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
 import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
+import { faSave } from '@fortawesome/fontawesome-free-regular'
 
 var timer
 
@@ -126,6 +129,7 @@ export default {
       faSignOutAlt,
       faCog,
       faInfo,
+      faSave,
       questionNum: 0,
       acceptVisible: true,
       currentQuestionTag: null,
@@ -143,6 +147,19 @@ export default {
   methods: {
     quitQuiz () {
       this.$router.push('/')
+    },
+    saveQuiz () {
+      const content = JSON.stringify(this.quiz, this.replacer)
+      try {
+        fs.writeFileSync(this.quiz.location + '/save.json', content, 'utf-8')
+        alert('Zapisano aktualny stan!')
+      } catch (e) {
+        alert('Failed to save the file !')
+      }
+    },
+    replacer (key, value) {
+      if (key === 'questions') return undefined
+      else return value
     },
     actionButtonClick () {
       if (this.acceptVisible) {
