@@ -11,7 +11,7 @@ const state = {
   controlsTheme: settings.get('controlsTheme') || 'win',
   reverseControlsLocation: settings.get('reverseControlsLocation'),
 
-  reoccurrencesIfBad: settings.get('reoccurrencesIfBad') || 1,
+  reoccurrencesIfBad: settings.get('reoccurrencesIfBad') || 0,
   reoccurrencesOnStart: settings.get('reoccurrencesOnStart') || 2,
   maxReoccurrences: settings.get('maxReoccurrences') || 10
 }

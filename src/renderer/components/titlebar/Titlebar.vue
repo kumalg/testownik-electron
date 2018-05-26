@@ -1,8 +1,5 @@
 <template>
 <div :class="['titlebar draggable', {'fullscreen': isMaximized}, {'titlebar-dark': theme === 'dark'}, {'titlebar-reverse-controls-location': reverseControlsLocation}]">
-  <!-- <div class="titlebar-app-title">
-    <span>Testownik</span>
-  </div> -->
   <div class="titlebar-controls">
     <OSXControls
       v-if="controlsTheme === 'osx'"
@@ -127,9 +124,6 @@ $color-dark: rgba(255,255,255,.5);
   .titlebar-controls {
     order: 0;
     margin-left: initial;
-  }
-  .titlebar-app-title {
-    // margin: auto;
   }
 }
 

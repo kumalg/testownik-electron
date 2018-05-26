@@ -2549,6 +2549,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_electron___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_electron__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_settings__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_electron_settings__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_os__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_os___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_os__);
+
 
 
 
@@ -2567,7 +2570,7 @@ function createWindow() {
     minHeight: 400,
     height: 512,
 
-    width: 900,
+    width: 1080,
     frame: false,
     webPreferences: {
       webSecurity: false
@@ -2582,11 +2585,26 @@ function createWindow() {
 }
 
 __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
+  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('recentFolders')) {
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('recentFolders', []);
+  }
   if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('theme')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('theme', 'light');
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('theme', 'dark');
   }
   if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('controlsTheme')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('controlsTheme', 'win');
+    var platform = void 0;
+    switch (__WEBPACK_IMPORTED_MODULE_2_os___default.a.platform()) {
+      case 'darwin':
+        platform = 'osx';
+        break;
+      case 'linux':
+        platform = 'linux';
+        break;
+      default:
+        platform = 'win';
+        break;
+    }
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('controlsTheme', platform);
   }
   if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reverseControlsLocation')) {
     __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reverseControlsLocation', false);
@@ -2598,8 +2616,8 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
   if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reoccurrencesOnStart')) {
     __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reoccurrencesOnStart', 2);
   }
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('setMaxReoccurrences')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('setMaxReoccurrences', 10);
+  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('maxReoccurrences')) {
+    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('maxReoccurrences', 10);
   }
   createWindow();
 });
@@ -7254,6 +7272,12 @@ module.exports = require("https");
 /***/ (function(module, exports) {
 
 module.exports = require("electron-settings");
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports) {
+
+module.exports = require("os");
 
 /***/ })
 /******/ ]);

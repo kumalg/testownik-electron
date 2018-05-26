@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal'
+import Modal from '@/components/shared/Modal'
 export default {
   props: {
     select: {

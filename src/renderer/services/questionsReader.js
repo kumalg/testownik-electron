@@ -45,13 +45,13 @@ function readXQuestion (quizPath, filename, lines) {
     return { char: char, index: index }
   }).filter(i => i.char === '1').map(i => i.index)
   const questionType = lines[1].trim().startsWith('[img]') ? 'image' : 'text'
-  const questionContent = questionType === 'image' ? quizPath.replace('\\', '/') + '/' + lines[1].replace('[img]', '').replace('[/img]', '') : lines[1]
+  const questionContent = questionType === 'image' ? lines[1].replace('[img]', '').replace('[/img]', '') : lines[1]
   const answers = lines.slice(2).filter(l => l.replace(/^\s*/, '').replace(/\s*$/, '').length !== 0).map((line, index) => {
     line = line.trim()
     return {
       id: index,
       type: line.startsWith('[img]') ? 'image' : 'text',
-      content: line.startsWith('[img]') ? quizPath.replace('\\', '/') + '/' + line.replace('[img]', '').replace('[/img]', '') : line,
+      content: line.startsWith('[img]') ? line.replace('[img]', '').replace('[/img]', '') : line,
       isCorrect: correctAnswers.findIndex(i => i === index) !== -1
     }
   })
@@ -110,6 +110,5 @@ function readYQuestion (quizPath, filename, lines) {
     type: 'select',
     answers: answers
   }
-  console.log(question)
   return question
 }

@@ -72,8 +72,8 @@ app.on('ready', () => {
   if (!settings.has('reoccurrencesOnStart')) {
     settings.set('reoccurrencesOnStart', 2)
   }
-  if (!settings.has('setMaxReoccurrences')) {
-    settings.set('setMaxReoccurrences', 10)
+  if (!settings.has('maxReoccurrences')) {
+    settings.set('maxReoccurrences', 10)
   }
   createWindow()
 })

@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../../style/_colors.scss';
+@import '@/style/_colors.scss';
 
 $color: rgba(0,0,0,.5);
 $color-dark: rgba($secondary-text-ondark,0.25);

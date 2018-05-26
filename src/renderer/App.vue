@@ -18,8 +18,8 @@
 
 <script>
 import Titlebar from '@/components/titlebar/Titlebar'
-import SettingsModal from '@/components/SettingsModal'
-import InfoModal from '@/components/InfoModal'
+import SettingsModal from '@/components/shared/modals/SettingsModal'
+import InfoModal from '@/components/shared/modals/InfoModal'
 
 export default {
   name: 'testownik-electron',
@@ -38,8 +38,8 @@ export default {
 </script>
 
 <style lang="scss">
-@import "style/_colors.scss";
-@import "style/ui_elements.scss";
+@import "@/style/_colors.scss";
+@import "@/style/ui_elements.scss";
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 * {
@@ -55,9 +55,15 @@ body {
 
 #app {
   background: $background-lighter;
+  &, span {
+    color: $primary-text;
+  }
   overflow-y: hidden;
   &[theme=dark] {
     background: $background-darker;
+    &, span {
+      color: $primary-text-ondark;
+    }
   }
 }
 
