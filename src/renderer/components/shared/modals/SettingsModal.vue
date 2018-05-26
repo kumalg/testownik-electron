@@ -45,11 +45,11 @@
       </div>
       <div class="section-option">
         <label for="reoccurrences-on-start-input">Wstępna liczba powtórzeń</label>
-        <input :theme="theme" class="custom-input line" id="reoccurrences-on-start-input" type="number" min="0" max="10" v-model.number="reoccurrencesOnStart">
+        <input :theme="theme" class="custom-input line" id="reoccurrences-on-start-input" type="number" min="1" max="10" v-model.number="reoccurrencesOnStart">
       </div>
       <div class="section-option">
         <label for="max-reoccurrences-input">Maksymalna liczba powtórzeń</label>
-        <input :theme="theme" class="custom-input line" id="max-reoccurrences-input" type="number" min="0" max="10" v-model.number="maxReoccurrences">
+        <input :theme="theme" class="custom-input line" id="max-reoccurrences-input" type="number" min="1" max="10" v-model.number="maxReoccurrences">
       </div>
     </div>
   </div>
@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal'
-import VSelect from '@/components/v-select'
+import Modal from '@/components/shared/Modal'
+import VSelect from '@/components/shared/v-select'
 import { controlThemes } from '@/constants.js'
 
 export default {
@@ -101,7 +101,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/_colors.scss";
+@import "@/style/_colors.scss";
 
 div[theme=dark] {
   .section {

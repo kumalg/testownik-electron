@@ -2,7 +2,7 @@
 <Modal @close="$emit('close')">
   <div slot="body">
     <div class="body-content">
-      <img class="beer-image" src="../assets/beer.png">
+      <img class="beer-image" src="@/assets/beer.png">
       <div class="info">
         <h3>Koniec quizu!</h3>
         <p>Twój czas: {{ time | moment }}</p>
@@ -14,7 +14,7 @@
 
 <script>
 import moment from 'moment'
-import Modal from '@/components/Modal'
+import Modal from '@/components/shared/Modal'
 export default {
   props: {
     time: {
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/_colors.scss";
+@import "@/style/_colors.scss";
 
 .body-content {
   display: flex;

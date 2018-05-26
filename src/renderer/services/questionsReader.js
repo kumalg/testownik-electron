@@ -110,6 +110,5 @@ function readYQuestion (quizPath, filename, lines) {
     type: 'select',
     answers: answers
   }
-  console.log(question)
   return question
 }

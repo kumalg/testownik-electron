@@ -5,8 +5,8 @@
     <SelectOptionsModal v-if="isSelectOptionsModalOpened" :select="selectOptionsModalContent" @selectOption="setSelectedOptionId" @close="isSelectOptionsModalOpened = false"/>
     <div class="question-wrapper">
       <transition name="answers-container-fade" mode="out-in">
-        <div v-if="quiz" :key="questionNum" :class="['question-wrapper-content', {'show-answers': !acceptVisible}]">
-          <div v-if="currentQuestion && currentQuestion.type == 'single'" class="single-question">
+        <div v-if="quiz && currentQuestion" :key="questionNum" :class="['question-wrapper-content', {'show-answers': !acceptVisible}]">
+          <div v-if="currentQuestion.type == 'single'" class="single-question">
             <div class="single-question-content">
               <div class="question-content">
                 <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
@@ -41,7 +41,7 @@
         </div>
       </transition>
       <transition name="question-info-fade" mode="out-in">
-        <div class="question-info" :key="questionNum">
+        <div v-if="currentQuestion" class="question-info" :key="questionNum">
           <div class="question-info-wrapper">
             <div>
               <span>{{ currentQuestion.tag }}</span>
@@ -101,9 +101,9 @@
 <script>
 import _ from 'lodash'
 import moment from 'moment'
-import ProgressBar from './ProgressBar'
-import FinishQuizModal from './FinishQuizModal'
-import SelectOptionsModal from '@/components/Quiz/SelectOptionsModal'
+import ProgressBar from '@/components/Quiz/ProgressBar'
+import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
+import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 
@@ -168,7 +168,6 @@ export default {
             .map(a => a.id)
           isCorrect = correctAnswers.sort().join(',') === this.answers.sort().join(',')
         } else if (this.currentQuestion.type === 'select') {
-          console.log(this.selectAnswers)
           isCorrect = !this.selectAnswers.find(c => c.correctOptionId !== c.selectedOptionId)
         }
 
@@ -234,7 +233,6 @@ export default {
       timer = null
     },
     setSelectedOptionId (response) {
-      console.log('setSelectedOptionId')
       const item = this.selectAnswers.find(i => i.selectId === response.selectId)
       if (item != null) {
         item.selectedOptionId = response.optionId
@@ -323,7 +321,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../style/_colors.scss";
+@import "@/style/_colors.scss";
 
 .question-content,
 .question-info,

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Modal from '@/components/Modal'
+import Modal from '@/components/shared/Modal'
 const appVersion = require('electron').remote.app.getVersion()
 export default {
   components: {
@@ -24,5 +24,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../style/_colors.scss";
+@import "@/style/_colors.scss";
 </style>

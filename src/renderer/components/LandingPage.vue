@@ -33,25 +33,13 @@
         </div>
       </div>
     </div>
-    <div class="recent-folders" v-if="recentFolders && recentFolders.length > 0">
-      <div class="recent-folders-container">
-        <h3>Ostatnio używane</h3>
-        <ul>
-          <li v-for="folder in recentFolders" :key="folder" :title="folder">
-            <i @click="$store.dispatch('deleteRecentFolder', folder)" title="">
-              <FontAwesomeIcon :icon="faTrashAlt"/>
-            </i>
-            <p @click="openQuiz(folder)">{{ folder }}</p>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <RecentFolders v-if="recentFolders && recentFolders.length > 0" :recentFolders="recentFolders" @FolderClick="openQuiz" />
   </div>
 </div>
 </template>
 
 <script>
-import SystemInformation from './LandingPage/SystemInformation'
+import RecentFolders from '@/components/LandingPage/RecentFolders'
 import questionsReader from '@/services/questionsReader'
 import quizMaker from '@/services/quizMaker'
 import { sampleQuiz } from '@/sampleQuiz'
@@ -59,7 +47,6 @@ import fs from 'fs'
 import { promisify } from 'util'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
-import { faTrashAlt } from '@fortawesome/fontawesome-free-regular'
 const readdirAsync = promisify(fs.readdir)
 const { dialog } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
@@ -67,14 +54,13 @@ const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(
 export default {
   name: 'landing-page',
   components: {
-    SystemInformation,
+    RecentFolders,
     FontAwesomeIcon
   },
   data () {
     return {
       faCog,
       faInfo,
-      faTrashAlt,
       isDragOver: false
     }
   },
@@ -147,7 +133,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../style/_colors.scss';
+@import '@/style/_colors.scss';
 
 h1 {
   font-size: 3em;
@@ -169,27 +155,6 @@ h1 {
     }
     &.drag-over {
       background: rgba(255,255,255,.04);
-    }
-  }
-  .recent-folders {
-    background: $background-darkest;
-    .recent-folders-container {
-      h3 {
-        color: $secondary-text-ondark;
-      }
-      ul {
-        li {
-          &:hover {
-            background: rgba(0,0,0,.25);
-          }
-          p {
-            color: $primary-text-ondark;
-          }
-          i {
-            color: $secondary-text-ondark;
-          }
-        }
-      }
     }
   }
   .left-column {
@@ -286,67 +251,6 @@ h1 {
       }
       &:active {
         background: $primary-color-lightest;
-      }
-    }
-  }
-
-  .recent-folders {
-    width: 300px;
-    background: $background-light;
-    transition: background .2s ease;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    
-    .recent-folders-container {
-      margin-top: 48px;
-      h3 {
-        text-align: right;
-        margin-bottom: 24px;
-        margin-right: 24px;
-        color: $secondary-text;
-        font-weight: 400;
-      }
-
-      ul {
-        width: 100%;
-        list-style: none;
-        padding: 0;
-        li {
-          padding: 16px 24px;
-          display: flex;
-          flex-wrap: nowrap;
-          cursor: pointer;
-          transition: background .2s ease;
-          font-size: 0.875em;
-          &:hover {
-            background: rgba(255,255,255,.25);
-            i {
-              opacity: 1;
-            }
-          }
-          p {
-            flex: 1;
-            text-align: right;
-            overflow: hidden;
-            direction: rtl;
-            text-overflow: ellipsis;
-            color: $primary-text;
-            white-space: nowrap;
-          }
-          i {
-            padding: 8px;
-            margin: -8px;
-            margin-right: 0;
-            transition: color .2s ease, opacity .2s ease;
-            color: $secondary-text;
-            opacity: 0;
-            &:hover {
-              color: $red-color;
-            }
-          }
-        }
       }
     }
   }

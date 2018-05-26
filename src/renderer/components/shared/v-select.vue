@@ -145,7 +145,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../style/_colors.scss';
+@import '@/style/_colors.scss';
 span {
   font-weight: 600;
 }
