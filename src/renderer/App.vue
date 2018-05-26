@@ -55,9 +55,15 @@ body {
 
 #app {
   background: $background-lighter;
+  &, span {
+    color: $primary-text;
+  }
   overflow-y: hidden;
   &[theme=dark] {
     background: $background-darker;
+    &, span {
+      color: $primary-text-ondark;
+    }
   }
 }
 

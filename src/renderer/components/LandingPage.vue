@@ -37,8 +37,8 @@
       <div class="recent-folders-container">
         <h3>Ostatnio używane</h3>
         <ul>
-          <li v-for="folder in recentFolders" :key="folder">
-            <i @click="$store.dispatch('deleteRecentFolder', folder)">
+          <li v-for="folder in recentFolders" :key="folder" :title="folder">
+            <i @click="$store.dispatch('deleteRecentFolder', folder)" title="">
               <FontAwesomeIcon :icon="faTrashAlt"/>
             </i>
             <p @click="openQuiz(folder)">{{ folder }}</p>
@@ -333,6 +333,7 @@ h1 {
             direction: rtl;
             text-overflow: ellipsis;
             color: $primary-text;
+            white-space: nowrap;
           }
           i {
             padding: 8px;

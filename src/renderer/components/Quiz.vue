@@ -3,23 +3,18 @@
   <div class="quiz-wrapper" :theme="theme">
     <FinishQuizModal v-if="showFinishModal" :time="quiz.time" @close="quitQuiz" />
     <SelectOptionsModal v-if="isSelectOptionsModalOpened" :select="selectOptionsModalContent" @selectOption="setSelectedOptionId" @close="isSelectOptionsModalOpened = false"/>
-    <!-- <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/> -->
     <div class="question-wrapper">
-      <div v-if="quiz && currentQuestion" class="question-content-wrapper">
-        <div class="question-content" v-if="currentQuestion.type === 'single'">
-          <transition name="question-content-fade" mode="out-in">
-            <div :key="questionNum">
-              <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
-              <img v-else :src="'file:///' + currentQuestion.content">
+      <transition name="answers-container-fade" mode="out-in">
+        <div v-if="quiz" :key="questionNum" :class="['question-wrapper-content', {'show-answers': !acceptVisible}]">
+          <div v-if="currentQuestion && currentQuestion.type == 'single'" class="single-question">
+            <div class="single-question-content">
+              <div class="question-content">
+                <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
+                <img v-else :src="'file:///' + currentQuestion.content">
+              </div>
             </div>
-          </transition>
-        </div>
-      </div>
-      <div v-if="quiz && currentQuestion" :class="['answer-wrapper', {'show-answers': !acceptVisible}]">
-        <transition name="answers-container-fade" mode="out-in">
-          <div v-if="currentQuestion" :key="questionNum">
-            <template v-if="currentQuestion.type == 'single'">
-              <ul class="single-question">
+            <div class="single-question-answers">
+              <ul>
                 <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
@@ -28,32 +23,34 @@
                   </label>
                 </li>
               </ul>
+            </div>
+          </div>
+          <div v-else-if="currentQuestion.type == 'select'" class="select-question">
+            <div class="select-question-content">
+            <template v-for="(item, index) in selectQuestionContent">
+              <span v-if="typeof item === 'string'" class="select-question-content-span" :key="index">{{ item }}</span>
+              <span
+                v-else
+                :key="index"
+                :class="['select-question-content-span select-question-content-option-span', {'empty-span': !item.visibleContent}, {'correct-answer': item.isCorrect}]" 
+                @click="acceptVisible ? showSelectOptionsModal(item.selectId) : null"
+              >{{ item.visibleContent }}</span>
             </template>
-            <div v-else-if="currentQuestion.type == 'select'" class="select-question-content">
-              <template v-for="(item, index) in selectQuestionContent">
-                <span v-if="typeof item === 'string'" class="select-question-content-span" :key="index">{{ item }}</span>
-                <span
-                  v-else
-                  :key="index"
-                  :class="['select-question-content-span select-question-content-option-span', {'empty-span': !item.visibleContent}, {'correct-answer': item.isCorrect}]" 
-                  @click="acceptVisible ? showSelectOptionsModal(item.selectId) : null"
-                >{{ item.visibleContent }}</span>
-              </template>
             </div>
           </div>
-        </transition>
-        <transition name="question-info-fade" mode="out-in">
-          <div class="question-info" :key="questionNum">
-            <div class="question-info-wrapper">
-              <div>
-                <span>{{ currentQuestion.tag }}</span>
-              </div><div>
-                <span>Ponowne wystąpienia: <b>{{ currentQuestionReoccurrences }}</b></span>
-              </div>
+        </div>
+      </transition>
+      <transition name="question-info-fade" mode="out-in">
+        <div class="question-info" :key="questionNum">
+          <div class="question-info-wrapper">
+            <div>
+              <span>{{ currentQuestion.tag }}</span>
+            </div><div>
+              <span>Ponowne wystąpienia: <b>{{ currentQuestionReoccurrences }}</b></span>
             </div>
           </div>
-        </transition>
-      </div>
+        </div>
+      </transition>
     </div>
     <div class="quiz-info-wrapper">
       <button :class="['action-button', {'next': !acceptVisible, 'accept': acceptVisible}]" @click="actionButtonClick"/>
@@ -288,7 +285,6 @@ export default {
         }
         return l
       })
-      console.log(cont)
       return cont
     }
   },
@@ -327,7 +323,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../style/_colors.scss';
+@import "../style/_colors.scss";
 
 .question-content,
 .question-info,
@@ -375,37 +371,38 @@ export default {
   padding: 0;
 }
 
-body { 
-  font-family: 'Source Sans Pro', sans-serif;
+body {
+  font-family: "Source Sans Pro", sans-serif;
   font-size: 16px;
 }
 
-.quiz-wrapper[theme=dark] {
-  color: $primary-text-ondark;
+.quiz-wrapper[theme="dark"] {
   .question-wrapper {
     background: $background-dark;
     box-shadow: none;
-    .answer-wrapper {
+    .question-wrapper-content {
       &:not(.show-answers) {
-        .select-question-content {
-          .select-question-content-span {
-            &.select-question-content-option-span {
-              border-bottom-color: $secondary-text-ondark;
+        .select-question {
+          .select-question-content {
+            .select-question-content-span {
+              &.select-question-content-option-span {
+                border-bottom-color: $secondary-text-ondark;
+              }
             }
           }
         }
       }
-      ul.single-question {
+      .single-question .single-question-answers ul {
         > li label {
           box-shadow: none !important;
         }
         > li:not(.white-background) {
-          $checked-color: rgba(255,255,255,.15);
+          $checked-color: rgba(255, 255, 255, 0.15);
           label {
             background: $background-darker;
             color: $primary-text-ondark;
           }
-          > input[type=checkbox]:checked ~ label {
+          > input[type="checkbox"]:checked ~ label {
             border-color: $checked-color;
             &::before {
               border-color: $checked-color $checked-color transparent transparent;
@@ -416,13 +413,13 @@ body {
           }
         }
       }
-      .question-info {
-        > .question-info-wrapper {
-          > div {
-            > span {
-              background: $background-darker;
-              box-shadow: none;
-            }
+    }
+    .question-info {
+      > .question-info-wrapper {
+        > div {
+          > span {
+            background: $background-darker;
+            box-shadow: none;
           }
         }
       }
@@ -449,100 +446,224 @@ $quiz-info-wrapper-width: 300px;
   height: 100vh;
   display: flex;
   align-items: stretch;
-  transition: color .2s ease;
-  color: rgba(0,0,0,.85);
+  transition: color 0.2s ease;
+  // color: rgba(0, 0, 0, 0.85);
 
   .question-wrapper {
+    height: 100%;
+    padding-top: 32px;
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    background: #fafafa;
+    overflow: hidden;
+    background: $background-lighter;
     z-index: 1;
-    box-shadow: 0 0 64px rgba(0,0,0,.05);
-    transition: background .2s ease;
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
+    transition: background 0.2s ease;
     max-width: calc(100% - #{$quiz-info-wrapper-width});
 
-    .question-content-wrapper {
-      margin-top: 40px;
-      min-height: 64px;
-      text-align: center;
-      font-size: 0.875em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .question-info {
+      position: fixed;
+      z-index: 1;
+      bottom: 16px;
+      left: calc(50% - #{$quiz-info-wrapper-width * 0.5});
+      .question-info-wrapper {
+        transform: translateX(-50%);
+        * {
+          display: inline-block;
+          span {
+            display: inline-block;
+            background: #fff;
+            padding: 8px 16px;
+            font-size: 0.8125em;
+            border-radius: 32px;
+            margin: 4px;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
 
-      .question-content {
-        padding: 16px 32px;
-        overflow: auto;
+            b {
+              color: $primary-color;
+            }
+          }
+        }
       }
     }
 
-    .answer-wrapper {
+    .question-wrapper-content {
+      height: 100%;
       flex: 1;
       position: relative;
       text-align: center;
-      padding: 32px;
-      padding-top: 8px;
-      padding-bottom: 64px;
-      overflow: auto;
-      transition: background .2s ease, box-shadow .2s ease;
+      transition: all 0.2s ease;
 
-      &:not(.show-answers) {        
+      .select-question {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 16px 64px;
+        overflow: auto;
+
         .select-question-content {
           .select-question-content-span {
+            vertical-align: middle;
+            line-height: 2em;
+            margin: 2px 0;
+
             &.select-question-content-option-span {
-              cursor: pointer;
-              &:hover {
-                background: rgba(0,0,0,.05);
+              display: inline;
+              min-height: 2em;
+              min-width: 128px;
+              padding: 4px 8px;
+              font-weight: 600;
+              border-bottom: 2px solid $secondary-text;
+              transition: all 0.2s ease;
+              // box-sizing: border-box;
+              // box-decoration-break: clone;
+
+              &.empty-span {
+                display: inline-block;
               }
             }
           }
         }
       }
 
-      .select-question-content {
-        .select-question-content-span {
-          vertical-align: middle;
-          line-height: 2em;
-          margin: 2px 0;
+      .single-question {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
 
-          &.select-question-content-option-span {
-            display: inline;
-            min-height: 2em;
-            min-width: 128px;
-            padding: 4px 8px;
-            font-weight: 600;
-            border-bottom: 2px solid $secondary-text;
-            transition: all .2s ease;
+        .single-question-content {
+          width: 100%;
+          min-height: 64px;
+          text-align: center;
+          font-size: 0.875em;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          .question-content {
+            flex: 1;
+            overflow: auto;
+            padding: 16px 32px;
+            img {
+              background: $background-lighter;
+            }
+          }
+        }
 
-            &.empty-span {
-              display: inline-block;
+        .single-question-answers {
+          padding: 16px 32px 64px;
+          overflow: auto;
+          flex: 1;
+        }
+
+        .single-question-answers ul {
+          list-style: none;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+
+          > li {
+            width: calc(50% - 16px);
+            margin: 8px;
+            font-size: 0.875em;
+            box-sizing: border-box;
+            transition: background 0.2s ease;
+
+            @media (max-width: 960px) {
+              width: 100%;
+            }
+
+            $checked-color: rgba(0, 0, 0, 0.25);
+            label {
+              position: relative;
+              width: 100%;
+              height: 100%;
+              min-height: 64px;
+              padding: 8px 16px;
+              background: #fff;
+              color: rgba(0, 0, 0, 0.85);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+              box-sizing: border-box;
+              transition: all 0.2s ease;
+              cursor: pointer;
+
+              border: {
+                style: solid;
+                color: transparent;
+                width: 2px;
+              }
+
+              img {
+                background: #fff;
+                max-width: 100%;
+              }
+
+              &:before {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 0;
+                border-width: 12px;
+                border-style: solid;
+                border-color: transparent;
+                transition: border-color 0.2s ease;
+              }
+
+              &:after {
+                content: "";
+                position: absolute;
+                top: 0;
+                right: 4px;
+                width: 4px;
+                height: 8px;
+                transform: rotate(45deg);
+                transition: border-color 0.2s ease;
+                border: {
+                  style: solid;
+                  color: transparent;
+                  width: 0 2px 2px 0;
+                }
+              }
+            }
+
+            > input[type="checkbox"] {
+              display: none;
+
+              &:checked ~ label {
+                border-color: $checked-color;
+
+                &::before {
+                  border-color: $checked-color $checked-color transparent
+                    transparent;
+                }
+                &::after {
+                  border-color: #fff;
+                }
+              }
+
+              &:not(:disabled) ~ label {
+                &:hover {
+                  transform: scale(0.98);
+                }
+                &:active {
+                  transform: scale(0.96);
+                }
+              }
             }
           }
         }
       }
 
-      .question-info {
-        position: fixed;
-        z-index: 1;
-        bottom: 16px;
-        left: calc(50% - #{$quiz-info-wrapper-width * 0.5});
-        .question-info-wrapper {
-          transform: translateX(-50%);
-          * {
-            display: inline-block;
-            span {
-              display: inline-block;
-              background: #fff;
-              padding: 8px 16px;
-              font-size: 0.8125em;
-              border-radius: 32px;
-              margin: 4px;
-              box-shadow: 0 4px 32px rgba(0,0,0,.1);
-              transition: all .2s ease;
-
-              b {
-                color: $primary-color;
+      &:not(.show-answers) {
+        .select-question-content {
+          .select-question-content-span {
+            &.select-question-content-option-span {
+              cursor: pointer;
+              &:hover {
+                background: rgba(0, 0, 0, 0.05);
               }
             }
           }
@@ -550,142 +671,48 @@ $quiz-info-wrapper-width: 300px;
       }
 
       &.show-answers {
-        .select-question-content-option-span {
-          &.correct-answer {
-            // color: $green-color;
-            background: rgba($green-color,.1);
-            border-bottom-color: $green-color;
-          }
-          &:not(.correct-answer) {
-            // color: $red-color;
-            background: rgba($red-color,.1);
-            border-bottom-color: $red-color;
+        .select-question {
+          .select-question-content {
+            .select-question-content-span {
+              &.select-question-content-option-span {
+                &.correct-answer {
+                  background: rgba($green-color, 0.1);
+                  border-bottom-color: $green-color;
+                }
+                &:not(.correct-answer) {
+                  background: rgba($red-color, 0.1);
+                  border-bottom-color: $red-color;
+                }   
+              }
+            }
           }
         }
-        ul.single-question {
+        .single-question .single-question-answers ul {
           > li {
             label {
               cursor: initial;
             }
             &.correct-answer {
-              > input[type=checkbox]:checked ~ label {
+              > input[type="checkbox"]:checked ~ label {
                 border-color: $green-color;
                 box-shadow: 0 4px 32px rgba($green-color, 0.25);
                 &::before {
-                  border-color: $green-color $green-color transparent transparent;
+                  border-color: $green-color $green-color transparent
+                    transparent;
                 }
               }
-              > input[type=checkbox]:not(:checked) ~ label {
+              > input[type="checkbox"]:not(:checked) ~ label {
                 border-color: $yellow-color;
                 box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
               }
             }
             &:not(.correct-answer) {
-              > input[type=checkbox]:checked ~ label {
+              > input[type="checkbox"]:checked ~ label {
                 border-color: $red-color;
                 box-shadow: 0 4px 32px rgba($red-color, 0.25);
                 &::before {
                   border-color: $red-color $red-color transparent transparent;
                 }
-              }
-            }
-          }
-        }
-      }
-
-      ul.single-question {
-        list-style: none;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-
-        > li {
-          width: calc(50% - 16px);
-          margin: 8px;
-          font-size: 0.875em;
-          box-sizing: border-box;
-          transition: background .2s ease;
-
-          @media (max-width: 960px) {
-            width: 100%;
-          }
-
-          $checked-color: rgba(0,0,0,.25);
-          label {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            min-height: 64px;
-            padding: 8px 16px;
-            background: #fff;
-            color: rgba(0,0,0,.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 32px rgba(0,0,0,.1);
-            box-sizing: border-box;
-            transition: all .2s ease;
-            cursor: pointer;
-
-            border: {
-              style: solid;
-              color: transparent;
-              width: 2px;
-            }
-
-            img {
-              background: #fff;
-              max-width: 100%;
-            }
-
-            &:before {
-              content: "";
-              position: absolute;
-              top: 0;
-              right: 0;
-              border-width: 12px;
-              border-style: solid;
-              border-color: transparent;
-              transition: border-color .2s ease;
-            }
-
-            &:after {
-              content: "";
-              position: absolute;
-              top: 0;
-              right: 4px;
-              width: 4px;
-              height: 8px;
-              transform: rotate(45deg);
-              transition: border-color .2s ease;
-              border: {
-                style: solid;
-                color: transparent;
-                width: 0 2px 2px 0;
-              }
-            }
-          }
-
-          > input[type=checkbox] {
-            display: none;
-
-            &:checked ~ label {
-              border-color: $checked-color;
-
-              &::before {
-                border-color: $checked-color $checked-color transparent transparent;
-              }
-              &::after {
-                border-color: #fff;
-              }
-            }
-
-            &:not(:disabled) ~ label {
-              &:hover {
-                transform: scale(0.98);
-              }
-              &:active {
-                transform: scale(0.96);
               }
             }
           }
@@ -700,7 +727,7 @@ $quiz-info-wrapper-width: 300px;
     background: #eee;
     position: relative;
     text-align: center;
-    transition: background .2s ease;
+    transition: background 0.2s ease;
 
     .quiz-info-wrapper-content {
       margin-top: 32px;
@@ -752,8 +779,8 @@ $quiz-info-wrapper-width: 300px;
         border: none;
         cursor: pointer;
         background: transparent;
-        color: rgba(0,0,0,.5);
-        transition: all .2s ease;
+        color: rgba(0, 0, 0, 0.5);
+        transition: all 0.2s ease;
         &:hover {
           color: $primary-color;
           background: $background-lighter;
@@ -772,23 +799,23 @@ $quiz-info-wrapper-width: 300px;
       bottom: 128px;
       left: -16px;
       z-index: 2;
-      box-shadow: 0 4px 32px rgba(0,0,0,.15);
+      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
       outline: none;
       cursor: pointer;
-      transition: transform .2s ease, background .2s ease;
+      transition: transform 0.2s ease, background 0.2s ease;
 
       &:hover {
         transform: scale(0.95);
-        background: $primary-color-lighter;//lighten(rgb(70, 185, 70), 2);
+        background: $primary-color-lighter; //lighten(rgb(70, 185, 70), 2);
       }
 
       &:active {
         transform: scale(0.9);
-        background: $primary-color-lightest;//lighten(rgb(70, 185, 70), 5);
+        background: $primary-color-lightest; //lighten(rgb(70, 185, 70), 5);
       }
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         width: 6px;
         height: 6px;
@@ -814,27 +841,27 @@ $quiz-info-wrapper-width: 300px;
       bottom: 48px;
       left: -32px;
       z-index: 2;
-      box-shadow: 0 4px 32px rgba($primary-color, .5);
+      box-shadow: 0 4px 32px rgba($primary-color, 0.5);
       outline: none;
       cursor: pointer;
-      transition: transform .2s ease, background .2s ease;
+      transition: transform 0.2s ease, background 0.2s ease;
 
       &:hover {
         transform: scale(0.95);
-        background: $primary-color-lighter;//lighten(rgb(70, 185, 70), 2);
+        background: $primary-color-lighter; //lighten(rgb(70, 185, 70), 2);
       }
 
       &:active {
         transform: scale(0.9);
-        background: $primary-color-lightest;//lighten(rgb(70, 185, 70), 5);
+        background: $primary-color-lightest; //lighten(rgb(70, 185, 70), 5);
       }
 
       &::after {
-        transition: all .2s ease;
+        transition: all 0.2s ease;
       }
 
       &.accept::after {
-        content: '';
+        content: "";
         position: absolute;
         width: 8px;
         height: 16px;
@@ -847,9 +874,9 @@ $quiz-info-wrapper-width: 300px;
           width: 0 2px 2px 0;
         }
       }
-      
+
       &.next::after {
-        content: '';
+        content: "";
         position: absolute;
         width: 12px;
         height: 12px;
