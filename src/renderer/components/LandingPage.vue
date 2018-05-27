@@ -5,6 +5,10 @@
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
+        <div v-if="newVersionAvailable" class="new-version-message">
+          <p>Dostępna nowa wersja!</p>
+          <a class="close-and-install" @click="ipcRenderer.send('quitAndInstall')">Odśwież</a>
+        </div>
         <div id="drag" :class="{'drag-over': isDragOver}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
@@ -18,12 +22,12 @@
             <a @click="selectFolder"><b>Wybierz folder</b> lub upuść go tutaj</a>
           </div>
         <div class="buttons">
-          <button @click="$emit('showInfo')">
+          <button class="default-button" @click="$emit('showInfo')">
             <i>
               <FontAwesomeIcon :icon="faInfo"/>
             </i>
             Informacje
-          </button><button @click="$emit('showSettings')">
+          </button><button class="default-button" @click="$emit('showSettings')">
             <i>
               <FontAwesomeIcon :icon="faCog"/>
             </i>
@@ -50,6 +54,7 @@ import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 const readdirAsync = promisify(fs.readdir)
 const { dialog } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
+const ipcRenderer = require('electron').ipcRenderer
 
 export default {
   name: 'landing-page',
@@ -63,7 +68,8 @@ export default {
       faCog,
       faInfo,
       isDragOver: false,
-      isContinueQuizModalOpen: false
+      isContinueQuizModalOpen: false,
+      newVersionAvailable: false
     }
   },
   methods: {
@@ -117,6 +123,9 @@ export default {
       if (e.keyCode === 84 && !this.showFinishModal) {
         this.sampleQuiz()
       }
+    })
+    ipcRenderer.on('updateReady', () => {
+      this.newVersionAvailable = true
     })
     var holder = document.getElementById('drag')
     holder.ondragover = (e) => {
@@ -179,14 +188,47 @@ h1 {
   .left-column {
     .left-column-content {
       .buttons > button {
-        &:not(:hover) {
-          color: $secondary-text-ondark;
-        }
-        &:hover {
-          color: $primary-text-ondark;
-          background: $background-darkest;
-        }
+        // &:not(:hover) {
+        //   color: $secondary-text-ondark;
+        // }
+        // &:hover {
+        //   color: $primary-text-ondark;
+        //   background: $background-darkest;
+        // }
       }
+    }
+  }
+  .default-button {
+    &:not(:hover) {
+      color: $secondary-text-ondark;
+    }
+    &:hover {
+      color: $primary-text-ondark;
+      background: $background-darkest;
+    }
+  }
+}
+
+.new-version-message {
+  max-width: 512px;
+  background: rgba(255,255,255,.04);
+  border-radius: 4px;
+  margin: 8px auto;
+  padding: 16px;
+  background: $green-color;
+  a, p {
+    display: inline-block;
+    margin: 0 8px;
+  }
+  a {
+    background: transparent;
+    border: none;
+    // color: $primary-color;
+    font-weight: 700;
+    transition: color .2s ease;
+    cursor: pointer;
+    &:hover {
+      color: #fff;
     }
   }
 }
@@ -288,27 +330,48 @@ h1 {
       .buttons {
         // margin: 32px;
         > button {
-          margin: 8px;
-          // display: block;
-          padding: 12px 24px;
-          border: none;
-          border-radius: 48px;
-          cursor: pointer;
-          background: none;
-          transition: all .2s ease;
-          i {
-            opacity: .4;
-            margin-right: 16px;
-          }
-          &:not(:hover) {
-            color: rgba(0,0,0,.75);
-          }
-          &:hover {
-            background: $background-light;
-          }
+          // margin: 8px;
+          // // display: block;
+          // padding: 12px 24px;
+          // border: none;
+          // border-radius: 48px;
+          // cursor: pointer;
+          // background: none;
+          // transition: all .2s ease;
+          // i {
+          //   opacity: .4;
+          //   margin-right: 16px;
+          // }
+          // &:not(:hover) {
+          //   color: rgba(0,0,0,.75);
+          // }
+          // &:hover {
+          //   background: $background-light;
+          // }
         }
       }
     }
+  }
+}
+
+.default-button {
+  margin: 8px;
+  // display: block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 48px;
+  cursor: pointer;
+  background: none;
+  transition: all .2s ease;
+  i {
+    opacity: .4;
+    margin-right: 16px;
+  }
+  &:not(:hover) {
+    color: rgba(0,0,0,.75);
+  }
+  &:hover {
+    background: $background-light;
   }
 }
 
