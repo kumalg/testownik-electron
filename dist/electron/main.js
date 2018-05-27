@@ -2547,10 +2547,13 @@ var changePermissions = exports.changePermissions = function changePermissions(d
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_electron__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_electron___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_electron__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_settings__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_electron_settings__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_os__ = __webpack_require__(49);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_os___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_os__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_updater__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_electron_updater___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_electron_updater__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_electron_settings__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_electron_settings___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_electron_settings__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_os__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_os___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_os__);
+
 
 
 
@@ -2585,15 +2588,15 @@ function createWindow() {
 }
 
 __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('recentFolders')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('recentFolders', []);
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('recentFolders')) {
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('recentFolders', []);
   }
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('theme')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('theme', 'dark');
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('theme')) {
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('theme', 'dark');
   }
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('controlsTheme')) {
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('controlsTheme')) {
     var platform = void 0;
-    switch (__WEBPACK_IMPORTED_MODULE_2_os___default.a.platform()) {
+    switch (__WEBPACK_IMPORTED_MODULE_3_os___default.a.platform()) {
       case 'darwin':
         platform = 'osx';
         break;
@@ -2604,22 +2607,23 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
         platform = 'win';
         break;
     }
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('controlsTheme', platform);
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('controlsTheme', platform);
   }
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reverseControlsLocation')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reverseControlsLocation', false);
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('reverseControlsLocation')) {
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('reverseControlsLocation', false);
   }
 
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reoccurrencesIfBad')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reoccurrencesIfBad', 1);
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('reoccurrencesIfBad')) {
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('reoccurrencesIfBad', 1);
   }
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('reoccurrencesOnStart')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('reoccurrencesOnStart', 2);
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('reoccurrencesOnStart')) {
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('reoccurrencesOnStart', 2);
   }
-  if (!__WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.has('maxReoccurrences')) {
-    __WEBPACK_IMPORTED_MODULE_1_electron_settings___default.a.set('maxReoccurrences', 10);
+  if (!__WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.has('maxReoccurrences')) {
+    __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('maxReoccurrences', 10);
   }
   createWindow();
+  if (process.env.NODE_ENV === 'production') __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].checkForUpdates();
 });
 
 __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('window-all-closed', function () {
@@ -2632,6 +2636,14 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('activate', function () {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+__WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].on('update-downloaded', function () {
+  mainWindow.webContents.send('updateReady');
+});
+
+__WEBPACK_IMPORTED_MODULE_0_electron__["ipcMain"].on('quitAndInstall', function () {
+  __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].quitAndInstall();
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "src\\main"))
 
@@ -7271,10 +7283,16 @@ module.exports = require("https");
 /* 48 */
 /***/ (function(module, exports) {
 
-module.exports = require("electron-settings");
+module.exports = require("electron-updater");
 
 /***/ }),
 /* 49 */
+/***/ (function(module, exports) {
+
+module.exports = require("electron-settings");
+
+/***/ }),
+/* 50 */
 /***/ (function(module, exports) {
 
 module.exports = require("os");
