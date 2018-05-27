@@ -18,6 +18,11 @@
         <span class="helping-el"></span>
         <span class="label-text">Jasny</span>
       </label>
+      <label class="custom-radio-button section-option" :theme="theme">
+        <input class="custom-radio-button" type="radio" v-model="theme" value="legacy">
+        <span class="helping-el"></span>
+        <span class="label-text">Klasyczny</span>
+      </label>
     </div>
     <div class="section">
       <div class="section-title">

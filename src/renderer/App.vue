@@ -65,6 +65,12 @@ body {
       color: $primary-text-ondark;
     }
   }
+  &[theme=legacy] {
+    background: $background-darker;
+    &, span {
+      color: $primary-text-ondark;
+    }
+  }
 }
 
 .page-component-fade-enter-active {
@@ -83,4 +89,20 @@ body {
 .page-component-fade-leave-to {
   transform: translateX(-32px);
 }
+
+// #app {
+//   &[theme=dark] {
+//     .themed-background {
+//       background: $background-light;
+//     }
+//   }
+
+//   .themed-background {
+//     background: $background-light;
+//   }
+  
+//   .themed-background_ {
+//     background: $background-light;
+//   }
+// }
 </style>
