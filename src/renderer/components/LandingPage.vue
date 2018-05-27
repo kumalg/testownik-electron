@@ -1,5 +1,6 @@
 <template>
 <div>
+  <ContinueQuizModal v-if="isContinueQuizModalOpen" ref="continueQuizModal" @close="isContinueQuizModalOpen = false"/>
   <div id="wrapper" :theme="$store.state.theme">
     <div class="left-column">
       <div class="left-column-content">
@@ -17,8 +18,6 @@
             <a @click="selectFolder"><b>Wybierz folder</b> lub upuść go tutaj</a>
           </div>
         <div class="buttons">
-          <!-- <button @click="sampleQuiz">Rozpocznij przykładowy quiz</button> -->
-
           <button @click="$emit('showInfo')">
             <i>
               <FontAwesomeIcon :icon="faInfo"/>
@@ -40,6 +39,7 @@
 
 <script>
 import RecentFolders from '@/components/LandingPage/RecentFolders'
+import ContinueQuizModal from '@/components/LandingPage/modals/ContinueQuizModal'
 import questionsReader from '@/services/questionsReader'
 import quizMaker from '@/services/quizMaker'
 import { sampleQuiz } from '@/sampleQuiz'
@@ -55,13 +55,15 @@ export default {
   name: 'landing-page',
   components: {
     RecentFolders,
-    FontAwesomeIcon
+    FontAwesomeIcon,
+    ContinueQuizModal
   },
   data () {
     return {
       faCog,
       faInfo,
-      isDragOver: false
+      isDragOver: false,
+      isContinueQuizModalOpen: false
     }
   },
   methods: {
@@ -79,12 +81,24 @@ export default {
     async openQuiz (quizPath) {
       const filenames = await readdirAsync(quizPath)
       const questions = await questionsReader.readFilesFromFolder(quizPath, filenames)
-      let quiz
       if (filenames.find(f => f === 'save.json')) {
-        quiz = await quizMaker.prepareQuizObjectWithSave(questions, quizPath)
-      } else {
-        quiz = quizMaker.prepareQuizObject(questions, quizPath)
-      }
+        this.isContinueQuizModalOpen = true
+        this.$nextTick(() => {
+          const continueQuizModal = this.$refs.continueQuizModal
+          continueQuizModal.$on('new', () => this.openNewQuiz(questions, quizPath))
+          continueQuizModal.$on('continue', () => this.openContinuedQuiz(questions, quizPath))
+        })
+      } else this.openNewQuiz(questions, quizPath)
+    },
+    openNewQuiz (questions, quizPath) {
+      const quiz = quizMaker.prepareQuizObject(questions, quizPath)
+      this.goToQuiz(quiz, quizPath)
+    },
+    async openContinuedQuiz (questions, quizPath) {
+      const quiz = await quizMaker.prepareQuizObjectWithSave(questions, quizPath)
+      this.goToQuiz(quiz, quizPath)
+    },
+    goToQuiz (quiz, quizPath) {
       this.$router.push({ name: 'quiz', params: { quizObject: quiz } })
       this.$store.dispatch('deleteRecentFolder', quizPath)
       this.$store.dispatch('addNewRecentFolder', quizPath)
