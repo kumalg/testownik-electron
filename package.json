@@ -1,7 +1,7 @@
 {
   "name": "testownik-electron",
   "productName": "Testownik",
-  "version": "0.3.0",
+  "version": "0.5.0",
   "author": "Kamil Golec <kumalgfilms@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
@@ -23,7 +23,7 @@
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
     "postinstall": "npm run lint:fix",
-    "ship": "build --win -p always"
+    "ship": "build -p always"
   },
   "build": {
     "productName": "Testownik",
@@ -51,13 +51,15 @@
       ]
     },
     "mac": {
+      "target": "dmg",
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "target": "nsis",
+      "target": ["nsis","portable"],
       "icon": "build/icons/icon.ico"
     },
     "linux": {
+      "target": "pacman",
       "icon": "build/icons"
     }
   },
