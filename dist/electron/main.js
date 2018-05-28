@@ -2623,7 +2623,7 @@ __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('ready', function () {
     __WEBPACK_IMPORTED_MODULE_2_electron_settings___default.a.set('maxReoccurrences', 10);
   }
   createWindow();
-  if (process.env.NODE_ENV === 'production') __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].checkForUpdates();
+  __WEBPACK_IMPORTED_MODULE_1_electron_updater__["autoUpdater"].checkForUpdates();
 });
 
 __WEBPACK_IMPORTED_MODULE_0_electron__["app"].on('window-all-closed', function () {

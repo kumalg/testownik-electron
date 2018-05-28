@@ -77,7 +77,7 @@ app.on('ready', () => {
     settings.set('maxReoccurrences', 10)
   }
   createWindow()
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+  autoUpdater.checkForUpdates()
 })
 
 app.on('window-all-closed', () => {

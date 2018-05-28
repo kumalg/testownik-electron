@@ -7,7 +7,7 @@
         <h1>Testownik</h1>
         <div v-if="newVersionAvailable" class="new-version-message">
           <p>Dostępna nowa wersja!</p>
-          <a class="close-and-install" @click="ipcRenderer.send('quitAndInstall')">Odśwież</a>
+          <a class="close-and-install" @click="$electron.ipcRenderer.send('quitAndInstall')">Odśwież</a>
         </div>
         <div id="drag" :class="{'drag-over': isDragOver}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -54,7 +54,6 @@ import { faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 const readdirAsync = promisify(fs.readdir)
 const { dialog } = require('electron').remote
 const openDialogAsync = options => new Promise(resolve => dialog.showOpenDialog(options, resolve))
-const ipcRenderer = require('electron').ipcRenderer
 
 export default {
   name: 'landing-page',
@@ -124,7 +123,7 @@ export default {
         this.sampleQuiz()
       }
     })
-    ipcRenderer.on('updateReady', () => {
+    this.$electron.ipcRenderer.on('updateReady', () => {
       this.newVersionAvailable = true
     })
     var holder = document.getElementById('drag')

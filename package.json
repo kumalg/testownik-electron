@@ -1,7 +1,7 @@
 {
   "name": "testownik-electron",
   "productName": "Testownik",
-  "version": "0.50.0",
+  "version": "0.3.0",
   "author": "Kamil Golec <kumalgfilms@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
@@ -23,11 +23,12 @@
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
     "postinstall": "npm run lint:fix",
-    "ship": "build -p always"
+    "ship": "build --win -p always"
   },
   "build": {
     "productName": "Testownik",
     "appId": "org.simulatedgreg.electron-vue",
+    "publish": ["github"],
     "directories": {
       "output": "build"
     },
