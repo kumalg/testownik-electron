@@ -3,7 +3,9 @@
 osx_image: xcode8.3
 sudo: required
 dist: trusty
-language: c
+language: node_js
+node_js:
+  - "8.10.0"
 matrix:
   include:
   - os: osx
@@ -22,6 +24,7 @@ addons:
     - icnsutils
     #- xvfb
 before_install:
+- npm install yarn
 - mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v1.2.1/git-lfs-$([
   "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-1.2.1.tar.gz
   | tar -xz -C /tmp/git-lfs --strip-components 1 && /tmp/git-lfs/git-lfs pull
@@ -33,11 +36,11 @@ install:
 - curl -o- -L https://yarnpkg.com/install.sh | bash
 - source ~/.bashrc
 - npm install -g xvfb-maybe
-- yarn
 script:
 #- xvfb-maybe node_modules/.bin/karma start test/unit/karma.conf.js
 #- yarn run pack && xvfb-maybe node_modules/.bin/mocha test/e2e
-- yarn run build
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run ship; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run ship -- --mac --win; fi
 branches:
   only:
   - master
