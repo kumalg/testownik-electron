@@ -144,7 +144,7 @@ input[type=number].custom-input {
   font-size: .875em;
   font-weight: 600;
   font-family: 'Open Sans';
-  color: rgba(0,0,0,.75);
+  color: var(--primary-text);
   border: none;
   border-radius: 4px;
   padding: 10px 16px;
@@ -153,7 +153,6 @@ input[type=number].custom-input {
   cursor: pointer;
 
   &[theme=dark] {
-    color: $primary-text-ondark;
     &:after {
       border: {
         color: rgba(255,255,255,.25);

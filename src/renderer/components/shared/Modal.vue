@@ -53,11 +53,8 @@ export default {
 @import "@/style/_colors.scss";
 .modal-mask[theme=legacy],
 .modal-mask[theme=dark] {
-  background-color: rgba($background-darkest, .5);
   > .modal-wrapper {
     > .modal-container {
-      color: $primary-text-ondark;
-      background-color: $background-dark;
       box-shadow: none;
 
       .modal-default-button {
@@ -78,9 +75,18 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba($background-light, .5);
   display: table;
   transition: opacity .3s ease;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--modal-mask);
+    opacity: 0.5;
+  }
 }
 .modal-wrapper {
   display: table-cell;
@@ -97,7 +103,7 @@ export default {
   margin: 0px auto;
   padding: 24px 32px;
   box-sizing: border-box;
-  background-color: $background-lighter;
+  background-color: var(--modal-background);
   border-radius: 4px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, .15);
   transition: all .3s ease;
@@ -106,7 +112,7 @@ export default {
   margin-top: 0;
   font-size: 1.5em;
   font-weight: 400;
-  color: $primary-color;
+  color: var(--primary-color);
   text-align: center;
 }
 .modal-body {

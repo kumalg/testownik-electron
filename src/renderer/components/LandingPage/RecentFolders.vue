@@ -1,5 +1,5 @@
 <template>
-<div class="recent-folders sidebar-theme">
+<div class="recent-folders">
   <div class="recent-folders-container">
     <h3>Ostatnio używane</h3>
     <ul>
@@ -38,23 +38,14 @@ export default {
 <style lang="scss">
 @import '@/style/_colors.scss';
 
+#app[theme=legacy],
 #app[theme=dark] {
   .recent-folders {
-    // background: $background-darkest;
     .recent-folders-container {
-      h3 {
-        color: $secondary-text-ondark;
-      }
       ul {
         li {
           &:hover {
             background: rgba(0,0,0,.25);
-          }
-          p {
-            color: $primary-text-ondark;
-          }
-          i:not(:hover) {
-            color: $secondary-text-ondark;
           }
         }
       }
@@ -68,7 +59,7 @@ export default {
 
 .recent-folders {
   width: 300px;
-  // background: $background-light;
+  background: var(--sidebar-background);
   transition: background .2s ease;
   box-sizing: border-box;
   display: flex;
@@ -85,7 +76,7 @@ export default {
       text-align: right;
       margin-bottom: 24px;
       margin-right: 24px;
-      color: $secondary-text;
+      color: var(--secondary-text);
       font-weight: 400;
     }
 
@@ -113,7 +104,7 @@ export default {
           overflow: hidden;
           direction: rtl;
           text-overflow: ellipsis;
-          color: $primary-text;
+          color: var(--primary-text);
           white-space: nowrap;
         }
         i {
@@ -121,7 +112,7 @@ export default {
           margin: -8px;
           margin-right: 0;
           transition: color .2s ease, opacity .2s ease;
-          color: $secondary-text;
+          color: var(--secondary-text);
           opacity: 0;
           &:hover {
             color: $red-color;

@@ -393,7 +393,6 @@ body {
 
 .quiz-wrapper[theme=legacy] {
   .question-wrapper {
-    background: #075098;
     box-shadow: none;
     .question-wrapper-content {
       &:not(.show-answers) {
@@ -459,7 +458,6 @@ body {
     }
   }
   .quiz-info-wrapper {
-    background: #06488a;
     .buttons {
       button {
         color: $secondary-text-ondark;
@@ -485,7 +483,6 @@ body {
 
 .quiz-wrapper[theme="dark"] {
   .question-wrapper {
-    background: $background-dark;
     box-shadow: none;
     .question-wrapper-content {
       &:not(.show-answers) {
@@ -533,7 +530,6 @@ body {
     }
   }
   .quiz-info-wrapper {
-    background: $background-darkest;
     .buttons {
       button {
         color: $secondary-text-ondark;
@@ -554,14 +550,14 @@ $quiz-info-wrapper-width: 300px;
   display: flex;
   align-items: stretch;
   transition: color 0.2s ease;
-  // color: rgba(0, 0, 0, 0.85);
+  background: var(--main-window-background);
 
   .question-wrapper {
     height: 100%;
     padding-top: 32px;
     flex: 1;
     overflow: hidden;
-    background: $background-lighter;
+    background: var(--main-window-background);
     z-index: 1;
     box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
     transition: background 0.2s ease;
@@ -831,7 +827,7 @@ $quiz-info-wrapper-width: 300px;
   .quiz-info-wrapper {
     width: $quiz-info-wrapper-width;
     margin-left: auto;
-    background: #eee;
+    background: var(--sidebar-background);
     position: relative;
     text-align: center;
     transition: background 0.2s ease;

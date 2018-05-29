@@ -1,11 +1,11 @@
 <template>
 <div>
   <ContinueQuizModal v-if="isContinueQuizModalOpen" ref="continueQuizModal" @close="isContinueQuizModalOpen = false"/>
-  <div id="wrapper" :theme="$store.state.theme" class="main-window-theme">
+  <div id="wrapper" :theme="$store.state.theme">
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
-        <div id="drag" :class="['drag-theme', {'drag-over-theme drag-over': isDragOver}]">
+        <div id="drag" :class="{'drag-over-theme drag-over': isDragOver}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
               <path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
@@ -159,36 +159,18 @@ h1 {
   font-weight: 200;
 }
 
-#wrapper[theme=dark] {
-  #drag {
-    svg {
-      height: 64px;
-      margin-bottom: 16px;
-      fill: rgba(255,255,255,.2);
-    }
-  }
-  .left-column {
-    .left-column-content {
-      .buttons > button {
-        &:not(:hover) {
-          color: $secondary-text-ondark;
-        }
-        &:hover {
-          color: $primary-text-ondark;
-          background: $background-darkest;
-        }
-      }
-    }
-  }
-}
-
 #wrapper {
   display: flex;
   height: 100vh;
   width: 100vw;
   transition: background .2s ease;
   text-align: center;
+  background: var(--main-window-background);
+
   #drag {
+    border-color: var(--drag-border-color);
+    background: var(--drag-background);
+    color: var(--secondary-text);
     padding: 32px;
     display: flex;
     flex-direction: column;
@@ -203,6 +185,7 @@ h1 {
     margin: 32px auto;
     transition: background .2s ease;
     &.drag-over {
+      background: var(--drag-over-background);
       a {
         height: 0;
       }
@@ -224,7 +207,7 @@ h1 {
     svg {
       height: 64px;
       margin-bottom: 16px;
-      fill: rgba(0,0,0,.2);
+      fill: var(--distant-text);
       transition: all .2s ease;
     }
 
@@ -245,7 +228,7 @@ h1 {
       padding: 16px 32px;
       line-height: 1em;
       border-radius: 4px;
-      background: $primary-color;
+      background: var(--primary-color);
       color: #fff;
       font-family: 'Open Sans';
       font-weight: 600;
@@ -254,10 +237,10 @@ h1 {
       cursor: pointer;
       transition: background .2s ease;
       &:hover {
-        background: $primary-color-lighter;
+        background: var(--primary-color-lighter);
       }
       &:active {
-        background: $primary-color-lightest;
+        background: var(--primary-color-lightest);
       }
     }
   }
@@ -284,15 +267,14 @@ h1 {
           cursor: pointer;
           background: none;
           transition: all .2s ease;
+          color: var(--secondary-text);
           i {
             opacity: .4;
             margin-right: 16px;
           }
-          &:not(:hover) {
-            color: rgba(0,0,0,.75);
-          }
           &:hover {
-            background: $background-light;
+            color: var(--primary-text);
+            background: var(--sidebar-background);
           }
         }
       }
@@ -300,63 +282,4 @@ h1 {
   }
 }
 
-#logo {
-  height: auto;
-  margin-bottom: 20px;
-  width: 420px;
-}
-
-main {
-  display: flex;
-  justify-content: space-between;
-}
-
-main > div { flex-basis: 50%; }
-
-.left-side {
-  display: flex;
-  flex-direction: column;
-}
-
-.welcome {
-  color: #555;
-  font-size: 23px;
-  margin-bottom: 10px;
-}
-
-.title {
-  color: #2c3e50;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-.title.alt {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.doc p {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.doc button {
-  font-size: .8em;
-  cursor: pointer;
-  outline: none;
-  padding: 0.75em 2em;
-  border-radius: 2em;
-  display: inline-block;
-  color: #fff;
-  background-color: #4fc08d;
-  transition: all 0.15s ease;
-  box-sizing: border-box;
-  border: 1px solid #4fc08d;
-}
-
-.doc button.alt {
-  color: #42b983;
-  background-color: transparent;
-}
 </style>

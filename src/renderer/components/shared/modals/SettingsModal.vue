@@ -108,20 +108,6 @@ export default {
 <style lang="scss">
 @import "@/style/_colors.scss";
 
-div[theme=dark] {
-  .section {
-    .section-option {
-      label {
-        display: block;
-        color: rgba(255,255,255,.5);
-        text-transform: uppercase;
-        font-size: .75em;
-        font-weight: 700;
-      }
-    }
-  }
-}
-
 .section {
   margin: 24px 0;
 
@@ -144,7 +130,7 @@ div[theme=dark] {
     label {
       margin-top: 8px;
       display: block;
-      color: rgba(0,0,0,.5);
+      color: var(--secondary-text);
       text-transform: uppercase;
       font-size: .75em;
       font-weight: 700;

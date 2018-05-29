@@ -193,7 +193,7 @@ span {
     box-shadow: 0 4px 16px rgba(#000, .05);
     font-size: .875em;
     font-family: 'Open Sans';
-    color: rgba(0,0,0,.75);
+    color: var(--primary-text);
     border: none;
     border-radius: 4px;
     padding: 10px 48px 10px 16px;
