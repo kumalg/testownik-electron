@@ -415,10 +415,14 @@ body {
           }
         }
         .single-question-answers ul {
+          flex-direction: column;
+          align-items: center;
           > li label {
             box-shadow: none !important;
           }
           > li {
+            width: 100%;
+            max-width: 640px;
             // $checked-color: rgba(255, 255, 255, 0.15);
             &:nth-child(odd) label{
               background: #dddddd;

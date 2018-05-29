@@ -51,6 +51,7 @@ export default {
 
 <style lang="scss">
 @import "@/style/_colors.scss";
+.modal-mask[theme=legacy],
 .modal-mask[theme=dark] {
   background-color: rgba($background-darkest, .5);
   > .modal-wrapper {

@@ -1,11 +1,11 @@
 <template>
 <div>
   <ContinueQuizModal v-if="isContinueQuizModalOpen" ref="continueQuizModal" @close="isContinueQuizModalOpen = false"/>
-  <div id="wrapper" :theme="$store.state.theme">
+  <div id="wrapper" :theme="$store.state.theme" class="main-window-theme">
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
-        <div id="drag" :class="{'drag-over': isDragOver}">
+        <div id="drag" :class="['drag-theme', {'drag-over-theme drag-over': isDragOver}]">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
               <path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
@@ -160,20 +160,11 @@ h1 {
 }
 
 #wrapper[theme=dark] {
-  background: $background-dark;
-  color: $primary-text-ondark;
-  
   #drag {
-    border: 2px dashed rgba(255,255,255,.1);
-    background: rgba(255,255,255,.02);
-    color: rgba(255,255,255,.4);
     svg {
       height: 64px;
       margin-bottom: 16px;
       fill: rgba(255,255,255,.2);
-    }
-    &.drag-over {
-      background: rgba(255,255,255,.04);
     }
   }
   .left-column {
@@ -193,7 +184,6 @@ h1 {
 
 #wrapper {
   display: flex;
-  background: $background-lighter;
   height: 100vh;
   width: 100vw;
   transition: background .2s ease;
@@ -205,16 +195,14 @@ h1 {
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    border: 2px dashed rgba(0,0,0,.1);
-    background: rgba(0, 0, 0, 0.02);
-    color:rgba(0,0,0,.5);
+    border-width: 2px;
+    border-style: dashed;
     text-align: center;
     max-width: 512px;
     height: 196px;
     margin: 32px auto;
     transition: background .2s ease;
     &.drag-over {
-      background: rgba(0, 0, 0, 0.05);
       a {
         height: 0;
       }

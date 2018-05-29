@@ -1,5 +1,5 @@
 <template>
-<div class="recent-folders">
+<div class="recent-folders sidebar-theme">
   <div class="recent-folders-container">
     <h3>Ostatnio używane</h3>
     <ul>
@@ -40,7 +40,7 @@ export default {
 
 #app[theme=dark] {
   .recent-folders {
-    background: $background-darkest;
+    // background: $background-darkest;
     .recent-folders-container {
       h3 {
         color: $secondary-text-ondark;
@@ -68,7 +68,7 @@ export default {
 
 .recent-folders {
   width: 300px;
-  background: $background-light;
+  // background: $background-light;
   transition: background .2s ease;
   box-sizing: border-box;
   display: flex;
