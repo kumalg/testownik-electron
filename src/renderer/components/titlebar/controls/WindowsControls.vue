@@ -1,5 +1,5 @@
 <template>
-  <div :class="['titlebar-windows-controls', {'titlebar-controls-dark': theme !== 'dark'}]">
+  <div :class="['titlebar-windows-controls', {'titlebar-controls-dark': theme !== 'light'}]">
     <div class="titlebar-minimize" @click="$emit('minimize')">
       <svg x="0px" y="0px" viewBox="0 0 10 1">
         <rect width="10" height="1"></rect>
