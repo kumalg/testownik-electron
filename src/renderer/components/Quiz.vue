@@ -71,7 +71,7 @@
             <h3>Opanowane pytania</h3>
             <ProgressBar
               :progress="learnedQuestionsRatio"
-              :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+              :backgroundColor="theme != 'light' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
             />
             <div class="progress-values">
               <span>{{ quiz.numberOfLearnedQuestions }}</span>
@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="buttons">
-          <button @click="quitQuiz"><FontAwesomeIcon :icon="faSignOutAlt"/>
+          <button @click="quitQuiz"><FontAwesomeIcon :icon="faPowerOff"/>
           </button><button v-if="quiz.location" @click="saveQuiz"><FontAwesomeIcon :icon="faSave"/>
           </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
           </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
@@ -107,7 +107,7 @@ import ProgressBar from '@/components/Quiz/ProgressBar'
 import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
 import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
+import { faPowerOff, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faSave } from '@fortawesome/fontawesome-free-regular'
 
 var timer
@@ -126,7 +126,7 @@ export default {
   },
   data () {
     return {
-      faSignOutAlt,
+      faPowerOff,
       faCog,
       faInfo,
       faSave,
@@ -697,11 +697,11 @@ $quiz-info-wrapper-width: 300px;
               &.select-question-content-option-span {
                 &.correct-answer {
                   background: rgba($green-color, 0.1);
-                  border-bottom-color: $green-color;
+                  border-bottom-color: var(--green-color);
                 }
                 &:not(.correct-answer) {
                   background: rgba($red-color, 0.1);
-                  border-bottom-color: $red-color;
+                  border-bottom-color: var(--red-color);
                 }   
               }
             }
@@ -714,23 +714,23 @@ $quiz-info-wrapper-width: 300px;
             }
             &.correct-answer {
               > input[type="checkbox"]:checked ~ label {
-                border-color: $green-color;
+                border-color: var(--green-color);
                 box-shadow: 0 4px 32px rgba($green-color, 0.25);
                 &::before {
-                  border-color: $green-color $green-color transparent transparent;
+                  border-color: var(--green-color) var(--green-color) transparent transparent;
                 }
               }
               > input[type="checkbox"]:not(:checked) ~ label {
-                border-color: $yellow-color;
+                border-color: var(--yellow-color);
                 box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
               }
             }
             &:not(.correct-answer) {
               > input[type="checkbox"]:checked ~ label {
-                border-color: $red-color;
+                border-color: var(--red-color);
                 box-shadow: 0 4px 32px rgba($red-color, 0.25);
                 &::before {
-                  border-color: $red-color $red-color transparent transparent;
+                  border-color: var(--red-color) var(--red-color) transparent transparent;
                 }
               }
             }

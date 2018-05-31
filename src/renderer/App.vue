@@ -42,6 +42,10 @@ export default {
 $primary-color: #39b54a;
 
 #app {
+  --green-color: #39b54a;
+  --yellow-color: rgb(255, 219, 58);
+  --red-color: rgb(241, 81, 81);
+
   --primary-color: #{$primary-color};
   --primary-color-lighter: #{lighten($primary-color, 2)};
   --primary-color-lightest: #{lighten($primary-color, 5)};
@@ -106,6 +110,10 @@ $primary-color: #39b54a;
   --v-select-list-hover: var(--background-3);
 }
 #app[theme=legacy] {
+  --green-color: rgb(0,255,0);
+  --yellow-color: rgb(255, 255, 0);
+  --red-color: rgb(255, 0, 0);
+
   --primary-color: #00ff00;
   --primary-color-lighter: #{lighten(#00ff00, 2)};
   --primary-color-lightest: #{lighten(#00ff00, 5)};

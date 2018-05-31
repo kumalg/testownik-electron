@@ -96,7 +96,7 @@ export default {
           color: var(--secondary-text);
           opacity: 0;
           &:hover {
-            color: $red-color;
+            color: var(--red-color);
           }
         }
       }
