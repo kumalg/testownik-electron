@@ -71,7 +71,7 @@
             <h3>Opanowane pytania</h3>
             <ProgressBar
               :progress="learnedQuestionsRatio"
-              :backgroundColor="theme == 'dark' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
+              :backgroundColor="theme != 'light' ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.1)'"
             />
             <div class="progress-values">
               <span>{{ quiz.numberOfLearnedQuestions }}</span>
@@ -88,7 +88,7 @@
           </div>
         </div>
         <div class="buttons">
-          <button @click="quitQuiz"><FontAwesomeIcon :icon="faSignOutAlt"/>
+          <button @click="quitQuiz"><FontAwesomeIcon :icon="faPowerOff"/>
           </button><button v-if="quiz.location" @click="saveQuiz"><FontAwesomeIcon :icon="faSave"/>
           </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
           </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
@@ -107,7 +107,7 @@ import ProgressBar from '@/components/Quiz/ProgressBar'
 import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
 import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faSignOutAlt, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
+import { faPowerOff, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faSave } from '@fortawesome/fontawesome-free-regular'
 
 var timer
@@ -126,7 +126,7 @@ export default {
   },
   data () {
     return {
-      faSignOutAlt,
+      faPowerOff,
       faCog,
       faInfo,
       faSave,
@@ -391,39 +391,82 @@ body {
   font-size: 16px;
 }
 
-.quiz-wrapper[theme="dark"] {
+.quiz-wrapper[theme=legacy] {
   .question-wrapper {
-    background: $background-dark;
-    box-shadow: none;
     .question-wrapper-content {
-      &:not(.show-answers) {
-        .select-question {
-          .select-question-content {
-            .select-question-content-span {
-              &.select-question-content-option-span {
-                border-bottom-color: $secondary-text-ondark;
+      .single-question {
+        .single-question-content {
+          background: #fff;
+          span {
+            color: #000 !important;
+          }
+        }
+        .single-question-answers ul {
+          flex-direction: column;
+          align-items: center;
+          > li {
+            width: 100%;
+            max-width: 640px;
+            &:nth-child(odd) label{
+              background: #dddddd;
+            }
+            label {
+              span {
+                color: #000 !important;
+              }
+            }
+            > input[type="checkbox"]:checked ~ label {
+              background: #ffff80;
+              border-color: transparent;
+              &::before {
+                border-color: transparent;
               }
             }
           }
         }
       }
+    }
+  }
+  .quiz-info-wrapper {
+    .action-button {
+      background: #f0f0f0;
+      border: inset;
+      border-radius: initial;
+      &:after {
+        border-color: #000;
+      }
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+}
+
+.quiz-wrapper[theme=light] {
+  .question-wrapper {
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
+    .question-wrapper-content {
       .single-question .single-question-answers ul {
         > li label {
-          box-shadow: none !important;
+          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
         }
-        > li:not(.white-background) {
-          $checked-color: rgba(255, 255, 255, 0.15);
-          label {
-            background: $background-darker;
-            color: $primary-text-ondark;
-          }
-          > input[type="checkbox"]:checked ~ label {
-            border-color: $checked-color;
-            &::before {
-              border-color: $checked-color $checked-color transparent transparent;
+      }
+      
+      &.show-answers {
+        .single-question .single-question-answers ul {
+          > li {
+            &.correct-answer {
+              > input[type="checkbox"]:checked ~ label {
+                box-shadow: 0 4px 32px rgba($green-color, 0.25);
+              }
+              > input[type="checkbox"]:not(:checked) ~ label {
+                box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
+              }
             }
-            &::after {
-              border-color: $background-darker;
+            &:not(.correct-answer) {
+              > input[type="checkbox"]:checked ~ label {
+                box-shadow: 0 4px 32px rgba($red-color, 0.25);
+              }
             }
           }
         }
@@ -433,25 +476,15 @@ body {
       > .question-info-wrapper {
         > div {
           > span {
-            background: $background-darker;
-            box-shadow: none;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
           }
         }
       }
     }
   }
   .quiz-info-wrapper {
-    background: $background-darkest;
-    .buttons {
-      button {
-        color: $secondary-text-ondark;
-        &:hover {
-          background: $background-dark;
-        }
-      }
-    }
     .action-button {
-      box-shadow: none;
+      box-shadow: 0 4px 32px rgba($primary-color, 0.5);
     }
   }
 }
@@ -462,16 +495,15 @@ $quiz-info-wrapper-width: 300px;
   display: flex;
   align-items: stretch;
   transition: color 0.2s ease;
-  // color: rgba(0, 0, 0, 0.85);
+  background: var(--main-window-background);
 
   .question-wrapper {
     height: 100%;
     padding-top: 32px;
     flex: 1;
     overflow: hidden;
-    background: $background-lighter;
+    background: var(--main-window-background);
     z-index: 1;
-    box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
     transition: background 0.2s ease;
     max-width: calc(100% - #{$quiz-info-wrapper-width});
 
@@ -486,16 +518,15 @@ $quiz-info-wrapper-width: 300px;
           display: inline-block;
           span {
             display: inline-block;
-            background: #fff;
+            background: var(--background-3);
             padding: 8px 16px;
             font-size: 0.8125em;
             border-radius: 32px;
             margin: 4px;
-            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
 
             b {
-              color: $primary-color;
+              color: var(--primary-color);
             }
           }
         }
@@ -529,10 +560,8 @@ $quiz-info-wrapper-width: 300px;
               min-width: 128px;
               padding: 4px 8px;
               font-weight: 600;
-              border-bottom: 2px solid $secondary-text;
+              border-bottom: 2px solid var(--secondary-text);
               transition: all 0.2s ease;
-              // box-sizing: border-box;
-              // box-decoration-break: clone;
 
               &.empty-span {
                 display: inline-block;
@@ -588,19 +617,16 @@ $quiz-info-wrapper-width: 300px;
               width: 100%;
             }
 
-            $checked-color: rgba(0, 0, 0, 0.25);
             label {
               position: relative;
               width: 100%;
               height: 100%;
               min-height: 64px;
               padding: 8px 16px;
-              background: #fff;
-              color: rgba(0, 0, 0, 0.85);
+              background: var(--answer-single-type-background);
               display: flex;
               align-items: center;
               justify-content: center;
-              box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
               box-sizing: border-box;
               transition: all 0.2s ease;
               cursor: pointer;
@@ -648,14 +674,13 @@ $quiz-info-wrapper-width: 300px;
               display: none;
 
               &:checked ~ label {
-                border-color: $checked-color;
+                border-color: var(--answer-single-type-checked-border-color);
 
                 &::before {
-                  border-color: $checked-color $checked-color transparent
-                    transparent;
+                  border-color: var(--answer-single-type-checked-border-color) var(--answer-single-type-checked-border-color) transparent transparent;
                 }
                 &::after {
-                  border-color: #fff;
+                  border-color: var(--answer-single-type-background);
                 }
               }
 
@@ -692,11 +717,11 @@ $quiz-info-wrapper-width: 300px;
               &.select-question-content-option-span {
                 &.correct-answer {
                   background: rgba($green-color, 0.1);
-                  border-bottom-color: $green-color;
+                  border-bottom-color: var(--green-color);
                 }
                 &:not(.correct-answer) {
                   background: rgba($red-color, 0.1);
-                  border-bottom-color: $red-color;
+                  border-bottom-color: var(--red-color);
                 }   
               }
             }
@@ -709,24 +734,20 @@ $quiz-info-wrapper-width: 300px;
             }
             &.correct-answer {
               > input[type="checkbox"]:checked ~ label {
-                border-color: $green-color;
-                box-shadow: 0 4px 32px rgba($green-color, 0.25);
+                border-color: var(--green-color);
                 &::before {
-                  border-color: $green-color $green-color transparent
-                    transparent;
+                  border-color: var(--green-color) var(--green-color) transparent transparent;
                 }
               }
               > input[type="checkbox"]:not(:checked) ~ label {
-                border-color: $yellow-color;
-                box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
+                border-color: var(--yellow-color);
               }
             }
             &:not(.correct-answer) {
               > input[type="checkbox"]:checked ~ label {
-                border-color: $red-color;
-                box-shadow: 0 4px 32px rgba($red-color, 0.25);
+                border-color: var(--red-color);
                 &::before {
-                  border-color: $red-color $red-color transparent transparent;
+                  border-color: var(--red-color) var(--red-color) transparent transparent;
                 }
               }
             }
@@ -739,7 +760,7 @@ $quiz-info-wrapper-width: 300px;
   .quiz-info-wrapper {
     width: $quiz-info-wrapper-width;
     margin-left: auto;
-    background: #eee;
+    background: var(--sidebar-background);
     position: relative;
     text-align: center;
     transition: background 0.2s ease;
@@ -768,7 +789,7 @@ $quiz-info-wrapper-width: 300px;
       h4 {
         font-weight: 400;
         font-size: 1.75em;
-        color: $primary-color;
+        color: var(--primary-color);
       }
 
       .progress-values {
@@ -794,60 +815,18 @@ $quiz-info-wrapper-width: 300px;
         border: none;
         cursor: pointer;
         background: transparent;
-        color: rgba(0, 0, 0, 0.5);
+        color: var(--secondary-text);
         transition: all 0.2s ease;
         &:hover {
-          color: $primary-color;
-          background: $background-lighter;
-        }
-      }
-    }
-
-    .back-button {
-      position: absolute;
-      background: $primary-color;
-      color: #fff;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: none;
-      bottom: 128px;
-      left: -16px;
-      z-index: 2;
-      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
-      outline: none;
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-
-      &:hover {
-        transform: scale(0.95);
-        background: $primary-color-lighter; //lighten(rgb(70, 185, 70), 2);
-      }
-
-      &:active {
-        transform: scale(0.9);
-        background: $primary-color-lightest; //lighten(rgb(70, 185, 70), 5);
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-30%, -50%) rotate(-45deg);
-        border: {
-          style: solid;
-          color: #fff;
-          width: 2px 0 0 2px;
+          color: var(--primary-color);
+          background: var(--main-window-background);
         }
       }
     }
 
     .action-button {
       position: absolute;
-      background: $primary-color;
+      background: var(--primary-color);
       color: #fff;
       width: 64px;
       height: 64px;
@@ -856,33 +835,29 @@ $quiz-info-wrapper-width: 300px;
       bottom: 48px;
       left: -32px;
       z-index: 2;
-      box-shadow: 0 4px 32px rgba($primary-color, 0.5);
       outline: none;
       cursor: pointer;
       transition: transform 0.2s ease, background 0.2s ease;
 
       &:hover {
         transform: scale(0.95);
-        background: $primary-color-lighter; //lighten(rgb(70, 185, 70), 2);
+        background: var(--primary-color-lighter);
       }
 
       &:active {
         transform: scale(0.9);
-        background: $primary-color-lightest; //lighten(rgb(70, 185, 70), 5);
+        background: var(--primary-color-lightest);
       }
 
       &::after {
         transition: all 0.2s ease;
       }
 
-      &.accept::after {
+      &::after {
         content: "";
         position: absolute;
-        width: 8px;
-        height: 16px;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -65%) rotate(45deg);
         border: {
           style: solid;
           color: #fff;
@@ -890,19 +865,16 @@ $quiz-info-wrapper-width: 300px;
         }
       }
 
+      &.accept::after {
+        width: 8px;
+        height: 16px;
+        transform: translate(-50%, -65%) rotate(45deg);
+      }
+
       &.next::after {
-        content: "";
-        position: absolute;
         width: 12px;
         height: 12px;
-        top: 50%;
-        left: 50%;
         transform: translate(-70%, -50%) rotate(-45deg);
-        border: {
-          style: solid;
-          color: #fff;
-          width: 0 2px 2px 0;
-        }
       }
     }
   }

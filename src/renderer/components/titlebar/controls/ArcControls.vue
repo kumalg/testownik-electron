@@ -1,5 +1,5 @@
 <template>
-  <div :class="['titlebar-osx-controls', {'titlebar-controls-dark': theme === 'dark'}]">
+  <div :class="['titlebar-osx-controls', {'titlebar-controls-dark': theme === 'dark' || theme === 'legacy'}]">
     <div class="titlebar-minimize" @click="$emit('minimize')">
       <svg x="0px" y="0px" viewBox="0 0 8 8">
         <path d="M8,4.002C8,4.555,7.553,5,7,5H1C0.448,5,0,4.555,0,4.002l0,0c0-0.553,0.447-1,1-1h6C7.553,3.002,8,3.45,8,4.002L8,4.002z"/>

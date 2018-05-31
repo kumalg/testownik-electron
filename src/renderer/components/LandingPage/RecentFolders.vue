@@ -35,40 +35,12 @@ export default {
 }
 </script>
 
-<style lang="scss">
-@import '@/style/_colors.scss';
-
-#app[theme=dark] {
-  .recent-folders {
-    background: $background-darkest;
-    .recent-folders-container {
-      h3 {
-        color: $secondary-text-ondark;
-      }
-      ul {
-        li {
-          &:hover {
-            background: rgba(0,0,0,.25);
-          }
-          p {
-            color: $primary-text-ondark;
-          }
-          i:not(:hover) {
-            color: $secondary-text-ondark;
-          }
-        }
-      }
-    }
-  }
-}
-</style>
-
 <style lang="scss" scoped>
 @import '../../style/_colors.scss';
 
 .recent-folders {
   width: 300px;
-  background: $background-light;
+  background: var(--sidebar-background);
   transition: background .2s ease;
   box-sizing: border-box;
   display: flex;
@@ -85,7 +57,7 @@ export default {
       text-align: right;
       margin-bottom: 24px;
       margin-right: 24px;
-      color: $secondary-text;
+      color: var(--secondary-text);
       font-weight: 400;
     }
 
@@ -102,7 +74,7 @@ export default {
         transition: background .2s ease;
         font-size: 0.875em;
         &:hover {
-          background: rgba(255,255,255,.25);
+          background: rgba(var(--max-color), .25);
           i {
             opacity: 1;
           }
@@ -113,7 +85,7 @@ export default {
           overflow: hidden;
           direction: rtl;
           text-overflow: ellipsis;
-          color: $primary-text;
+          color: var(--primary-text);
           white-space: nowrap;
         }
         i {
@@ -121,10 +93,10 @@ export default {
           margin: -8px;
           margin-right: 0;
           transition: color .2s ease, opacity .2s ease;
-          color: $secondary-text;
+          color: var(--secondary-text);
           opacity: 0;
           &:hover {
-            color: $red-color;
+            color: var(--red-color);
           }
         }
       }
