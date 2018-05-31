@@ -1,6 +1,7 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { autoUpdater } from 'electron-updater'
 import settings from 'electron-settings'
 import os from 'os'
 
@@ -76,6 +77,7 @@ app.on('ready', () => {
     settings.set('maxReoccurrences', 10)
   }
   createWindow()
+  autoUpdater.checkForUpdates()
 })
 
 app.on('window-all-closed', () => {
@@ -88,6 +90,15 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('updateReady')
+})
+
+// when receiving a quitAndInstall signal, quit and install the new version ;)
+ipcMain.on('quitAndInstall', () => {
+  autoUpdater.quitAndInstall()
 })
 
 /**

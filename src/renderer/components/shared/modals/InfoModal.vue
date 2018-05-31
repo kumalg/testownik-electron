@@ -11,6 +11,7 @@
 <script>
 import Modal from '@/components/shared/Modal'
 const appVersion = require('electron').remote.app.getVersion()
+
 export default {
   components: {
     Modal

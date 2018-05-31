@@ -5,6 +5,10 @@
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
+        <div v-if="newVersionAvailable" class="new-version-message">
+          <p>Dostępna nowa wersja!</p>
+          <a class="close-and-install" @click="$electron.ipcRenderer.send('quitAndInstall')">Odśwież</a>
+        </div>
         <div id="drag" :class="{'drag-over': isDragOver}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
@@ -18,12 +22,12 @@
             <a @click="selectFolder"><b>Wybierz folder</b> lub upuść go tutaj</a>
           </div>
         <div class="buttons">
-          <button @click="$emit('showInfo')">
+          <button class="default-button" @click="$emit('showInfo')">
             <i>
               <FontAwesomeIcon :icon="faInfo"/>
             </i>
             Informacje
-          </button><button @click="$emit('showSettings')">
+          </button><button class="default-button" @click="$emit('showSettings')">
             <i>
               <FontAwesomeIcon :icon="faCog"/>
             </i>
@@ -63,7 +67,8 @@ export default {
       faCog,
       faInfo,
       isDragOver: false,
-      isContinueQuizModalOpen: false
+      isContinueQuizModalOpen: false,
+      newVersionAvailable: false
     }
   },
   methods: {
@@ -117,6 +122,9 @@ export default {
       if (e.keyCode === 84 && !this.showFinishModal) {
         this.sampleQuiz()
       }
+    })
+    this.$electron.ipcRenderer.on('updateReady', () => {
+      this.newVersionAvailable = true
     })
     var holder = document.getElementById('drag')
     holder.ondragover = (e) => {
@@ -280,5 +288,4 @@ h1 {
     }
   }
 }
-
 </style>

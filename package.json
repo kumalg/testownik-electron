@@ -1,11 +1,12 @@
 {
   "name": "testownik-electron",
   "productName": "Testownik",
-  "version": "0.10.0",
+  "version": "0.6.5",
   "author": "Kamil Golec <kumalgfilms@gmail.com>",
   "description": "An electron-vue project",
   "license": null,
   "main": "./dist/electron/main.js",
+  "repository": "https://github.com/kumalg/testownik-electron",
   "scripts": {
     "start": "electron . --allow-file-access-from-files",
     "build": "node .electron-vue/build.js && electron-builder",
@@ -21,11 +22,13 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "ship": "build -p always"
   },
   "build": {
-    "productName": "testownik-electron",
+    "productName": "Testownik",
     "appId": "org.simulatedgreg.electron-vue",
+    "publish": ["github"],
     "directories": {
       "output": "build"
     },
@@ -48,13 +51,15 @@
       ]
     },
     "mac": {
+      "target": "dmg",
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "target": "nsis",
+      "target": ["nsis","portable"],
       "icon": "build/icons/icon.ico"
     },
     "linux": {
+      "target": "pacman",
       "icon": "build/icons"
     }
   },
@@ -65,7 +70,7 @@
     "@fortawesome/vue-fontawesome": "0.0.22",
     "axios": "^0.16.1",
     "electron-settings": "^3.1.4",
-    "electron-titlebar-windows": "^3.0.0",
+    "electron-updater": "^2.21.10",
     "moment": "^2.22.1",
     "node-sass": "^4.8.3",
     "sass-loader": "^7.0.1",
