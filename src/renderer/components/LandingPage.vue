@@ -257,10 +257,8 @@ h1 {
       padding: 32px;
       overflow-y: auto;
       .buttons {
-        // margin: 32px;
         > button {
           margin: 8px;
-          // display: block;
           padding: 12px 24px;
           border: none;
           border-radius: 48px;

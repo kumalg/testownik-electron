@@ -35,25 +35,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
-@import '@/style/_colors.scss';
-
-#app[theme=legacy],
-#app[theme=dark] {
-  .recent-folders {
-    .recent-folders-container {
-      ul {
-        li {
-          &:hover {
-            background: rgba(0,0,0,.25);
-          }
-        }
-      }
-    }
-  }
-}
-</style>
-
 <style lang="scss" scoped>
 @import '../../style/_colors.scss';
 
@@ -93,7 +74,7 @@ export default {
         transition: background .2s ease;
         font-size: 0.875em;
         &:hover {
-          background: rgba(255,255,255,.25);
+          background: rgba(var(--max-color), .25);
           i {
             opacity: 1;
           }

@@ -59,7 +59,6 @@ export default {
 
       .modal-default-button {
         background: rgba(255,255,255,.03);
-        color: rgba(255,255,255,.75);
         &:hover {
           background: rgba(255,255,255,.06);
         }
@@ -162,7 +161,7 @@ export default {
   font-size: .75em;
   font-weight: 600;
   font-family: 'Open Sans', sans-serif;
-  color: rgba(0,0,0,.75);
+  color: var(--primary-text);
   border: none;
   border-radius: 4px;
   cursor: pointer;

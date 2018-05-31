@@ -393,19 +393,7 @@ body {
 
 .quiz-wrapper[theme=legacy] {
   .question-wrapper {
-    box-shadow: none;
     .question-wrapper-content {
-      &:not(.show-answers) {
-        .select-question {
-          .select-question-content {
-            .select-question-content-span {
-              &.select-question-content-option-span {
-                border-bottom-color: $secondary-text-ondark;
-              }
-            }
-          }
-        }
-      }
       .single-question {
         .single-question-content {
           background: #fff;
@@ -416,18 +404,13 @@ body {
         .single-question-answers ul {
           flex-direction: column;
           align-items: center;
-          > li label {
-            box-shadow: none !important;
-          }
           > li {
             width: 100%;
             max-width: 640px;
-            // $checked-color: rgba(255, 255, 255, 0.15);
             &:nth-child(odd) label{
               background: #dddddd;
             }
             label {
-              background: #fff;
               span {
                 color: #000 !important;
               }
@@ -438,39 +421,17 @@ body {
               &::before {
                 border-color: transparent;
               }
-              &::after {
-                // border-color: transparent;
-              }
             }
-          }
-        }
-      }
-    }
-    .question-info {
-      > .question-info-wrapper {
-        > div {
-          > span {
-            background: #06488a;
-            box-shadow: none;
           }
         }
       }
     }
   }
   .quiz-info-wrapper {
-    .buttons {
-      button {
-        color: $secondary-text-ondark;
-        &:hover {
-          background: $background-dark;
-        }
-      }
-    }
     .action-button {
       background: #f0f0f0;
       border: inset;
       border-radius: initial;
-      box-shadow: none;
       &::after {
         border-color: $primary-text;
       }
@@ -481,40 +442,13 @@ body {
   }
 }
 
-.quiz-wrapper[theme="dark"] {
+.quiz-wrapper[theme=light] {
   .question-wrapper {
-    box-shadow: none;
+    box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
     .question-wrapper-content {
-      &:not(.show-answers) {
-        .select-question {
-          .select-question-content {
-            .select-question-content-span {
-              &.select-question-content-option-span {
-                border-bottom-color: $secondary-text-ondark;
-              }
-            }
-          }
-        }
-      }
       .single-question .single-question-answers ul {
         > li label {
-          box-shadow: none !important;
-        }
-        > li:not(.white-background) {
-          $checked-color: rgba(255, 255, 255, 0.15);
-          label {
-            background: $background-darker;
-            color: $primary-text-ondark;
-          }
-          > input[type="checkbox"]:checked ~ label {
-            border-color: $checked-color;
-            &::before {
-              border-color: $checked-color $checked-color transparent transparent;
-            }
-            &::after {
-              border-color: $background-darker;
-            }
-          }
+          box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
         }
       }
     }
@@ -522,24 +456,15 @@ body {
       > .question-info-wrapper {
         > div {
           > span {
-            background: $background-darker;
-            box-shadow: none;
+            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
           }
         }
       }
     }
   }
   .quiz-info-wrapper {
-    .buttons {
-      button {
-        color: $secondary-text-ondark;
-        &:hover {
-          background: $background-dark;
-        }
-      }
-    }
     .action-button {
-      box-shadow: none;
+      box-shadow: 0 4px 32px rgba($primary-color, 0.5);
     }
   }
 }
@@ -559,7 +484,7 @@ $quiz-info-wrapper-width: 300px;
     overflow: hidden;
     background: var(--main-window-background);
     z-index: 1;
-    box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
+    // box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
     transition: background 0.2s ease;
     max-width: calc(100% - #{$quiz-info-wrapper-width});
 
@@ -574,12 +499,12 @@ $quiz-info-wrapper-width: 300px;
           display: inline-block;
           span {
             display: inline-block;
-            background: #fff;
+            background: var(--background-3);
             padding: 8px 16px;
             font-size: 0.8125em;
             border-radius: 32px;
             margin: 4px;
-            box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+            // box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
 
             b {
@@ -617,7 +542,7 @@ $quiz-info-wrapper-width: 300px;
               min-width: 128px;
               padding: 4px 8px;
               font-weight: 600;
-              border-bottom: 2px solid $secondary-text;
+              border-bottom: 2px solid var(--secondary-text);
               transition: all 0.2s ease;
               // box-sizing: border-box;
               // box-decoration-break: clone;
@@ -676,19 +601,17 @@ $quiz-info-wrapper-width: 300px;
               width: 100%;
             }
 
-            $checked-color: rgba(0, 0, 0, 0.25);
             label {
               position: relative;
               width: 100%;
               height: 100%;
               min-height: 64px;
               padding: 8px 16px;
-              background: #fff;
-              color: rgba(0, 0, 0, 0.85);
+              background: var(--answer-single-type-background);
               display: flex;
               align-items: center;
               justify-content: center;
-              box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
+              // box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
               box-sizing: border-box;
               transition: all 0.2s ease;
               cursor: pointer;
@@ -736,14 +659,13 @@ $quiz-info-wrapper-width: 300px;
               display: none;
 
               &:checked ~ label {
-                border-color: $checked-color;
+                border-color: var(--answer-single-type-checked-border-color);
 
                 &::before {
-                  border-color: $checked-color $checked-color transparent
-                    transparent;
+                  border-color: var(--answer-single-type-checked-border-color) var(--answer-single-type-checked-border-color) transparent transparent;
                 }
                 &::after {
-                  border-color: #fff;
+                  border-color: var(--answer-single-type-background);
                 }
               }
 
@@ -800,8 +722,7 @@ $quiz-info-wrapper-width: 300px;
                 border-color: $green-color;
                 box-shadow: 0 4px 32px rgba($green-color, 0.25);
                 &::before {
-                  border-color: $green-color $green-color transparent
-                    transparent;
+                  border-color: $green-color $green-color transparent transparent;
                 }
               }
               > input[type="checkbox"]:not(:checked) ~ label {
@@ -856,7 +777,7 @@ $quiz-info-wrapper-width: 300px;
       h4 {
         font-weight: 400;
         font-size: 1.75em;
-        color: $primary-color;
+        color: var(--primary-color);
       }
 
       .progress-values {
@@ -882,60 +803,18 @@ $quiz-info-wrapper-width: 300px;
         border: none;
         cursor: pointer;
         background: transparent;
-        color: rgba(0, 0, 0, 0.5);
+        color: var(--secondary-text);
         transition: all 0.2s ease;
         &:hover {
-          color: $primary-color;
-          background: $background-lighter;
-        }
-      }
-    }
-
-    .back-button {
-      position: absolute;
-      background: $primary-color;
-      color: #fff;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      border: none;
-      bottom: 128px;
-      left: -16px;
-      z-index: 2;
-      box-shadow: 0 4px 32px rgba(0, 0, 0, 0.15);
-      outline: none;
-      cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-
-      &:hover {
-        transform: scale(0.95);
-        background: $primary-color-lighter; //lighten(rgb(70, 185, 70), 2);
-      }
-
-      &:active {
-        transform: scale(0.9);
-        background: $primary-color-lightest; //lighten(rgb(70, 185, 70), 5);
-      }
-
-      &::after {
-        content: "";
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-30%, -50%) rotate(-45deg);
-        border: {
-          style: solid;
-          color: #fff;
-          width: 2px 0 0 2px;
+          color: var(--primary-color);
+          background: var(--main-window-background);
         }
       }
     }
 
     .action-button {
       position: absolute;
-      background: $primary-color;
+      background: var(--primary-color);
       color: #fff;
       width: 64px;
       height: 64px;
@@ -944,19 +823,19 @@ $quiz-info-wrapper-width: 300px;
       bottom: 48px;
       left: -32px;
       z-index: 2;
-      box-shadow: 0 4px 32px rgba($primary-color, 0.5);
+      // box-shadow: 0 4px 32px rgba($primary-color, 0.5);
       outline: none;
       cursor: pointer;
       transition: transform 0.2s ease, background 0.2s ease;
 
       &:hover {
         transform: scale(0.95);
-        background: $primary-color-lighter; //lighten(rgb(70, 185, 70), 2);
+        background: var(--primary-color-lighter);
       }
 
       &:active {
         transform: scale(0.9);
-        background: $primary-color-lightest; //lighten(rgb(70, 185, 70), 5);
+        background: var(--primary-color-lightest);
       }
 
       &::after {

@@ -155,9 +155,9 @@ span {
 .custom-select-container {
   position: relative;
 
+  &[theme=legacy],
   &[theme=dark] {
     .custom-select-toggle {
-      color: $primary-text-ondark;
       &:after {
         border: {
           color: rgba(255,255,255,.25);
@@ -170,20 +170,7 @@ span {
       }
     }
     .custom-select-menu {
-      background: $background-darker;
-      color: $secondary-text-ondark;
       box-shadow: none;
-      ul {
-        li {
-          &:hover {
-            background: $background-darkest;
-          }
-        }
-        .custom-select-menu-item-selected {
-          background: $background-darkest;
-          color: $primary-text-ondark;
-        }
-      }
     }
   }
   .custom-select-toggle {
@@ -237,10 +224,9 @@ span {
     width: 100%;
     font-size: .8125em;
     font-family: 'Open Sans';
-    color: rgba(#000, .5);
     position: absolute;
     box-shadow: 0 4px 32px rgba(0,0,0,.15);
-    background: #fff;
+    background: var(--v-select-list-background);
     border: none;
     border-radius: 4px;
     z-index: 999;
@@ -253,12 +239,18 @@ span {
         padding: 8px 16px;
         cursor: pointer;
         transition: background .2s ease;
-         &:hover {
-           background: rgba(0,0,0,.05);
-         }
+        &:hover {
+          background: var(--v-select-list-hover);
+        }
+        span {
+          color: var(--secondary-text) !important;
+        }
       }
       .custom-select-menu-item-selected {
         background: rgba(0,0,0,.05);
+        span {
+          color: var(--primary-text) !important;
+        }
       }
     }
   }

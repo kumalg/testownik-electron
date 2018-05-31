@@ -37,19 +37,6 @@ export default {
   padding: 0;
   margin: 0 -8px;
 
-  &[theme=dark] {
-    button {
-      background: rgba(255,255,255,.03);
-      color: rgba(255,255,255,.4);
-      i {
-        color: rgba(255,255,255,.2);
-      }
-      &:hover {
-        background: rgba(255,255,255,.06);
-      }
-    }
-  }
-
   button {
     margin: 0 8px;
     width: calc(50% - 16px);
@@ -59,17 +46,17 @@ export default {
     border-radius: 4px;
     font-family: 'Open Sans';
     cursor: pointer;
-    background: rgba(0,0,0,.03);
-    color: rgba(0,0,0,.6);
+    background: rgba(var(--contrast-color), .03);
+    color: rgba(var(--contrast-color), .6);
     transition: all .2s ease;
     i {
       display: block;
       margin-bottom: 8px;
       font-size: 2em;
-      color: rgba(0,0,0,.25);
+      color: rgba(var(--contrast-color), .25);
     }
     &:hover {
-      background: rgba(0,0,0,.06);
+      background: rgba(var(--contrast-color), .06);
     }
   }
 }
