@@ -152,6 +152,7 @@ input[type=number].custom-input {
   outline: none;
   cursor: pointer;
 
+  &[theme=legacy],
   &[theme=dark] {
     &:after {
       border: {
