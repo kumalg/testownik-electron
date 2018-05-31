@@ -218,7 +218,7 @@ h1 {
       transition: all .2s ease;
       &:hover {
         b {
-          color: $primary-color;
+          color: var(--primary-color);
         }
       }
     }

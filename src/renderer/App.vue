@@ -106,6 +106,10 @@ $primary-color: #39b54a;
   --v-select-list-hover: var(--background-3);
 }
 #app[theme=legacy] {
+  --primary-color: #00ff00;
+  --primary-color-lighter: #{lighten(#00ff00, 2)};
+  --primary-color-lightest: #{lighten(#00ff00, 5)};
+
   --primary-text: rgba(255,255,255,1);
   --secondary-text: rgba(255,255,255,.5);
   --distant-text: rgba(255,255,255,.2);

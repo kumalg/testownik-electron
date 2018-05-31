@@ -432,8 +432,8 @@ body {
       background: #f0f0f0;
       border: inset;
       border-radius: initial;
-      &::after {
-        border-color: $primary-text;
+      &:after {
+        border-color: #000;
       }
       &:hover {
         background: #f0f0f0;
@@ -506,7 +506,7 @@ $quiz-info-wrapper-width: 300px;
             transition: all 0.2s ease;
 
             b {
-              color: $primary-color;
+              color: var(--primary-color);
             }
           }
         }
