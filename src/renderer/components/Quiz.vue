@@ -451,6 +451,26 @@ body {
           box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
         }
       }
+      
+      &.show-answers {
+        .single-question .single-question-answers ul {
+          > li {
+            &.correct-answer {
+              > input[type="checkbox"]:checked ~ label {
+                box-shadow: 0 4px 32px rgba($green-color, 0.25);
+              }
+              > input[type="checkbox"]:not(:checked) ~ label {
+                box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
+              }
+            }
+            &:not(.correct-answer) {
+              > input[type="checkbox"]:checked ~ label {
+                box-shadow: 0 4px 32px rgba($red-color, 0.25);
+              }
+            }
+          }
+        }
+      }
     }
     .question-info {
       > .question-info-wrapper {
@@ -715,20 +735,17 @@ $quiz-info-wrapper-width: 300px;
             &.correct-answer {
               > input[type="checkbox"]:checked ~ label {
                 border-color: var(--green-color);
-                box-shadow: 0 4px 32px rgba($green-color, 0.25);
                 &::before {
                   border-color: var(--green-color) var(--green-color) transparent transparent;
                 }
               }
               > input[type="checkbox"]:not(:checked) ~ label {
                 border-color: var(--yellow-color);
-                box-shadow: 0 4px 32px rgba($yellow-color, 0.25);
               }
             }
             &:not(.correct-answer) {
               > input[type="checkbox"]:checked ~ label {
                 border-color: var(--red-color);
-                box-shadow: 0 4px 32px rgba($red-color, 0.25);
                 &::before {
                   border-color: var(--red-color) var(--red-color) transparent transparent;
                 }

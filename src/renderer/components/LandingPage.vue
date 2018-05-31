@@ -251,6 +251,7 @@ h1 {
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 0 64px rgba(0,0,0,.05);
+    z-index: 1;
 
     .left-column-content {
       margin-top: 32px;

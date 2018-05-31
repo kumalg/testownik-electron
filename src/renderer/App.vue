@@ -119,8 +119,8 @@ $primary-color: #39b54a;
   --primary-color-lightest: #{lighten(#00ff00, 5)};
 
   --primary-text: rgba(255,255,255,1);
-  --secondary-text: rgba(255,255,255,.5);
-  --distant-text: rgba(255,255,255,.2);
+  --secondary-text: rgba(255,255,255,.6);
+  --distant-text: rgba(255,255,255,.4);
 
   --background: #075098;
   --background-2: #{mix(#075098, #06488a)};
