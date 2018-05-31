@@ -1,6 +1,6 @@
 <template>
 <Modal @close="$emit('close')">
-  <div slot="body" class="body-content" :theme="$store.state.theme">
+  <div slot="body" class="body-content">
     <button @click="$emit('new')">
       <i><FontAwesomeIcon :icon="faPlus"/></i>Nowy
     </button><button @click="$emit('continue')">

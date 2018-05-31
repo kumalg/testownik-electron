@@ -1,11 +1,11 @@
 <template>
 <div>
   <ContinueQuizModal v-if="isContinueQuizModalOpen" ref="continueQuizModal" @close="isContinueQuizModalOpen = false"/>
-  <div id="wrapper" :theme="$store.state.theme">
+  <div id="wrapper">
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
-        <div id="drag" :class="{'drag-over-theme drag-over': isDragOver}">
+        <div id="drag" :class="{'drag-over': isDragOver}">
             <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
           viewBox="0 0 412 412" style="enable-background:new 0 0 412 412;" xml:space="preserve">
               <path d="M334,140h-64c-4.4,0-8,3.6-8,8c0,4.4,3.6,8,8,8h64c13.2,0,24,10.8,24,24v192c0,13.2-10.8,24-24,24H78
