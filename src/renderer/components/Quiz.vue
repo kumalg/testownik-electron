@@ -484,7 +484,6 @@ $quiz-info-wrapper-width: 300px;
     overflow: hidden;
     background: var(--main-window-background);
     z-index: 1;
-    // box-shadow: 0 0 64px rgba(0, 0, 0, 0.05);
     transition: background 0.2s ease;
     max-width: calc(100% - #{$quiz-info-wrapper-width});
 
@@ -504,7 +503,6 @@ $quiz-info-wrapper-width: 300px;
             font-size: 0.8125em;
             border-radius: 32px;
             margin: 4px;
-            // box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
             transition: all 0.2s ease;
 
             b {
@@ -544,8 +542,6 @@ $quiz-info-wrapper-width: 300px;
               font-weight: 600;
               border-bottom: 2px solid var(--secondary-text);
               transition: all 0.2s ease;
-              // box-sizing: border-box;
-              // box-decoration-break: clone;
 
               &.empty-span {
                 display: inline-block;
@@ -611,7 +607,6 @@ $quiz-info-wrapper-width: 300px;
               display: flex;
               align-items: center;
               justify-content: center;
-              // box-shadow: 0 4px 32px rgba(0, 0, 0, 0.1);
               box-sizing: border-box;
               transition: all 0.2s ease;
               cursor: pointer;
@@ -823,7 +818,6 @@ $quiz-info-wrapper-width: 300px;
       bottom: 48px;
       left: -32px;
       z-index: 2;
-      // box-shadow: 0 4px 32px rgba($primary-color, 0.5);
       outline: none;
       cursor: pointer;
       transition: transform 0.2s ease, background 0.2s ease;

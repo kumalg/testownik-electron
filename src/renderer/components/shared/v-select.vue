@@ -317,7 +317,7 @@ span {
     &:hover,
     &:focus,
     &:active {
-      outline: none; // background: red;
+      outline: none;
     }
   }
   .icon {

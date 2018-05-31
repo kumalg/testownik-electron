@@ -157,7 +157,6 @@ export default {
   padding: 12px 24px;
   line-height: 1em;
   background: $background-light;
-  // text-transform: uppercase;
   font-size: .75em;
   font-weight: 600;
   font-family: 'Open Sans', sans-serif;
