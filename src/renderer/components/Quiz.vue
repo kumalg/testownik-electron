@@ -1,6 +1,7 @@
 <template>
 <div>
   <div class="quiz-wrapper" :theme="theme">
+    <SaveBeforeExit v-if="isSaveBeforeExitModalOpened" @quitQuiz="quitQuiz" @saveState="saveAndExit" @close="isSaveBeforeExitModalOpened = false"/>
     <FinishQuizModal v-if="showFinishModal" :time="quiz.time" @close="quitQuiz" />
     <SelectOptionsModal v-if="isSelectOptionsModalOpened" :select="selectOptionsModalContent" @selectOption="setSelectedOptionId" @close="isSelectOptionsModalOpened = false"/>
     <div class="question-wrapper">
@@ -88,7 +89,7 @@
           </div>
         </div>
         <div class="buttons">
-          <button @click="quitQuiz"><FontAwesomeIcon :icon="faPowerOff"/>
+          <button @click="isSaveBeforeExitModalOpened = true"><FontAwesomeIcon :icon="faPowerOff"/>
           </button><button v-if="quiz.location" @click="saveQuiz"><FontAwesomeIcon :icon="faSave"/>
           </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
           </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
@@ -106,6 +107,7 @@ import moment from 'moment'
 import ProgressBar from '@/components/Quiz/ProgressBar'
 import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
 import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
+import SaveBeforeExit from '@/components/Quiz/modals/SaveBeforeExit'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faPowerOff, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faSave } from '@fortawesome/fontawesome-free-regular'
@@ -122,6 +124,7 @@ export default {
     ProgressBar,
     FinishQuizModal,
     SelectOptionsModal,
+    SaveBeforeExit,
     FontAwesomeIcon
   },
   data () {
@@ -138,6 +141,7 @@ export default {
       quiz: this.quizObject,
       showFinishModal: false,
       isSelectOptionsModalOpened: false,
+      isSaveBeforeExitModalOpened: false,
       answers: [],
       selectAnswers: [],
       selectObject: Object,
@@ -145,6 +149,10 @@ export default {
     }
   },
   methods: {
+    saveAndExit () {
+      this.saveQuiz()
+      this.quitQuiz()
+    },
     quitQuiz () {
       this.$router.push('/')
     },
