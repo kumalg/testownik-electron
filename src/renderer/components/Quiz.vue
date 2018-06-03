@@ -258,6 +258,18 @@ export default {
     showSelectOptionsModal (selectId) {
       this.isSelectOptionsModalOpened = true
       this.selectOptionsModalContent = this.currentQuestion.answers.find(s => s.id === selectId)
+    },
+    toggleAnswerSelect (index) {
+      if (index >= 0 && index < this.unsortedAnswers.length) {
+        const id = this.unsortedAnswers[index].id
+        const answerIndex = this.answers.indexOf(id)
+
+        if (answerIndex === -1) {
+          this.answers.push(id)
+        } else {
+          this.answers.splice(answerIndex, 1)
+        }
+      }
     }
   },
   computed: {
@@ -314,21 +326,10 @@ export default {
       this.quitQuiz()
     }
     document.body.addEventListener('keyup', e => {
-      if (e.keyCode === 32 && !this.showFinishModal) {
-        this.actionButtonClick()
-      }
-      if (this.acceptVisible && !this.showFinishModal && e.keyCode >= 49 && e.keyCode <= 57) {
-        const index = e.keyCode - 49
-        if (index >= 0 && index < this.unsortedAnswers.length) {
-          const id = this.unsortedAnswers[index].id
-          const answerIndex = this.answers.indexOf(id)
-
-          if (answerIndex === -1) {
-            this.answers.push(id)
-          } else {
-            this.answers.splice(answerIndex, 1)
-          }
-        }
+      if (e.keyCode === 32 && !this.showFinishModal) this.actionButtonClick()
+      if (this.acceptVisible && !this.showFinishModal) {
+        if (e.keyCode >= 49 && e.keyCode <= 57) this.toggleAnswerSelect(e.keyCode - 49)
+        else if (e.keyCode >= 97 && e.keyCode <= 105) this.toggleAnswerSelect(e.keyCode - 97)
       }
     })
     this.randomQuestion()
