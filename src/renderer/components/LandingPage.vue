@@ -1,7 +1,7 @@
 <template>
 <div>
   <ContinueQuizModal v-if="isContinueQuizModalOpen" ref="continueQuizModal" @close="isContinueQuizModalOpen = false"/>
-  <div id="wrapper" :theme="$store.state.theme">
+  <div id="wrapper">
     <div class="left-column">
       <div class="left-column-content">
         <h1>Testownik</h1>
@@ -167,95 +167,33 @@ h1 {
   font-weight: 200;
 }
 
-#wrapper[theme=dark] {
-  background: $background-dark;
-  color: $primary-text-ondark;
-  
-  #drag {
-    border: 2px dashed rgba(255,255,255,.1);
-    background: rgba(255,255,255,.02);
-    color: rgba(255,255,255,.4);
-    svg {
-      height: 64px;
-      margin-bottom: 16px;
-      fill: rgba(255,255,255,.2);
-    }
-    &.drag-over {
-      background: rgba(255,255,255,.04);
-    }
-  }
-  .left-column {
-    .left-column-content {
-      .buttons > button {
-        // &:not(:hover) {
-        //   color: $secondary-text-ondark;
-        // }
-        // &:hover {
-        //   color: $primary-text-ondark;
-        //   background: $background-darkest;
-        // }
-      }
-    }
-  }
-  .default-button {
-    &:not(:hover) {
-      color: $secondary-text-ondark;
-    }
-    &:hover {
-      color: $primary-text-ondark;
-      background: $background-darkest;
-    }
-  }
-}
-
-.new-version-message {
-  max-width: 512px;
-  background: rgba(255,255,255,.04);
-  border-radius: 4px;
-  margin: 8px auto;
-  padding: 16px;
-  background: $green-color;
-  a, p {
-    display: inline-block;
-    margin: 0 8px;
-  }
-  a {
-    background: transparent;
-    border: none;
-    // color: $primary-color;
-    font-weight: 700;
-    transition: color .2s ease;
-    cursor: pointer;
-    &:hover {
-      color: #fff;
-    }
-  }
-}
-
 #wrapper {
   display: flex;
-  background: $background-lighter;
   height: 100vh;
   width: 100vw;
   transition: background .2s ease;
   text-align: center;
+  background: var(--main-window-background);
+
   #drag {
+    border-color: var(--drag-border-color);
+    background: var(--drag-background);
+    color: var(--secondary-text);
     padding: 32px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
-    border: 2px dashed rgba(0,0,0,.1);
-    background: rgba(0, 0, 0, 0.02);
-    color:rgba(0,0,0,.5);
+    border-width: 2px;
+    border-style: dashed;
     text-align: center;
     max-width: 512px;
     height: 196px;
     margin: 32px auto;
     transition: background .2s ease;
     &.drag-over {
-      background: rgba(0, 0, 0, 0.05);
+      background: var(--drag-over-background);
       a {
         height: 0;
       }
@@ -277,7 +215,7 @@ h1 {
     svg {
       height: 64px;
       margin-bottom: 16px;
-      fill: rgba(0,0,0,.2);
+      fill: var(--distant-text);
       transition: all .2s ease;
     }
 
@@ -288,7 +226,7 @@ h1 {
       transition: all .2s ease;
       &:hover {
         b {
-          color: $primary-color;
+          color: var(--primary-color);
         }
       }
     }
@@ -298,7 +236,7 @@ h1 {
       padding: 16px 32px;
       line-height: 1em;
       border-radius: 4px;
-      background: $primary-color;
+      background: var(--primary-color);
       color: #fff;
       font-family: 'Open Sans';
       font-weight: 600;
@@ -307,10 +245,10 @@ h1 {
       cursor: pointer;
       transition: background .2s ease;
       &:hover {
-        background: $primary-color-lighter;
+        background: var(--primary-color-lighter);
       }
       &:active {
-        background: $primary-color-lightest;
+        background: var(--primary-color-lightest);
       }
     }
   }
@@ -321,116 +259,33 @@ h1 {
     flex-direction: column;
     justify-content: center;
     box-shadow: 0 0 64px rgba(0,0,0,.05);
+    z-index: 1;
 
     .left-column-content {
       margin-top: 32px;
       padding: 32px;
       overflow-y: auto;
       .buttons {
-        // margin: 32px;
         > button {
-          // margin: 8px;
-          // // display: block;
-          // padding: 12px 24px;
-          // border: none;
-          // border-radius: 48px;
-          // cursor: pointer;
-          // background: none;
-          // transition: all .2s ease;
-          // i {
-          //   opacity: .4;
-          //   margin-right: 16px;
-          // }
-          // &:not(:hover) {
-          //   color: rgba(0,0,0,.75);
-          // }
-          // &:hover {
-          //   background: $background-light;
-          // }
+          margin: 8px;
+          padding: 12px 24px;
+          border: none;
+          border-radius: 48px;
+          cursor: pointer;
+          background: none;
+          transition: all .2s ease;
+          color: var(--secondary-text);
+          i {
+            opacity: .4;
+            margin-right: 16px;
+          }
+          &:hover {
+            color: var(--primary-text);
+            background: var(--sidebar-background);
+          }
         }
       }
     }
   }
-}
-
-.default-button {
-  margin: 8px;
-  // display: block;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 48px;
-  cursor: pointer;
-  background: none;
-  transition: all .2s ease;
-  i {
-    opacity: .4;
-    margin-right: 16px;
-  }
-  &:not(:hover) {
-    color: rgba(0,0,0,.75);
-  }
-  &:hover {
-    background: $background-light;
-  }
-}
-
-#logo {
-  height: auto;
-  margin-bottom: 20px;
-  width: 420px;
-}
-
-main {
-  display: flex;
-  justify-content: space-between;
-}
-
-main > div { flex-basis: 50%; }
-
-.left-side {
-  display: flex;
-  flex-direction: column;
-}
-
-.welcome {
-  color: #555;
-  font-size: 23px;
-  margin-bottom: 10px;
-}
-
-.title {
-  color: #2c3e50;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-.title.alt {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.doc p {
-  color: black;
-  margin-bottom: 10px;
-}
-
-.doc button {
-  font-size: .8em;
-  cursor: pointer;
-  outline: none;
-  padding: 0.75em 2em;
-  border-radius: 2em;
-  display: inline-block;
-  color: #fff;
-  background-color: #4fc08d;
-  transition: all 0.15s ease;
-  box-sizing: border-box;
-  border: 1px solid #4fc08d;
-}
-
-.doc button.alt {
-  color: #42b983;
-  background-color: transparent;
 }
 </style>

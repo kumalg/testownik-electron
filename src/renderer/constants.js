@@ -8,7 +8,7 @@ export const controlThemes = [
     value: 'osx'
   },
   {
-    label: 'Arch Linux',
+    label: 'Arc Linux',
     value: 'linux'
   }
 ]

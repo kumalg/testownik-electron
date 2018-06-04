@@ -18,6 +18,11 @@
         <span class="helping-el"></span>
         <span class="label-text">Jasny</span>
       </label>
+      <label class="custom-radio-button section-option" :theme="theme">
+        <input class="custom-radio-button" type="radio" v-model="theme" value="legacy">
+        <span class="helping-el"></span>
+        <span class="label-text">Klasyczny</span>
+      </label>
     </div>
     <div class="section">
       <div class="section-title">
@@ -41,15 +46,42 @@
       </div>
       <div class="section-option">
         <label for="reoccurrences-if-bad-input">Liczba dodatkowych powtórzeń przy błędnej odpowiedzi</label>
-        <input :theme="theme" class="custom-input line" id="reoccurrences-if-bad-input" type="number" min="0" max="10" v-model.number="reoccurrencesIfBad">
+        <input
+          :theme="theme"
+          class="custom-input line"
+          id="reoccurrences-if-bad-input"
+          type="number"
+          min="0"
+          max="10"
+          step="1"
+          v-model.number="reoccurrencesIfBad"
+          @blur="reoccurrencesIfBadBlurred">
       </div>
       <div class="section-option">
         <label for="reoccurrences-on-start-input">Wstępna liczba powtórzeń</label>
-        <input :theme="theme" class="custom-input line" id="reoccurrences-on-start-input" type="number" min="1" max="10" v-model.number="reoccurrencesOnStart">
+        <input
+          :theme="theme"
+          class="custom-input line"
+          id="reoccurrences-on-start-input"
+          type="number"
+          min="1"
+          max="10"
+          step="1"
+          v-model.number="reoccurrencesOnStart"
+          @blur="reoccurrencesOnStartBlurred">
       </div>
       <div class="section-option">
         <label for="max-reoccurrences-input">Maksymalna liczba powtórzeń</label>
-        <input :theme="theme" class="custom-input line" id="max-reoccurrences-input" type="number" min="1" max="10" v-model.number="maxReoccurrences">
+        <input
+          :theme="theme"
+          class="custom-input line"
+          id="max-reoccurrences-input"
+          type="number"
+          min="1"
+          max="10"
+          step="1"
+          v-model.number="maxReoccurrences"
+          @blur="maxReoccurrencesBlurred">
       </div>
     </div>
   </div>
@@ -73,8 +105,26 @@ export default {
       controlsTheme: controlThemes.find(i => i.value === this.$store.state.controlsTheme),
       reverseControlsLocation: this.$store.state.reverseControlsLocation,
       reoccurrencesIfBad: this.$store.state.reoccurrencesIfBad,
+      reoccurrencesIfBadFocused: false,
       reoccurrencesOnStart: this.$store.state.reoccurrencesOnStart,
-      maxReoccurrences: this.$store.state.maxReoccurrences
+      reoccurrencesOnStartFocused: false,
+      maxReoccurrences: this.$store.state.maxReoccurrences,
+      maxReoccurrencesFocused: false
+    }
+  },
+  methods: {
+    reoccurrencesIfBadBlurred () {
+      const int = parseInt(this.reoccurrencesIfBad)
+      if (!int || int <= 0) this.reoccurrencesIfBad = 0
+      else if (int > 10) this.reoccurrencesIfBad = 10
+    },
+    reoccurrencesOnStartBlurred () {
+      if (this.reoccurrencesOnStart < 1) this.reoccurrencesOnStart = 1
+      else if (this.reoccurrencesOnStart > 10) this.reoccurrencesOnStart = 10
+    },
+    maxReoccurrencesBlurred () {
+      if (this.maxReoccurrences < 1) this.maxReoccurrences = 1
+      else if (this.maxReoccurrences > 10) this.maxReoccurrences = 10
     }
   },
   watch: {
@@ -88,13 +138,16 @@ export default {
       this.$store.dispatch('setReverseControlsLocation', value)
     },
     reoccurrencesIfBad (value) {
-      this.$store.dispatch('setReoccurrencesIfBad', value)
+      const int = parseInt(value)
+      if (int >= 0 && int <= 10) this.$store.dispatch('setReoccurrencesIfBad', int)
     },
     reoccurrencesOnStart (value) {
-      this.$store.dispatch('setReoccurrencesOnStart', value)
+      const int = parseInt(value)
+      if (int >= 1 && int <= 10) this.$store.dispatch('setReoccurrencesOnStart', int)
     },
     maxReoccurrences (value) {
-      this.$store.dispatch('setMaxReoccurrences', value)
+      const int = parseInt(value)
+      if (int >= 1 && int <= 10) this.$store.dispatch('setMaxReoccurrences', int)
     }
   }
 }
@@ -102,20 +155,6 @@ export default {
 
 <style lang="scss">
 @import "@/style/_colors.scss";
-
-div[theme=dark] {
-  .section {
-    .section-option {
-      label {
-        display: block;
-        color: rgba(255,255,255,.5);
-        text-transform: uppercase;
-        font-size: .75em;
-        font-weight: 700;
-      }
-    }
-  }
-}
 
 .section {
   margin: 24px 0;
@@ -139,7 +178,7 @@ div[theme=dark] {
     label {
       margin-top: 8px;
       display: block;
-      color: rgba(0,0,0,.5);
+      color: var(--secondary-text);
       text-transform: uppercase;
       font-size: .75em;
       font-weight: 700;

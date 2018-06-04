@@ -1,28 +1,42 @@
 <template>
 <Modal @close="$emit('close')">
   <div slot="body" class="body-content">
-    <button @click="$emit('new')">
-      <i><FontAwesomeIcon :icon="faPlus"/></i>Nowy
-    </button><button @click="$emit('continue')">
-      <i><FontAwesomeIcon :icon="faPlay"/></i>Kontynuuj
+    <h3>Zapisać aktualny stan?</h3>
+    <button @click="$emit('saveState')">
+      <i><FontAwesomeIcon :icon="faSave"/></i>Zapisz
+    </button><button @click="$emit('quitQuiz')">
+      <i><FontAwesomeIcon :icon="faPowerOff"/></i>Wyjdź
     </button>
   </div>
+  <template slot="modal-footer-button">Anuluj</template>
 </Modal>
 </template>
 
 <script>
+import moment from 'moment'
 import Modal from '@/components/shared/Modal'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
-import { faPlus, faPlay } from '@fortawesome/fontawesome-free-solid'
+import { faPowerOff } from '@fortawesome/fontawesome-free-solid'
+import { faSave } from '@fortawesome/fontawesome-free-regular'
+
 export default {
-  components: {
-    Modal,
-    FontAwesomeIcon
+  props: {
+    time: {
+      type: Number
+    }
   },
-  data () {
-    return {
-      faPlus,
-      faPlay
+  components: {
+    FontAwesomeIcon,
+    Modal
+  },
+  data: () => ({
+    faPowerOff,
+    faSave
+  }),
+  filters: {
+    moment: function (date) {
+      const duration = moment.duration(date, 'ms')
+      return duration.hours().toFixed().padStart(2, '0') + ':' + duration.minutes().toFixed().padStart(2, '0') + ':' + duration.seconds().toFixed().padStart(2, '0')
     }
   }
 }
@@ -36,6 +50,10 @@ export default {
   text-align: center;
   padding: 0;
   margin: 0 -8px;
+
+  h3 {
+    margin-bottom: 16px;
+  }
 
   button {
     margin: 0 8px;
