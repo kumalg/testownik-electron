@@ -7,6 +7,7 @@
     />
     <SettingsModal v-if="showSettingsModal" @close="showSettingsModal = false"/>
     <InfoModal v-if="showInfoModal" @close="showInfoModal = false"/>
+    <WhatsNewModal v-if="showWhatsNewModal" @close="showWhatsNewModal = false"/>
     <transition name="page-component-fade" mode="out-in">
       <router-view 
         @showSettings="showSettingsModal = true"
@@ -20,19 +21,36 @@
 import Titlebar from '@/components/titlebar/Titlebar'
 import SettingsModal from '@/components/shared/modals/SettingsModal'
 import InfoModal from '@/components/shared/modals/InfoModal'
+import WhatsNewModal from '@/components/shared/modals/WhatsNewModal'
+import settings from 'electron-settings'
+// import { shell } from 'electron'
+const appVersion = require('electron').remote.app.getVersion()
 
 export default {
   name: 'testownik-electron',
   components: {
     Titlebar,
     SettingsModal,
-    InfoModal
+    InfoModal,
+    WhatsNewModal
   },
   data () {
     return {
       showSettingsModal: false,
-      showInfoModal: false
+      showInfoModal: false,
+      showWhatsNewModal: false
     }
+  },
+  mounted () {
+    if (settings.get('lastVersion') !== appVersion) {
+      this.showWhatsNewModal = true
+      settings.set('lastVersion', appVersion)
+    }
+    // shell.on('click', 'a[href^="http"]', (event) => {
+    //   alert('mamcie')
+    //   event.preventDefault()
+    //   shell.openExternal(this.href)
+    // })
   }
 }
 </script>
