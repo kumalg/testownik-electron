@@ -64,7 +64,7 @@ app.on('ready', () => {
     settings.set('controlsTheme', platform)
   }
   if (!settings.has('reverseControlsLocation')) {
-    settings.set('reverseControlsLocation', false)
+    settings.set('reverseControlsLocation', os.platform() === 'darwin')
   }
 
   if (!settings.has('reoccurrencesIfBad')) {

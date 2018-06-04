@@ -1,6 +1,8 @@
 <template>
 <div>
   <div class="quiz-wrapper" :theme="theme">
+    <SaveBeforeExit v-if="isSaveBeforeQuitQuizModalOpened" @quitQuiz="quitQuiz" @saveState="saveAndQuitQuiz" @close="isSaveBeforeQuitQuizModalOpened = false"/>
+    <SaveBeforeExit v-if="isSaveBeforeQuitAppModalOpened" @quitQuiz="quitApp" @saveState="saveAndQuitApp" @close="isSaveBeforeQuitAppModalOpened = false"/>
     <FinishQuizModal v-if="showFinishModal" :time="quiz.time" @close="quitQuiz" />
     <SelectOptionsModal v-if="isSelectOptionsModalOpened" :select="selectOptionsModalContent" @selectOption="setSelectedOptionId" @close="isSelectOptionsModalOpened = false"/>
     <div class="question-wrapper">
@@ -19,7 +21,7 @@
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
                     <span v-if="answer.type == 'text'">{{ answer.content }}</span>
-                    <img v-else :src="'file:///' + quiz.location + '/' + answer.content">
+                    <img v-else :src="'file:///' + quiz.location + '/' + answer.content" alt="rysunek">
                   </label>
                 </li>
               </ul>
@@ -88,7 +90,7 @@
           </div>
         </div>
         <div class="buttons">
-          <button @click="quitQuiz"><FontAwesomeIcon :icon="faPowerOff"/>
+          <button @click="tryQuitQuiz"><FontAwesomeIcon :icon="faPowerOff"/>
           </button><button v-if="quiz.location" @click="saveQuiz"><FontAwesomeIcon :icon="faSave"/>
           </button><button @click="$emit('showSettings')"><FontAwesomeIcon :icon="faCog"/>
           </button><button @click="$emit('showInfo')"><FontAwesomeIcon :icon="faInfo"/></button>
@@ -103,12 +105,15 @@
 import fs from 'fs'
 import _ from 'lodash'
 import moment from 'moment'
+import { remote } from 'electron'
 import ProgressBar from '@/components/Quiz/ProgressBar'
 import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
 import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
+import SaveBeforeExit from '@/components/Quiz/modals/SaveBeforeExit'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faPowerOff, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faSave } from '@fortawesome/fontawesome-free-regular'
+const browserWindow = remote.getCurrentWindow()
 
 var timer
 
@@ -122,6 +127,7 @@ export default {
     ProgressBar,
     FinishQuizModal,
     SelectOptionsModal,
+    SaveBeforeExit,
     FontAwesomeIcon
   },
   data () {
@@ -138,6 +144,8 @@ export default {
       quiz: this.quizObject,
       showFinishModal: false,
       isSelectOptionsModalOpened: false,
+      isSaveBeforeQuitQuizModalOpened: false,
+      isSaveBeforeQuitAppModalOpened: false,
       answers: [],
       selectAnswers: [],
       selectObject: Object,
@@ -145,8 +153,27 @@ export default {
     }
   },
   methods: {
+    tryQuitApp (event) {
+      if (this.quiz.location) this.isSaveBeforeQuitAppModalOpened = true
+      else this.quitApp()
+    },
+    tryQuitQuiz () {
+      if (this.quiz.location) this.isSaveBeforeQuitQuizModalOpened = true
+      else this.quitQuiz()
+    },
+    saveAndQuitQuiz () {
+      this.saveQuiz()
+      this.quitQuiz()
+    },
+    saveAndQuitApp () {
+      this.saveQuiz()
+      this.quitApp()
+    },
     quitQuiz () {
       this.$router.push('/')
+    },
+    quitApp () {
+      browserWindow.close()
     },
     saveQuiz () {
       const content = JSON.stringify(this.quiz, this.replacer)
@@ -333,6 +360,14 @@ export default {
     })
     this.randomQuestion()
     this.startTimer()
+    window.onbeforeunload = (e) => {
+      if (this.isSaveBeforeQuitAppModalOpened || !this.quiz.location) {
+        e.resume()
+      } else {
+        this.isSaveBeforeQuitAppModalOpened = true
+        return false
+      }
+    }
   }
 }
 </script>
@@ -578,16 +613,13 @@ $quiz-info-wrapper-width: 300px;
 
         .single-question-content {
           width: 100%;
+          max-height: 50%;
+          overflow: auto;
           min-height: 64px;
           text-align: center;
           font-size: 0.875em;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           .question-content {
-            flex: 1;
-            overflow: auto;
-            padding: 16px 32px;
+            margin: 16px 32px;
             img {
               background: $background-lighter;
             }
