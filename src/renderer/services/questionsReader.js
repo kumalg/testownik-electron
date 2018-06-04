@@ -40,18 +40,22 @@ function getQuestionFromBuffer (textBuffer, quizPath, filename) {
   }
 }
 
+function getLinkToImage (line) {
+  return line.split('[img]').pop().split('[/img]').shift()
+}
+
 function readXQuestion (quizPath, filename, lines) {
   const correctAnswers = lines[0].trim().substring(1).split('').map((char, index) => {
     return { char: char, index: index }
   }).filter(i => i.char === '1').map(i => i.index)
   const questionType = lines[1].trim().startsWith('[img]') ? 'image' : 'text'
-  const questionContent = questionType === 'image' ? lines[1].replace('[img]', '').replace('[/img]', '') : lines[1]
+  const questionContent = questionType === 'image' ? getLinkToImage(lines[1]) : lines[1]
   const answers = lines.slice(2).filter(l => l.replace(/^\s*/, '').replace(/\s*$/, '').length !== 0).map((line, index) => {
     line = line.trim()
     return {
       id: index,
       type: line.startsWith('[img]') ? 'image' : 'text',
-      content: line.startsWith('[img]') ? line.replace('[img]', '').replace('[/img]', '') : line,
+      content: line.startsWith('[img]') ? getLinkToImage(line) : line,
       isCorrect: correctAnswers.findIndex(i => i === index) !== -1
     }
   })
@@ -86,7 +90,7 @@ function readYQuestion (quizPath, filename, lines) {
   })
 
   const questionType = lines[1].trim().startsWith('[img]') ? 'image' : 'text'
-  const questionContent = questionType === 'image' ? quizPath.replace('\\', '/') + '/' + lines[1].replace('[img]', '').replace('[/img]', '') : getYQuestionContent(lines[1], lines[0].trim().substring(1, 1))
+  const questionContent = getYQuestionContent(lines[1], lines[0].trim().substring(1, 1))
   const answers = lines.slice(2).filter(l => l.replace(/^\s*/, '').replace(/\s*$/, '').length !== 0).map((line, selectIndex) => {
     const options = line.trim().split(';;').filter(x => x)
     const correctOptionId = correctAnswersOfSelects[selectIndex]
@@ -97,7 +101,7 @@ function readYQuestion (quizPath, filename, lines) {
         return {
           id: answerIndex,
           type: o.startsWith('[img]') ? 'image' : 'text',
-          content: o.startsWith('[img]') ? quizPath.replace('\\', '/') + '/' + o.replace('[img]', '').replace('[/img]', '') : o,
+          content: o.startsWith('[img]') ? getLinkToImage(o) : o,
           isCorrect: correctOptionId === answerIndex
         }
       })

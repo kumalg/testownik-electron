@@ -155,6 +155,10 @@ $primary-color: #39b54a;
 @import "@/style/ui_elements.scss";
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
+button {
+  outline: none;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
