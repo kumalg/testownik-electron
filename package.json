@@ -51,7 +51,7 @@
       ]
     },
     "mac": {
-      "target": "dmg",
+      "target": ["dmg", "zip"],
       "icon": "build/icons/icon.icns"
     },
     "win": {
@@ -59,7 +59,7 @@
       "icon": "build/icons/icon.ico"
     },
     "linux": {
-      "target": "pacman",
+      "target": "AppImage",
       "icon": "build/icons"
     }
   },
