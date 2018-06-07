@@ -353,7 +353,10 @@ export default {
       this.quitQuiz()
     }
     document.body.addEventListener('keyup', e => {
-      if (e.keyCode === 32 && !this.showFinishModal) this.actionButtonClick()
+      if (e.keyCode === 32 && !this.showFinishModal) {
+        e.preventDefault()
+        this.actionButtonClick()
+      }
       if (this.acceptVisible && !this.showFinishModal) {
         if (e.keyCode >= 49 && e.keyCode <= 57) this.toggleAnswerSelect(e.keyCode - 49)
         else if (e.keyCode >= 97 && e.keyCode <= 105) this.toggleAnswerSelect(e.keyCode - 97)
