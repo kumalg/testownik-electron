@@ -11,7 +11,7 @@
           <div v-if="currentQuestion.type == 'single'" class="single-question">
             <div class="single-question-content">
               <div class="question-content">
-                <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
+                <span class="mathjax-element" v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
                 <img v-else :src="'file:///' + quiz.location + '/' + currentQuestion.content">
               </div>
             </div>
@@ -20,7 +20,7 @@
                 <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
-                    <span v-if="answer.type == 'text'">{{ answer.content }}</span>
+                    <span class="mathjax-element" v-if="answer.type == 'text'">{{ answer.content }}</span>
                     <img v-else :src="'file:///' + quiz.location + '/' + answer.content" alt="rysunek">
                   </label>
                 </li>
@@ -113,6 +113,7 @@ import SaveBeforeExit from '@/components/Quiz/modals/SaveBeforeExit'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faPowerOff, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faSave } from '@fortawesome/fontawesome-free-regular'
+import mathjaxHelper from 'mathjax-electron'
 const browserWindow = remote.getCurrentWindow()
 
 var timer
@@ -149,7 +150,8 @@ export default {
       answers: [],
       selectAnswers: [],
       selectObject: Object,
-      selectOptionsModalContent: null
+      selectOptionsModalContent: null,
+      questionHTML: null
     }
   },
   methods: {
@@ -258,6 +260,11 @@ export default {
             })
             this.unsortedAnswers = JSON.parse(JSON.stringify(this.currentQuestion.content))
           }
+          var mathElements = document.getElementsByClassName('mathjax-element')
+          Array.prototype.forEach.call(mathElements, element => {
+            mathjaxHelper.typesetMath(element)
+            console.log(element)
+          })
         }
       } else {
         this.finishQuiz()
@@ -268,6 +275,7 @@ export default {
       this.showFinishModal = true
     },
     startTimer () {
+      this.stopTimer()
       timer = window.setInterval(() => {
         this.quiz.time += 1000
       }, 1000)

@@ -9,6 +9,7 @@
         require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
       </script>
     <% } %>
+    <script type="text/javascript" src="./node_modules/mathjax-electron/resources/MathJax/MathJax.js?config=electron"></script>
   </head>
   <body>
     <div id="app"></div>
