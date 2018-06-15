@@ -9,6 +9,7 @@
       <transition name="answers-container-fade" mode="out-in">
         <div v-if="quiz && currentQuestion" :key="questionNum" :class="['question-wrapper-content', {'show-answers': !acceptVisible}]">
           <div v-if="currentQuestion.type == 'single'" class="single-question">
+            <AnswerCheckboxOption />
             <div class="single-question-content">
               <div class="question-content">
                 <span class="mathjax-element" v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
@@ -20,6 +21,7 @@
                 <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
+                    <!-- <AnswerCheckboxOption v-if="answer.type == 'text'" :content="answer.content"/> -->
                     <span class="mathjax-element" v-if="answer.type == 'text'">{{ answer.content }}</span>
                     <img v-else :src="'file:///' + quiz.location + '/' + answer.content" alt="rysunek">
                   </label>
@@ -106,6 +108,7 @@ import fs from 'fs'
 import _ from 'lodash'
 import moment from 'moment'
 import { remote } from 'electron'
+import AnswerCheckboxOption from '@/components/Quiz/AnswerCheckboxOption'
 import ProgressBar from '@/components/Quiz/ProgressBar'
 import FinishQuizModal from '@/components/Quiz/modals/FinishQuizModal'
 import SelectOptionsModal from '@/components/Quiz/modals/SelectOptionsModal'
@@ -113,7 +116,7 @@ import SaveBeforeExit from '@/components/Quiz/modals/SaveBeforeExit'
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import { faPowerOff, faCog, faInfo } from '@fortawesome/fontawesome-free-solid'
 import { faSave } from '@fortawesome/fontawesome-free-regular'
-import mathjaxHelper from 'mathjax-electron'
+// import mathjaxHelper from 'mathjax-electron'
 const browserWindow = remote.getCurrentWindow()
 
 var timer
@@ -128,6 +131,7 @@ export default {
     ProgressBar,
     FinishQuizModal,
     SelectOptionsModal,
+    AnswerCheckboxOption,
     SaveBeforeExit,
     FontAwesomeIcon
   },
@@ -260,11 +264,12 @@ export default {
             })
             this.unsortedAnswers = JSON.parse(JSON.stringify(this.currentQuestion.content))
           }
-          var mathElements = document.getElementsByClassName('mathjax-element')
-          Array.prototype.forEach.call(mathElements, element => {
-            mathjaxHelper.typesetMath(element)
-            console.log(element)
-          })
+          console.log('ty serio to wyłączyłem')
+          // var mathElements = document.getElementsByClassName('mathjax-element')
+          // Array.prototype.forEach.call(mathElements, element => {
+          //   mathjaxHelper.typesetMath(element)
+          //   console.log(element)
+          // })
         }
       } else {
         this.finishQuiz()
@@ -356,6 +361,14 @@ export default {
       return duration.hours().toFixed().padStart(2, '0') + ':' + duration.minutes().toFixed().padStart(2, '0') + ':' + duration.seconds().toFixed().padStart(2, '0')
     }
   },
+  // updated () {
+  //   console.log('updatuje')
+  //   var mathElements = document.getElementsByClassName('mathjax-element')
+  //   Array.prototype.forEach.call(mathElements, element => {
+  //     mathjaxHelper.typesetMath(element)
+  //     console.log(element)
+  //   })
+  // },
   mounted () {
     if (!this.quizObject) {
       this.quitQuiz()
