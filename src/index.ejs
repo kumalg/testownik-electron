@@ -9,7 +9,7 @@
         require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
       </script>
     <% } %>
-    <script type="text/javascript" src="./node_modules/mathjax-electron/resources/MathJax/MathJax.js?config=electron"></script>
+    <link rel="stylesheet" href="https://unpkg.com/katex@0.6.0/dist/katex.min.css">
   </head>
   <body>
     <div id="app"></div>
