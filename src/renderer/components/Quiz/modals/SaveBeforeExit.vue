@@ -62,7 +62,7 @@ export default {
     display: inline-block;
     border: none;
     border-radius: 4px;
-    font-family: 'Open Sans';
+    font-family: 'Raleway';
     cursor: pointer;
     background: rgba(var(--contrast-color), .03);
     color: rgba(var(--contrast-color), .6);

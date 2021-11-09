@@ -179,7 +179,7 @@ span {
     background: #fff;
     box-shadow: 0 4px 16px rgba(#000, .05);
     font-size: .875em;
-    font-family: 'Open Sans';
+    font-family: 'Raleway';
     color: var(--primary-text);
     border: none;
     border-radius: 4px;
@@ -223,7 +223,7 @@ span {
   .custom-select-menu {
     width: 100%;
     font-size: .8125em;
-    font-family: 'Open Sans';
+    font-family: 'Raleway';
     position: absolute;
     box-shadow: 0 4px 32px rgba(0,0,0,.15);
     background: var(--v-select-list-background);
@@ -294,7 +294,7 @@ span {
     border: none;
     font-size: .875em;
     font-weight: 600;
-    font-family: 'Open Sans';
+    font-family: 'Raleway';
     color: rgba(#000, .5);
     padding-left: 48px;
     border-radius: 4px;

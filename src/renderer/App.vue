@@ -57,10 +57,10 @@ export default {
 
 <style lang="scss">
 @import "@/style/_colors.scss";
-$primary-color: #39b54a;
+$primary-color: #12CB84;
 
 #app {
-  --green-color: #39b54a;
+  --green-color: #12CB84;
   --yellow-color: rgb(255, 219, 58);
   --red-color: rgb(241, 81, 81);
 
@@ -184,8 +184,9 @@ button {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Raleway', sans-serif;
   overflow-y: hidden;
+  font-weight: 500;
 }
 
 #app {

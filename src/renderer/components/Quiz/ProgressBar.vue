@@ -17,7 +17,7 @@ export default {
     },
     color: {
       type: String,
-      default: '#39b54a'
+      default: '#12cb84'
     },
     backgroundColor: {
       type: String,

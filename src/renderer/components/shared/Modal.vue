@@ -161,7 +161,7 @@ export default {
   background: $background-light;
   font-size: .75em;
   font-weight: 600;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Raleway', sans-serif;
   color: var(--primary-text);
   border: none;
   border-radius: 4px;

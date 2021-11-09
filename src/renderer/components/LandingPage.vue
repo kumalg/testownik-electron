@@ -4,7 +4,7 @@
   <div id="wrapper">
     <div class="left-column">
       <div class="left-column-content">
-        <h1>Testownik</h1>
+        <h1>Quizer</h1>
         <div v-if="newVersionAvailable" class="new-version-message">
           <p>Dostępna nowa wersja!</p>
           <a class="close-and-install" @click="$electron.ipcRenderer.send('quitAndInstall')">Odśwież</a>
@@ -164,7 +164,7 @@ export default {
 
 h1 {
   font-size: 3em;
-  font-weight: 200;
+  font-weight: 500;
 }
 
 #wrapper {
@@ -238,7 +238,7 @@ h1 {
       border-radius: 4px;
       background: var(--primary-color);
       color: #fff;
-      font-family: 'Open Sans';
+      font-family: 'Raleway';
       font-weight: 600;
       font-size: 0.75em;
       border: none;
@@ -272,6 +272,8 @@ h1 {
           border: none;
           border-radius: 48px;
           cursor: pointer;
+          font-family: 'Raleway';
+          font-weight: 600;
           background: none;
           transition: all .2s ease;
           color: var(--secondary-text);
