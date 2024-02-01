@@ -11,7 +11,7 @@
           <div v-if="currentQuestion.type == 'single'" class="single-question">
             <div class="single-question-content">
               <div class="question-content">
-                <span v-if="currentQuestion.contentType == 'text'">{{ currentQuestion.content }}</span>
+                <span v-if="currentQuestion.contentType == 'text'" v-katex:auto>{{ currentQuestion.content }}</span>
                 <img v-else :src="'file:///' + quiz.location + '/' + currentQuestion.content">
               </div>
             </div>
@@ -20,7 +20,7 @@
                 <li v-for="(answer, index) in unsortedAnswers" :key="'answer_' + index" :class="[{'correct-answer': answer.isCorrect}, {'white-background': answer.type == 'image'}]">
                   <input type="checkbox" v-model="answers" :value="answer.id" :id="'answer_' + answer.id" :disabled="!acceptVisible">
                   <label :for="'answer_' + answer.id">
-                    <span v-if="answer.type == 'text'">{{ answer.content }}</span>
+                    <span v-if="answer.type == 'text'" v-katex:auto>{{ answer.content }}</span>
                     <img v-else :src="'file:///' + quiz.location + '/' + answer.content" alt="rysunek">
                   </label>
                 </li>

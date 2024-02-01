@@ -1,7 +1,7 @@
 import store from './store'
 
 export const sampleQuiz = {
-  numberOfQuestions: 3,
+  numberOfQuestions: 4,
   numberOfLearnedQuestions: 0,
   numberOfCorrectAnswers: 0,
   numberOfBadAnswers: 0,
@@ -9,7 +9,8 @@ export const sampleQuiz = {
   reoccurrences: [
     { tag: '001.txt', value: store.state.reoccurrencesOnStart },
     { tag: '002.txt', value: store.state.reoccurrencesOnStart },
-    { tag: '003.txt', value: store.state.reoccurrencesOnStart }
+    { tag: '003.txt', value: store.state.reoccurrencesOnStart },
+    { tag: '004.txt', value: store.state.reoccurrencesOnStart }
   ],
   questions: [{
     tag: '001.txt',
@@ -72,6 +73,22 @@ export const sampleQuiz = {
       id: 2,
       type: 'text',
       content: '2. Nie',
+      isCorrect: false
+    }]
+  }, {
+    tag: '004.txt',
+    contentType: 'text',
+    content: 'Jaka funkcja jest pochodzą funkcji $f(x) = x^2 + 2$?',
+    type: 'single',
+    answers: [{
+      id: 1,
+      type: 'text',
+      content: '1. $f\'(x) =  2x$ (T)',
+      isCorrect: true
+    }, {
+      id: 2,
+      type: 'text',
+      content: '2. $f\'(x) = 3x - 7$',
       isCorrect: false
     }]
   }]
